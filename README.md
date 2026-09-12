@@ -1,4 +1,4 @@
-# How we work
+# How We Work
 The future of work happens because we act.
 
 Seventwos is an Applied AI company. We are our own first customer, adopting frontier technologies ourselves before helping organizations deploy them with confidence through turnkey solutions that combine practical value with breakthrough innovation.
