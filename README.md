@@ -12,9 +12,9 @@ At Seventwos, people and agents work together. Humans provide intent, context, j
 
 Collaboration starts in the workspace, where ideas, decisions, requirements, and feedback are captured.
 
-# The workspace captures intent.
-# The repository captures implementation.
-# Together, they create a transparent path from human insight to machine execution.
+**The workspace captures intent.**
+**The repository captures implementation.**
+**Together, they create a transparent path from human insight to machine execution.**
 
 This is how attribution becomes recognition.
 
