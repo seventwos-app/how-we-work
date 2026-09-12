@@ -1,3 +1,10 @@
+---
+type: Vision
+title: How We Work
+description: A business heuristic for how we work at Seventwos.
+tags: [heuristic]
+---
+
 # How We Work
 The future of work happens because we act.
 
