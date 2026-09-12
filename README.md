@@ -5,7 +5,7 @@ Seventwos is an Applied AI company. We are our own first customer, adopting fron
 
 As large language models make software development increasingly autonomous, agents can take on more of the implementation work, giving people more time to focus on strategy, creativity, and growth.
 
-That's why our code is written agentically.
+That's why we've moved forward with agentically written code.
 As code becomes easier to generate, the repository serves as a transparent record of outcomes. It makes implementation visible and auditable, enabling collaboration, validation, attribution, and trust.
 
 At Seventwos, people and agents work together. Humans provide intent, context, judgment, and direction. Agents transform that guidance into working software. Together, they review, refine, and extend the results.
