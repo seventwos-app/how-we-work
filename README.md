@@ -1,7 +1,7 @@
 # How We Work
 The future of work happens because we act.
 
-Seventwos is an Applied AI company. We are our own first customer, adopting frontier technologies ourselves before helping organizations deploy them with confidence through turnkey solutions that combine practical value with breakthrough innovation.
+**Seventwos is an Applied AI company.** We are our own first customer, adopting frontier technologies ourselves before helping organizations deploy them with confidence through turnkey solutions that combine practical value with breakthrough innovation.
 
 As large language models make software development increasingly autonomous, agents can take on more of the implementation work, giving people more time to focus on strategy, creativity, and growth.
 
