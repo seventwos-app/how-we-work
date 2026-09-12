@@ -23,4 +23,3 @@ In an agentic world, the most valuable human contributions are often not lines o
 This dual system allows us to recognize the human contributions that matter most in an agentic world: strategic direction, contextual understanding, and creative vision.
 
 By connecting human influence to machine output, we create an environment where people and agents can collaborate at scale, building the future of Seventwos together.
-
