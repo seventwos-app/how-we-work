@@ -1,7 +1,7 @@
 ---
 type: Vision
 title: How We Work
-description: A business heuristic for how we work at Seventwos.
+description: How Seventwos turns intent into action.
 tags: [heuristic]
 ---
 
