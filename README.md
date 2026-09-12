@@ -8,7 +8,7 @@ As large language models make software development increasingly autonomous, agen
 That's why we've moved forward with agentically written code.
 As code becomes easier to generate, the repository serves as a transparent record of outcomes. It makes implementation visible and auditable, enabling collaboration, validation, attribution, and trust.
 
-At Seventwos, people and agents work together. Humans provide intent, context, judgment, and direction. Agents transform that guidance into working software. Together, they review, refine, and extend the results.
+At Seventwos, people and agents work together. Humans provide intent, context, judgment, and direction. Agents transform that guidance into working outcomes. Together, they review, refine, and extend the results.
 
 Collaboration starts in the workspace, where ideas, decisions, requirements, and feedback are captured.
 
