@@ -13,7 +13,7 @@ A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expr
 - `log.md` — dated "Update Log" of substantive changes to the bundle (init, classification, wording edits) — append-only style, newest section on top per date.
 
 ## Commands
-- `python scripts/okf/validate_okf_markdown.py --changed` — validates changed markdown against this repo's OKF v0.2 bundle convention (used by CI on pull requests). `--all` scans everything and reports a baseline without failing.
+- `python scripts/okf/validate_okf_markdown.py --changed` — validates changed markdown against this repo's OKF v0.2 bundle convention (the `lint` CI check on pull requests). `--all` scans everything and reports a baseline without failing.
 
 ## Conventions
 - Changes to `README.md` content should be reflected as a new dated entry in `log.md` (pattern observed: `## YYYY-MM-DD` heading with `* **Label**: description` bullets), matching git history where every substantive README edit has a corresponding commit message describing the wording/classification change.
@@ -26,14 +26,21 @@ A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expr
 
 ## OKF Validation (added by explicit request; kept intentionally minimal)
 
-`.github/workflows/okf-markdown.yml` runs
-`scripts/okf/validate_okf_markdown.py --changed` on every pull request
-touching a `.md` file. It only reports pass/fail as a PR check — it never
-opens issues, comments, or writes to the repo. This repo is public, so
-anything more (e.g. automation that files issues) would be visible to
-everyone; that tradeoff is why broader automation used in other repos
-(monthly spec-drift watch, push-triggered doc-gap delegation to
-`@copilot`) was deliberately **not** added here. Ask before adding either.
+`.github/workflows/ci.yml` provides the three status checks the
+organization ruleset requires on `main` (`lint`, `test`, `security`). It
+runs on every pull request — a required check that never reports would
+leave a PR blocked forever, so it is deliberately *not* path-filtered.
+
+- `lint` — `scripts/okf/validate_okf_markdown.py --changed`
+- `test` — validator compiles, and the whole bundle's OKF baseline is clean
+- `security` — workflows stay read-only and avoid `pull_request_target`
+
+These only report pass/fail as PR checks — they never open issues,
+comment, or write to the repo. This repo is public, so anything more (e.g.
+automation that files issues) would be visible to everyone; that tradeoff
+is why broader automation used in other repos (monthly spec-drift watch,
+push-triggered doc-gap delegation to `@copilot`) was deliberately **not**
+added here. Ask before adding either.
 
 The validator understands this repo's actual OKF usage: `README.md` is a
 `type: Vision` concept, `index.md` is the reserved bundle index
