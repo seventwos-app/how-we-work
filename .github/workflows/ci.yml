@@ -44,6 +44,9 @@ jobs:
       - name: Validator is syntactically valid
         run: python -m py_compile scripts/okf/validate_okf_markdown.py
 
+      - name: Validator unit tests
+        run: python -m unittest discover -s tests -v
+
       - name: Whole bundle conforms to OKF v0.2
         run: |
           python scripts/okf/validate_okf_markdown.py --all | tee baseline.txt
