@@ -41,6 +41,42 @@ The validator understands this repo's actual OKF usage: `README.md` is a
 frontmatter-free update log — `.github/copilot-instructions.md` itself is
 excluded (tooling config, not OKF content).
 
+## Engineering Workflow: Bounded PR Process (applies to all agent-driven PR work)
+
+Goal: keep every PR-based task on a predictable, bounded path and prevent
+unbounded push/review/fix loops.
+
+- **Start with reconnaissance.** Before writing code, check for an existing
+  PR/issue for the task, the target branch's protection rules, any open
+  review threads on a PR you're resuming, and what has changed on the base
+  branch (`main`) since the branch was created. Don't duplicate work or
+  reopen settled discussion.
+- **Implement and validate before the first push.** Finish the intended
+  change and run the relevant targeted validation (e.g. the OKF validator,
+  or any check that applies to the files you touched) locally before
+  pushing anything. Don't push partial or unvalidated work to open a PR
+  "to see what CI says."
+- **Batch review feedback.** When a reviewer (human or automated) leaves
+  findings, collect and address all valid points from that round in a
+  single follow-up push rather than pushing once per comment.
+- **Sync sparingly.** Only merge/rebase onto the latest base branch
+  immediately before what you expect to be your final push, not on every
+  iteration — this avoids churn from repeatedly re-resolving the same
+  conflicts.
+- **Bound the review loop.** Plan for at most two automated review cycles
+  or 30 minutes of iteration on a single PR, whichever comes first. If the
+  PR isn't mergeable by then, stop and report a concrete blocker (what's
+  failing, what was tried, what decision or input is needed) instead of
+  continuing to iterate silently.
+- **Report progress regularly.** Post a short status update at each
+  meaningful stage transition (recon done, implementation done, validation
+  run, review addressed) and at least every 10 minutes during longer work,
+  so a human can follow along or intervene.
+- **Validate in two tiers.** Run focused/targeted checks while iterating
+  (e.g. just the file(s) you changed), then run the full validation gate
+  exactly once, right before the final push, to confirm nothing else
+  regressed.
+
 ## Workflow Optimization (quality-neutral, applies to all work in this repo)
 
 - **Parallelize independent work.** Batch every tool call that doesn't depend on another call's output into one response (multiple view/grep/glob/search calls together). Only serialize true dependencies. Use background agents for self-contained sub-investigations instead of polling.

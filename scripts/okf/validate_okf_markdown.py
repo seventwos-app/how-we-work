@@ -41,7 +41,10 @@ EXCLUDED_DIR_PARTS = {"node_modules", ".git", "dist", "build", "vendor"}
 # GitHub Copilot tooling-config files carry their own contract (or none),
 # not OKF's `type` -- out of scope for this content convention, same as
 # .agent.md / SKILL.md / .prompt.md files elsewhere.
-EXCLUDED_RELATIVE_PATHS = {".github/copilot-instructions.md"}
+EXCLUDED_RELATIVE_PATHS = {
+    ".github/copilot-instructions.md",
+    ".github/pull_request_template.md",
+}
 
 
 def is_excluded(path):
