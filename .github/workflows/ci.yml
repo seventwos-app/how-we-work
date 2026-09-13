@@ -1,0 +1,75 @@
+name: CI
+
+# Provides the status checks required by the organization ruleset on `main`
+# (`lint`, `test`, `security`). Runs on every pull request -- not just
+# markdown ones -- because a required check that never reports leaves a PR
+# blocked forever.
+#
+# Deliberately minimal, in keeping with .github/copilot-instructions.md:
+# this repo is a small public vision-doc bundle, so each job is a real but
+# lightweight check and none of them write to the repo, open issues, or
+# post comments.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate changed markdown against OKF v0.2
+        run: python scripts/okf/validate_okf_markdown.py --changed
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validator is syntactically valid
+        run: python -m py_compile scripts/okf/validate_okf_markdown.py
+
+      - name: Whole bundle conforms to OKF v0.2
+        run: |
+          python scripts/okf/validate_okf_markdown.py --all | tee baseline.txt
+          if grep -q '^REPORT ' baseline.txt; then
+            echo "::error::Non-conformant markdown found in the OKF bundle baseline."
+            exit 1
+          fi
+
+  security:
+    name: security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Workflows avoid pull_request_target
+        run: |
+          if grep -rnE '^[[:space:]]*pull_request_target:' .github/workflows; then
+            echo "::error::pull_request_target runs with repo write scope on fork PRs; not appropriate for this public repo."
+            exit 1
+          fi
+          echo "No pull_request_target triggers found."
+
+      - name: Workflows do not request write permissions
+        run: |
+          if grep -rnE '^[[:space:]]*(contents|issues|pull-requests|packages|id-token):[[:space:]]*write' .github/workflows; then
+            echo "::error::Workflows in this repo are intended to be read-only PR checks."
+            exit 1
+          fi
+          echo "All workflows are read-only."
