@@ -51,7 +51,9 @@ RESERVED_NAMES = {RESERVED_INDEX_NAME, RESERVED_LOG_NAME}
 
 VALID_STATUSES = {"draft", "stable", "deprecated"}
 
-EXCLUDED_DIR_PARTS = {"node_modules", ".git", "dist", "build", "vendor"}
+# `.copilot/` holds assistant tooling (e.g. installed skills), not
+# knowledge-bundle content, so it is outside the OKF frontmatter contract.
+EXCLUDED_DIR_PARTS = {"node_modules", ".git", "dist", "build", "vendor", ".copilot"}
 
 # GitHub Copilot tooling-config files carry their own contract (or none),
 # not OKF's `type` -- out of scope for this content convention, same as
