@@ -13,7 +13,7 @@ A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expr
 - `log.md` — dated "Update Log" of substantive changes to the bundle (init, classification, wording edits) — append-only style, newest section on top per date.
 
 ## Commands
-None — no install/build/test/lint tooling exists in this repo.
+- `python scripts/okf/validate_okf_markdown.py --changed` — validates changed markdown against this repo's OKF v0.2 bundle convention (used by CI on pull requests). `--all` scans everything and reports a baseline without failing.
 
 ## Conventions
 - Changes to `README.md` content should be reflected as a new dated entry in `log.md` (pattern observed: `## YYYY-MM-DD` heading with `* **Label**: description` bullets), matching git history where every substantive README edit has a corresponding commit message describing the wording/classification change.
@@ -21,8 +21,25 @@ None — no install/build/test/lint tooling exists in this repo.
 - Commit messages in history are short, imperative, `docs:`-prefixed for structural changes (e.g. `docs: update Vision description in README frontmatter`) or plain descriptive for content edits.
 
 ## Gotchas
-- This is a docs/vision artifact, not a project with builds or tests — do not add tooling, package files, or CI unless explicitly requested.
+- This is a docs/vision artifact, not a project with builds or tests — do not add more tooling, package files, or CI beyond the OKF validator below unless explicitly requested.
 - Remote has extra branches (`a-tcp-patch-1`, `a-tcp-patch-2`) beyond `main`; default branch is `main` — don't assume those are stale/mergeable without checking.
+
+## OKF Validation (added by explicit request; kept intentionally minimal)
+
+`.github/workflows/okf-markdown.yml` runs
+`scripts/okf/validate_okf_markdown.py --changed` on every pull request
+touching a `.md` file. It only reports pass/fail as a PR check — it never
+opens issues, comments, or writes to the repo. This repo is public, so
+anything more (e.g. automation that files issues) would be visible to
+everyone; that tradeoff is why broader automation used in other repos
+(monthly spec-drift watch, push-triggered doc-gap delegation to
+`@copilot`) was deliberately **not** added here. Ask before adding either.
+
+The validator understands this repo's actual OKF usage: `README.md` is a
+`type: Vision` concept, `index.md` is the reserved bundle index
+(`okf_version` frontmatter, not `type`), and `log.md` is the reserved,
+frontmatter-free update log — `.github/copilot-instructions.md` itself is
+excluded (tooling config, not OKF content).
 
 ## Workflow Optimization (quality-neutral, applies to all work in this repo)
 
