@@ -36,7 +36,7 @@ RESERVED_INDEX_NAME = "index.md"
 RESERVED_LOG_NAME = "log.md"
 RESERVED_NAMES = {RESERVED_INDEX_NAME, RESERVED_LOG_NAME}
 
-EXCLUDED_DIR_PARTS = {"node_modules", ".git", "dist", "build", "vendor"}
+EXCLUDED_DIR_PARTS = {"node_modules", ".git", "dist", "build", "vendor", ".copilot"}
 
 # GitHub Copilot tooling-config files carry their own contract (or none),
 # not OKF's `type` -- out of scope for this content convention, same as
