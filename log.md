@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-09-14
+* **Tooling**: Rewrote `scripts/okf/validate_okf_markdown.py` to enforce OKF v0.2 strictly and recursively: every non-reserved markdown file must carry a parseable YAML frontmatter block with a non-empty `type`; `index.md`/`log.md` must have no frontmatter, except the bundle-root `index.md`, which may carry frontmatter containing only `okf_version`; the optional `tags`/`status`/`generated`/`verified`/`sources` frontmatter families are shape-checked when present; each `sources[]` entry must declare a non-empty `resource`; and every body footnote label (`[^id]`) must correspond to a `sources[].id`. Added a small in-house YAML-subset parser (no third-party dependency) to support the richer shapes, and a `tests/` unit suite (`python -m unittest discover -s tests`) covering the new rules, wired into the `test` CI job.
+
 ## 2026-09-13 (4)
 * **Organization**: Moved the [Emergency Cloud Handoff](runbooks/emergency-cloud-handoff.md) runbook into `runbooks/`, keeping bundle entrypoints and the Vision at the repository root.
 

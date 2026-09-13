@@ -32,7 +32,8 @@ runs on every pull request — a required check that never reports would
 leave a PR blocked forever, so it is deliberately *not* path-filtered.
 
 - `lint` — `scripts/okf/validate_okf_markdown.py --changed`
-- `test` — validator compiles, and the whole bundle's OKF baseline is clean
+- `test` — validator compiles, its `tests/` unit suite passes, and the
+  whole bundle's OKF baseline is clean
 - `security` — workflows stay read-only and avoid `pull_request_target`
 
 These only report pass/fail as PR checks — they never open issues,
@@ -42,11 +43,18 @@ is why broader automation used in other repos (monthly spec-drift watch,
 push-triggered doc-gap delegation to `@copilot`) was deliberately **not**
 added here. Ask before adding either.
 
-The validator understands this repo's actual OKF usage: `README.md` is a
-`type: Vision` concept, `index.md` is the reserved bundle index
-(`okf_version` frontmatter, not `type`), and `log.md` is the reserved,
-frontmatter-free update log — `.github/copilot-instructions.md` itself is
-excluded (tooling config, not OKF content).
+The validator understands this repo's actual OKF usage: every non-reserved
+`.md` file recursively is a concept requiring a parseable YAML frontmatter
+block with a non-empty `type`; `index.md` and `log.md` are reserved and
+must carry no frontmatter, except the bundle-root `index.md`, which may
+carry a frontmatter block containing only `okf_version`. When present, it
+also enforces the shape of the optional `tags`/`status`/`generated`/
+`verified`/`sources` frontmatter families, requires each `sources[]` entry
+to declare a non-empty `resource`, and requires every body footnote label
+(`[^id]`) to correspond to a `sources[].id`. `.github/copilot-instructions.md`
+and `.github/pull_request_template.md` are excluded (tooling config, not
+OKF content). Run `python -m unittest discover -s tests` after touching
+the validator.
 
 ## Engineering Workflow: Bounded PR Process (applies to all agent-driven PR work)
 
