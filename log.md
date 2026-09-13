@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-09-13 (3)
+* **Runbook**: Bounded the [Emergency Cloud Handoff](emergency-cloud-handoff.md) procedure to a 1-hour checkpoint per cloud session -- it must push its state and check in at the hour mark (or on completion) instead of running unbounded, so you can choose to extend or stop. The paired "Emergency Cloud Handoff" automation now also nudges existing handoffs approaching their bound.
+
 ## 2026-09-13 (2)
 * **Runbook**: Added [Emergency Cloud Handoff](emergency-cloud-handoff.md), a procedure for moving busy local agent sessions to cloud sessions when you need to shut down suddenly -- force-push in-flight work, open a cloud session per PR from the pushed branch, hand it a resume prompt, then stop the local session.
 
