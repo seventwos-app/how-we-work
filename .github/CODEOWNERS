@@ -1,0 +1,24 @@
+# Default owners for all files.
+#
+# Owners must be a user or a team with write access. An organisation handle
+# (e.g. `@seventwos-app`) is NOT valid CODEOWNERS syntax and is silently
+# ignored by GitHub, which makes any code-owner review requirement vacuous.
+# Verify with: gh api repos/seventwos-app/how-we-work/codeowners/errors
+* @seventwos-app/engineering
+
+# Agent and skill definitions.
+# These are executable instructions to AI agents, not documentation. A change
+# here alters what an agent will do on this repository, so it carries the same
+# weight as a workflow change and must not land unreviewed.
+/.github/agents/ @seventwos-app/engineering
+/.github/skills/ @seventwos-app/engineering
+/.github/copilot-instructions.md @seventwos-app/engineering
+
+# CI/CD and repository governance
+/.github/workflows/ @seventwos-app/engineering
+/.github/CODEOWNERS @seventwos-app/engineering
+
+# Published conventions other repositories are expected to conform to.
+# Downstream repositories validate against these, so a change here can
+# silently invalidate records elsewhere.
+/plans/ @seventwos-app/engineering
