@@ -14,15 +14,22 @@ A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expr
 
 ## Commands
 - `python scripts/okf/validate_okf_markdown.py --changed` — validates changed markdown against this repo's OKF v0.2 bundle convention (the `lint` CI check on pull requests). `--all` scans everything and reports a baseline without failing.
+- `python scripts/provenance/validate_provenance.py --file .seventwos/provenance.json` — validates the repository provenance record against schema v0.1 (the `test` CI job).
 
 ## Conventions
 - Changes to `README.md` content should be reflected as a new dated entry in `log.md` (pattern observed: `## YYYY-MM-DD` heading with `* **Label**: description` bullets), matching git history where every substantive README edit has a corresponding commit message describing the wording/classification change.
 - Preserve YAML frontmatter on `README.md` (`type`, `title`, `description`, `tags`) and on `index.md` (`okf_version`) — these are OKF bundle metadata, not incidental headers.
 - Commit messages in history are short, imperative, `docs:`-prefixed for structural changes (e.g. `docs: update Vision description in README frontmatter`) or plain descriptive for content edits.
 
+## Provenance
+- `.seventwos/provenance.json` (schema v0.1) records, per change: intent, human direction, agent involvement (`none`/`assisted`/`generated-and-reviewed`), review, and source outcome — see `plans/repository-provenance.md` for the full convention and disclosure classes (`public`/`internal`/`restricted`). It must never contain workspace IDs, prompts, customer data, or credentials.
+- `.github/pull_request_template.md` collects exactly the four fields a provenance entry needs: Intent, Human direction, Agent/tool involvement, Verification.
+- `scripts/provenance/validate_provenance.py` reports violations as a JSON path plus a rule id (`PROV001`-`PROV005`), never the offending value. Run `python -m unittest discover -s tests` after touching it.
+
 ## Gotchas
 - This is a docs/vision artifact, not a project with builds or tests — do not add more tooling, package files, or CI beyond the OKF validator below unless explicitly requested.
 - Remote has extra branches (`a-tcp-patch-1`, `a-tcp-patch-2`) beyond `main`; default branch is `main` — don't assume those are stale/mergeable without checking.
+- Apply repository exclusion rules to paths relative to the repository root, never absolute paths. Local Copilot checkouts commonly live beneath a parent `.copilot` directory; inspecting absolute path parts can silently exclude the entire bundle. Treat a `0/0 markdown files` baseline as a validator failure, not a successful empty scan.
 
 ## OKF Validation (added by explicit request; kept intentionally minimal)
 
@@ -32,8 +39,9 @@ runs on every pull request — a required check that never reports would
 leave a PR blocked forever, so it is deliberately *not* path-filtered.
 
 - `lint` — `scripts/okf/validate_okf_markdown.py --changed`
-- `test` — validator compiles, its `tests/` unit suite passes, and the
-  whole bundle's OKF baseline is clean
+- `test` — both validators compile, the `tests/` unit suite passes, the
+  whole bundle's OKF baseline is clean, and the provenance record
+  (`.seventwos/provenance.json`) conforms to schema v0.1
 - `security` — workflows stay read-only and avoid `pull_request_target`
 
 These only report pass/fail as PR checks — they never open issues,
