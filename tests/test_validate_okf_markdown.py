@@ -258,6 +258,48 @@ class ReservedFileTests(unittest.TestCase):
 class RepoBundleTests(unittest.TestCase):
     """Guards against regressions on the tracked bundle itself."""
 
+    def test_assistant_tooling_directories_are_excluded(self):
+        path = REPO_ROOT / ".github" / "agents" / "example.agent.md"
+        self.assertTrue(okf.is_excluded(path))
+
+    def test_bundle_index_requires_each_concept_document(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_root = Path(tmp_dir)
+            old_root = okf.REPO_ROOT
+            okf.REPO_ROOT = tmp_root
+            try:
+                write(tmp_root, "index.md", '---\nokf_version: "0.2"\n---\n')
+                write(tmp_root, "README.md", "---\ntype: Vision\n---\n")
+                write(tmp_root, "stack.md", "---\ntype: Specification\n---\n")
+                self.assertEqual(
+                    okf.check_bundle_index(),
+                    ["missing index.md entry for README.md, stack.md"],
+                )
+            finally:
+                okf.REPO_ROOT = old_root
+
+    def test_bundle_index_rejects_stale_document_link(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_root = Path(tmp_dir)
+            old_root = okf.REPO_ROOT
+            okf.REPO_ROOT = tmp_root
+            try:
+                write(
+                    tmp_root,
+                    "index.md",
+                    '---\nokf_version: "0.2"\n---\n\n* [Missing](missing.md)\n',
+                )
+                self.assertEqual(
+                    okf.check_bundle_index(),
+                    ["index.md links to missing document(s): missing.md"],
+                )
+            finally:
+                okf.REPO_ROOT = old_root
+
     def test_whole_bundle_conforms(self):
         clean = True
         offenders = []

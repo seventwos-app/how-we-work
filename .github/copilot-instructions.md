@@ -4,7 +4,7 @@
 A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expressing Seventwos' vision/heuristic for how humans and AI agents collaborate ("workspace captures intent, repository captures implementation"). Not a code repo — no app, no dependencies, no CI.
 
 ## Stack
-- Pure Markdown content. No package manifest, no language runtime, no `.github/workflows/`.
+- Pure Markdown content with a small in-repository Python OKF validator and pull-request CI; no application runtime or package manifest.
 - Uses OKF bundle conventions via YAML frontmatter (`okf_version: "0.2"` in `index.md`; `type`, `title`, `description`, `tags` in `README.md`).
 
 ## Repo shape
@@ -21,8 +21,17 @@ A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expr
 - Commit messages in history are short, imperative, `docs:`-prefixed for structural changes (e.g. `docs: update Vision description in README frontmatter`) or plain descriptive for content edits.
 
 ## Gotchas
-- This is a docs/vision artifact, not a project with builds or tests — do not add more tooling, package files, or CI beyond the OKF validator below unless explicitly requested.
+- This is a docs/vision artifact, not an application — do not add application tooling or CI beyond the existing OKF validator workflow unless explicitly requested.
 - Remote has extra branches (`a-tcp-patch-1`, `a-tcp-patch-2`) beyond `main`; default branch is `main` — don't assume those are stale/mergeable without checking.
+
+## Agents
+This bundle captures intent, so its agents are document-production specialists. Architecture and implementation agents (e.g. `Platform Architect`) live in the implementation repository, not here.
+
+- **Fact Checker** (`.github/agents/fact-checker.agent.md`, pinned to `Gemini 3.8 Flash`): Web search, evidence triage, and fact-checking specialist. Use when searching the web for technical specifications, verifying claims, investigating external libraries or desktop frameworks, and validating facts against primary sources before adding them to bundle documentation.
+- **Technical Visualizer** (`.github/agents/technical-visualizer.agent.md`, pinned to `Claude Sonnet 5`): Technical visualization, system topology, and information design specialist. Use when mapping complex technical architectures, human-agent workflows, sequence lifecycles, and multi-platform boundaries into rigorous, elegant diagrams using C4 modeling, Tufte information design principles, and custom-styled Mermaid charts.
+
+## Skills
+- **`mermaid-diagrams`** (`.github/skills/mermaid-diagrams/SKILL.md`): Technical standards for generating clean, syntax-valid, and visually compelling Mermaid diagrams (architecture topologies, sequence flows, state diagrams, class relationships, and system charts).
 
 ## OKF Validation (added by explicit request; kept intentionally minimal)
 
@@ -44,17 +53,19 @@ push-triggered doc-gap delegation to `@copilot`) was deliberately **not**
 added here. Ask before adding either.
 
 The validator understands this repo's actual OKF usage: every non-reserved
-`.md` file recursively is a concept requiring a parseable YAML frontmatter
+bundle-content `.md` file recursively is a concept requiring a parseable YAML frontmatter
 block with a non-empty `type`; `index.md` and `log.md` are reserved and
 must carry no frontmatter, except the bundle-root `index.md`, which may
 carry a frontmatter block containing only `okf_version`. When present, it
 also enforces the shape of the optional `tags`/`status`/`generated`/
 `verified`/`sources` frontmatter families, requires each `sources[]` entry
 to declare a non-empty `resource`, and requires every body footnote label
-(`[^id]`) to correspond to a `sources[].id`. `.github/copilot-instructions.md`
-and `.github/pull_request_template.md` are excluded (tooling config, not
-OKF content). Run `python -m unittest discover -s tests` after touching
-the validator.
+(`[^id]`) to correspond to a `sources[].id`. Copilot tooling directories
+(`.github/` and `.copilot/`) are excluded because they are configuration,
+not OKF content. Run `python -m unittest discover -s tests` after touching
+the validator. The root `index.md` is also a complete bundle manifest:
+every concept document must appear in it, and every linked Markdown document
+must exist.
 
 ## Engineering Workflow: Bounded PR Process (applies to all agent-driven PR work)
 
