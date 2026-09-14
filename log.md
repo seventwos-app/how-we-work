@@ -1,7 +1,7 @@
 # Update Log
 
 ## 2026-09-14
-* **Agent Integration**: Mapped over the `Platform Architect` specialist agent (`.github/agents/platform-architect.agent.md`, pinned to `Claude Opus 5`) from `/seventwos` to serve as the lead authority for cross-tier platform planning, Design-It-Twice trade-offs, premise challenges, and technical specifications.
+* **Agent Scope**: Removed the `Platform Architect` agent from this bundle. Its deliverables (implementation plans, codepath failure-mode analysis, test strategies) are repository-tier concerns; this bundle captures intent, so it retains only document-production agents. The canonical agent remains in the implementation repository.
 * **Agent Integration**: Established the `Technical Visualizer` specialist agent (`.github/agents/technical-visualizer.agent.md`, pinned to `Claude Sonnet 5`) and the `mermaid-diagrams` skill (`.github/skills/mermaid-diagrams/SKILL.md`) to elevate system architecture visualization with C4 tiered modeling, Tufte information design, and styled Mermaid schematics in [Technology Stack](stack.md).
 * **Update**: Refined frontend framework alignment phrasing in [Technology Stack](stack.md).
 * **Addition**: Expanded [Technology Stack](stack.md) to integrate the complete multi-platform ecosystem: Desktop (Tauri v2 + React 19), Mobile (Element X on iOS with SwiftUI and Android with Jetpack Compose sharing `matrix-rust-sdk`), and the decentralized Matrix communications fabric (Matrix 2.0 Sliding Sync, Vodozemac E2EE, Matrix Application Services).

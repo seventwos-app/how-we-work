@@ -25,7 +25,8 @@ None — no install/build/test/lint tooling exists in this repo.
 - Remote has extra branches (`a-tcp-patch-1`, `a-tcp-patch-2`) beyond `main`; default branch is `main` — don't assume those are stale/mergeable without checking.
 
 ## Agents
-- **Platform Architect** (`.github/agents/platform-architect.agent.md`, pinned to `Claude Opus 5`): Cross-tier platform architecture and strategic planning specialist. Use before implementing non-trivial features, evaluating technology stacks, introducing multi-service boundaries, or specifying architectures spanning the desktop, mobile, communications fabric, and execution tiers. Challenges premises, maps failure modes, enforces Design-It-Twice trade-offs, and produces actionable specifications with high product-quality bars.
+This bundle captures intent, so its agents are document-production specialists. Architecture and implementation agents (e.g. `Platform Architect`) live in the implementation repository, not here.
+
 - **Fact Checker** (`.github/agents/fact-checker.agent.md`, pinned to `Gemini 3.8 Flash`): Web search, evidence triage, and fact-checking specialist. Use when searching the web for technical specifications, verifying claims, investigating external libraries or desktop frameworks, and validating facts against primary sources before adding them to bundle documentation.
 - **Technical Visualizer** (`.github/agents/technical-visualizer.agent.md`, pinned to `Claude Sonnet 5`): Technical visualization, system topology, and information design specialist. Use when mapping complex technical architectures, human-agent workflows, sequence lifecycles, and multi-platform boundaries into rigorous, elegant diagrams using C4 modeling, Tufte information design principles, and custom-styled Mermaid charts.
 
