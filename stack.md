@@ -65,6 +65,18 @@ graph TD
             D_UI <-->|Tauri IPC: JSON-serialized| D_Tauri
             D_Tauri -->|Direct Rust call: no FFI| D_Matrix
             D_Matrix <-->|Encrypt / decrypt in process| D_Crypto
+
+            subgraph LocalExecution ["Local Execution Sandbox (same machine)"]
+                D_Git["Git Worktree Manager (Branch Isolation)"]
+                D_SQLite[("App SQLite Store (Sessions & DAGs)")]
+                D_MCP["Model Context Protocol (MCP) Client"]
+                LocalTools{{"Local Dev Tools (Node / Python / Shell)"}}
+                D_MCP <-->|stdio / JSON-RPC| LocalTools
+            end
+
+            D_Tauri -->|Session control| D_Git
+            D_Tauri -->|State persistence| D_SQLite
+            D_Tauri -->|Tool invocation| D_MCP
         end
 
         subgraph MobileClients ["Mobile Clients — UniFFI Bridge to Rust"]
@@ -84,65 +96,45 @@ graph TD
 
     %% Tier 2: Communications Fabric (Real-Time Decentralized Coordination)
     subgraph Fabric ["2. Communications Fabric — Matrix 2.0 Network (zero-knowledge relay)"]
-        Homeserver(["Matrix 2.0 Homeserver (Synapse)"])
-        NativeSync["Native Sliding Sync Endpoint (MSC4186)"]
+        Homeserver(["Matrix 2.0 Homeserver (Synapse)<br/>native MSC4186 sliding sync"])
         PushGateway["Push Gateway (Sygnal)"]
         Federation{{"Federated Homeservers (Matrix network)"}}
-        Homeserver -->|Serves sync natively| NativeSync
-        Homeserver -->|Push Gateway API| PushGateway
+        Homeserver -->|"Push Gateway API"| PushGateway
         Homeserver <-->|Server-to-server federation| Federation
     end
 
-    %% Tier 3: Execution & Agent Intelligence
-    subgraph Execution ["3. Execution & Implementation Tier"]
-        subgraph LocalExecution ["Local Desktop Sandbox"]
-            D_Git["Git Worktree Manager (Branch Isolation)"]
-            D_SQLite[("Local SQLite Store (Sessions & DAGs)")]
-            D_MCP["Model Context Protocol (MCP) Client"]
-            LocalTools{{"Local Dev Tools (Node / Python / Shell)"}}
+    %% Tier 3: Cloud Agent Intelligence
+    subgraph Execution ["3. Cloud Agent Services — Implementation Tier"]
+        MatrixAS["Matrix Application Service (Agent Bots)"]
+        AgentGateway(["Agent Gateway (Azure Functions C#)"])
+        FrontierLLMs{{"Frontier LLMs (Claude Opus/Sonnet, GPT-5/6, Gemini)"}}
+        CosmosDB[("Azure Cosmos DB NoSQL")]
 
-            D_Tauri -->|Session control| D_Git
-            D_Tauri -->|State persistence| D_SQLite
-            D_Tauri -->|Tool invocation| D_MCP
-            D_MCP <-->|stdio / JSON-RPC| LocalTools
-        end
-
-        subgraph CloudBackend ["Seventwos Cloud & Agent Services"]
-            MatrixAS["Matrix Application Service (Agent Bots)"]
-            AgentGateway(["Agent Gateway (Azure Functions C#)"])
-            FrontierLLMs{{"Frontier LLMs (Claude Opus/Sonnet, GPT-5/6, Gemini)"}}
-            CosmosDB[("Azure Cosmos DB NoSQL")]
-
-            MatrixAS <-->|Event webhook| AgentGateway
-            AgentGateway <-->|Inference API| FrontierLLMs
-            AgentGateway <-->|State read/write| CosmosDB
-        end
+        MatrixAS <-->|Event webhook| AgentGateway
+        AgentGateway <-->|Inference API| FrontierLLMs
+        AgentGateway <-->|State read/write| CosmosDB
     end
 
     %% Cross-Tier Connections
-    %% Downstream event streaming (MSC4186) and upstream sends, key distribution
-    %% and authentication (Client-Server API) both terminate at the homeserver.
-    D_Matrix <-->|MSC4186 sync: ciphertext down| NativeSync
-    iOS_Rust <-->|MSC4186 sync: ciphertext down| NativeSync
-    And_Rust <-->|MSC4186 sync: ciphertext down| NativeSync
+    %% Each client holds one authenticated connection to the homeserver carrying
+    %% both downstream sync (MSC4186) and upstream sends, key distribution and OIDC.
+    D_Matrix <-->|"Client-Server API + MSC4186 sync (ciphertext)"| Homeserver
+    iOS_Rust <-->|"Client-Server API + MSC4186 sync (ciphertext)"| Homeserver
+    And_Rust <-->|"Client-Server API + MSC4186 sync (ciphertext)"| Homeserver
 
-    D_Matrix <-->|Client-Server API: send, keys, OIDC| Homeserver
-    iOS_Rust <-->|Client-Server API: send, keys, OIDC| Homeserver
-    And_Rust <-->|Client-Server API: send, keys, OIDC| Homeserver
-
-    PushGateway -.->|APNs / FCM wake signal: event ID only| iOS_UI
-    PushGateway -.->|UnifiedPush / FCM wake signal: event ID only| And_UI
+    PushGateway -.->|"Wake signal: event ID only"| iOS_UI
+    PushGateway -.->|"Wake signal: event ID only"| And_UI
 
     Homeserver <-->|Matrix AS Protocol| MatrixAS
 
     %% Apply Class Styles
     class Clients,Fabric,Execution zoneContainer;
-    class DesktopClient,MobileClients,LocalExecution,CloudBackend subContainer;
+    class DesktopClient,MobileClients,LocalExecution subContainer;
     class D_UI,D_Tauri,iOS_UI,And_UI clientZone;
     class D_Matrix nativeCore;
     class iOS_Rust,And_Rust ffiCore;
     class D_Crypto,iOS_Crypto,And_Crypto cryptoZone;
-    class Homeserver,NativeSync,PushGateway,Federation matrixZone;
+    class Homeserver,PushGateway,Federation matrixZone;
     class D_Git,D_SQLite,D_MCP,LocalTools execZone;
     class MatrixAS,AgentGateway,FrontierLLMs,CosmosDB cloudZone;
 ```
