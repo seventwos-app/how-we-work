@@ -24,6 +24,9 @@ None — no install/build/test/lint tooling exists in this repo.
 - This is a docs/vision artifact, not a project with builds or tests — do not add tooling, package files, or CI unless explicitly requested.
 - Remote has extra branches (`a-tcp-patch-1`, `a-tcp-patch-2`) beyond `main`; default branch is `main` — don't assume those are stale/mergeable without checking.
 
+## Agents
+- **Fact Checker** (`.github/agents/fact-checker.agent.md`, pinned to `Gemini 3.8 Flash`): Web search, evidence triage, and fact-checking specialist. Use when searching the web for technical specifications, verifying claims, investigating external libraries or desktop frameworks, and validating facts against primary sources before adding them to bundle documentation.
+
 ## Workflow Optimization (quality-neutral, applies to all work in this repo)
 
 - **Parallelize independent work.** Batch every tool call that doesn't depend on another call's output into one response (multiple view/grep/glob/search calls together). Only serialize true dependencies. Use background agents for self-contained sub-investigations instead of polling.
