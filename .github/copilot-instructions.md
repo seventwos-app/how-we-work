@@ -4,7 +4,7 @@
 A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expressing Seventwos' vision/heuristic for how humans and AI agents collaborate ("workspace captures intent, repository captures implementation"). Not a code repo — no app, no dependencies, no CI.
 
 ## Stack
-- Pure Markdown content. No package manifest, no language runtime, no `.github/workflows/`.
+- Pure Markdown content with a small in-repository Python OKF validator and pull-request CI; no application runtime or package manifest.
 - Uses OKF bundle conventions via YAML frontmatter (`okf_version: "0.2"` in `index.md`; `type`, `title`, `description`, `tags` in `README.md`).
 
 ## Repo shape
@@ -13,7 +13,7 @@ A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expr
 - `log.md` — dated "Update Log" of substantive changes to the bundle (init, classification, wording edits) — append-only style, newest section on top per date.
 
 ## Commands
-None — no install/build/test/lint tooling exists in this repo.
+- `python scripts/okf/validate_okf_markdown.py --changed` — validates changed markdown against this repo's OKF v0.2 bundle convention (the `lint` CI check on pull requests). `--all` scans everything and reports a baseline without failing.
 
 ## Conventions
 - Changes to `README.md` content should be reflected as a new dated entry in `log.md` (pattern observed: `## YYYY-MM-DD` heading with `* **Label**: description` bullets), matching git history where every substantive README edit has a corresponding commit message describing the wording/classification change.
@@ -21,7 +21,7 @@ None — no install/build/test/lint tooling exists in this repo.
 - Commit messages in history are short, imperative, `docs:`-prefixed for structural changes (e.g. `docs: update Vision description in README frontmatter`) or plain descriptive for content edits.
 
 ## Gotchas
-- This is a docs/vision artifact, not a project with builds or tests — do not add tooling, package files, or CI unless explicitly requested.
+- This is a docs/vision artifact, not an application — do not add application tooling or CI beyond the existing OKF validator workflow unless explicitly requested.
 - Remote has extra branches (`a-tcp-patch-1`, `a-tcp-patch-2`) beyond `main`; default branch is `main` — don't assume those are stale/mergeable without checking.
 
 ## Agents
@@ -32,6 +32,74 @@ This bundle captures intent, so its agents are document-production specialists. 
 
 ## Skills
 - **`mermaid-diagrams`** (`.github/skills/mermaid-diagrams/SKILL.md`): Technical standards for generating clean, syntax-valid, and visually compelling Mermaid diagrams (architecture topologies, sequence flows, state diagrams, class relationships, and system charts).
+
+## OKF Validation (added by explicit request; kept intentionally minimal)
+
+`.github/workflows/ci.yml` provides the three status checks the
+organization ruleset requires on `main` (`lint`, `test`, `security`). It
+runs on every pull request — a required check that never reports would
+leave a PR blocked forever, so it is deliberately *not* path-filtered.
+
+- `lint` — `scripts/okf/validate_okf_markdown.py --changed`
+- `test` — validator compiles, its `tests/` unit suite passes, and the
+  whole bundle's OKF baseline is clean
+- `security` — workflows stay read-only and avoid `pull_request_target`
+
+These only report pass/fail as PR checks — they never open issues,
+comment, or write to the repo. This repo is public, so anything more (e.g.
+automation that files issues) would be visible to everyone; that tradeoff
+is why broader automation used in other repos (monthly spec-drift watch,
+push-triggered doc-gap delegation to `@copilot`) was deliberately **not**
+added here. Ask before adding either.
+
+The validator understands this repo's actual OKF usage: every non-reserved
+bundle-content `.md` file recursively is a concept requiring a parseable YAML frontmatter
+block with a non-empty `type`; `index.md` and `log.md` are reserved and
+must carry no frontmatter, except the bundle-root `index.md`, which may
+carry a frontmatter block containing only `okf_version`. When present, it
+also enforces the shape of the optional `tags`/`status`/`generated`/
+`verified`/`sources` frontmatter families, requires each `sources[]` entry
+to declare a non-empty `resource`, and requires every body footnote label
+(`[^id]`) to correspond to a `sources[].id`. Copilot tooling directories
+(`.github/` and `.copilot/`) are excluded because they are configuration,
+not OKF content. Run `python -m unittest discover -s tests` after touching
+the validator.
+
+## Engineering Workflow: Bounded PR Process (applies to all agent-driven PR work)
+
+Goal: keep every PR-based task on a predictable, bounded path and prevent
+unbounded push/review/fix loops.
+
+- **Start with reconnaissance.** Before writing code, check for an existing
+  PR/issue for the task, the target branch's protection rules, any open
+  review threads on a PR you're resuming, and what has changed on the base
+  branch (`main`) since the branch was created. Don't duplicate work or
+  reopen settled discussion.
+- **Implement and validate before the first push.** Finish the intended
+  change and run the relevant targeted validation (e.g. the OKF validator,
+  or any check that applies to the files you touched) locally before
+  pushing anything. Don't push partial or unvalidated work to open a PR
+  "to see what CI says."
+- **Batch review feedback.** When a reviewer (human or automated) leaves
+  findings, collect and address all valid points from that round in a
+  single follow-up push rather than pushing once per comment.
+- **Sync sparingly.** Only merge/rebase onto the latest base branch
+  immediately before what you expect to be your final push, not on every
+  iteration — this avoids churn from repeatedly re-resolving the same
+  conflicts.
+- **Bound the review loop.** Plan for at most two automated review cycles
+  or 30 minutes of iteration on a single PR, whichever comes first. If the
+  PR isn't mergeable by then, stop and report a concrete blocker (what's
+  failing, what was tried, what decision or input is needed) instead of
+  continuing to iterate silently.
+- **Report progress regularly.** Post a short status update at each
+  meaningful stage transition (recon done, implementation done, validation
+  run, review addressed) and at least every 10 minutes during longer work,
+  so a human can follow along or intervene.
+- **Validate in two tiers.** Run focused/targeted checks while iterating
+  (e.g. just the file(s) you changed), then run the full validation gate
+  exactly once, right before the final push, to confirm nothing else
+  regressed.
 
 ## Workflow Optimization (quality-neutral, applies to all work in this repo)
 
