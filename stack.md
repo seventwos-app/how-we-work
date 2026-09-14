@@ -22,7 +22,7 @@ To deliver secure, real-time collaboration with native device fidelity, Seventwo
 | Layer | Desktop Client | iOS Mobile Client | Android Mobile Client |
 | :--- | :--- | :--- | :--- |
 | **Reference Anchor** | Claude Desktop & GitHub Copilot Desktop | Element X iOS | Element X Android |
-| **Host Shell / Runtime** | **Tauri v2** (Rust + Native Webview) | Native Swift / iOS 18+ App | Native Kotlin / Modern Android App |
+| **Host Shell / Runtime** | **Tauri v2** (Rust + Native Webview) | Native Swift / iOS 18.5+ App | Native Kotlin / Modern Android App |
 | **Fallback Shell** | Electron (Chromium + Node.js) | — | — |
 | **UI Framework** | **React 19 + TypeScript + Vite** | **SwiftUI** (Declarative Native) | **Jetpack Compose** (Declarative Native) |
 | **Design / Styling** | **Tailwind CSS** (Shared design tokens) | Apple Human Interface Guidelines | Material Design 3 (M3) |
@@ -31,7 +31,7 @@ To deliver secure, real-time collaboration with native device fidelity, Seventwo
 | **Encryption (E2EE)** | Vodozemac client-side (Megolm / Olm) | Vodozemac client-side (Megolm / Olm) | Vodozemac client-side (Megolm / Olm) |
 | **Extensibility & Tools** | Model Context Protocol (MCP Client) | In-app Action Sheets & Push Actions | In-app Action Sheets & Push Actions |
 | **Workspace Model** | Git Worktrees (Multi-agent branches) | Mobile Activity & Task Views | Mobile Activity & Task Views |
-| **Local Persistence** | SQLite (Sessions, DAGs, Checkpoints) | SQLite / CoreData / Rust State Store | SQLite / Room / Rust State Store |
+| **Local Persistence** | SQLite (Sessions, DAGs, Checkpoints) | `matrix-rust-sdk` state store (SQLite) + Keychain | `matrix-rust-sdk` state store (SQLite) + SQLDelight + Keystore |
 | **Push Notifications** | OS Native Notifications | Apple Push Notification service (APNs) | UnifiedPush / Firebase Cloud Messaging (FCM) |
 
 ---
@@ -145,10 +145,11 @@ The desktop client is optimized for high-intensity engineering, agent coordinati
 
 ### 3.1. Shell Architecture: Tauri v2
 - **Unified Rust Foundation**: Because Tauri v2 is written in Rust, it imports `matrix-rust-sdk` natively as a dependency without the overhead of foreign function interfaces.
-- **Resource Footprint**: Renders through operating system native webviews (WebView2 on Windows, WebKit on macOS), achieving:
+- **Resource Footprint**: Renders through operating system native webviews (WebView2 on Windows, WebKit on macOS, WebKitGTK on Linux). Published baseline measurements for minimal shells report:
   - Idle RAM consumption under 60 MB (versus 250–400 MB in standard Electron shells).
   - Installer sizes under 20 MB (versus 85–130 MB for bundled Chromium binaries).
   - Sub-second launch time.
+  These are baseline figures for lightweight shells, not production footprints — real memory use scales with DOM complexity and varies by platform webview.
 - **Electron Fallback Mode**: The presentation tier is decoupled from host primitives, enabling an Electron wrapper when enterprise environments enforce legacy Node.js C++ addons or pinned Chromium revisions.
 
 ### 3.2. Presentation Layer: React 19 + Vite
@@ -157,8 +158,9 @@ The desktop client is optimized for high-intensity engineering, agent coordinati
 - **Workspace Canvases**: Dedicated side-by-side surfaces for diff inspection, terminal execution, and markdown preview.
 
 ### 3.3. Tool Protocol: Model Context Protocol (MCP)
-- Adopts the open standard pioneered by Anthropic and adopted across modern AI developer tooling:
-  - Runs local MCP servers over `stdio` and connects to remote servers via `SSE` / `HTTP`.
+- Adopts the open standard released by Anthropic in November 2024 and adopted across modern AI developer tooling:
+  - Runs local MCP servers as subprocesses over `stdio` using newline-delimited JSON-RPC 2.0.
+  - Connects to remote servers over **Streamable HTTP**, the transport introduced in MCP revision `2025-03-26` that superseded the deprecated HTTP+SSE transport. Legacy HTTP+SSE is supported only where older servers require it.
   - Exposes tools (file viewing, code search, git operations, browser execution, database queries) directly to active agents.
 
 ### 3.4. Multi-Agent Workspace Isolation: Git Worktrees
@@ -179,10 +181,10 @@ The mobile applications for iOS and Android are built upon **Element X**, the re
   - High-performance state storage and event caching.
   - End-to-end encryption via **Vodozemac** (pure-Rust implementation of Olm and Megolm protocols), executed entirely on-device — the homeserver never holds decryption keys.
   - Modern OIDC authentication flow (MSC2965 / MSC3861).
-  - VoIP and group video integration via **MatrixRTC**.
+  - VoIP and group video integration via **MatrixRTC** (MSC4143).
 
 ### 4.2. iOS Application (Element X iOS)
-- **Language & UI**: Swift 6 and **SwiftUI**.
+- **Language & UI**: Swift 6 and **SwiftUI**, with a minimum deployment target of iOS 18.5.
 - **Integration**: The Rust SDK is compiled as a multi-architecture framework and imported into the Xcode project via a Swift Package with **UniFFI** bindings.
 - **iOS-Specific Features**:
   - Background sync using iOS Background Tasks framework.
@@ -223,12 +225,12 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 
 ## 6. Fact-Checking & Source Verification
 
-*All specification items below were verified against authoritative primary sources.*
+*Each specification item below carries a verification status. `[VERIFIED]` items are confirmed against a primary source — a protocol specification, official announcement, or the vendor's own public repository. `[DIRECTIONAL]` items are widely reported and consistent with observable evidence, but no vendor publishes an authoritative architecture manifest for them; they are recorded here as working assumptions rather than established fact.*
 
 | # | Specification Item | Verification Detail | Status | Authoritative Source | Confidence |
 |---|-------------------|---------------------|--------|----------------------|------------|
-| 1 | Claude Desktop Host | Electron application utilizing React and TypeScript for macOS and Windows. | `[VERIFIED]` | [Anthropic Official Documentation](https://docs.anthropic.com/en/docs/agents-and-tools/mcp) | 5/5 |
-| 2 | GitHub Copilot Desktop App | Desktop application utilizing Tauri v2 (Rust host shell + native OS webview) with Git worktree session isolation. | `[VERIFIED]` | [GitHub Documentation & Workspace Metadata](https://docs.github.com/en/copilot) | 5/5 |
+| 1 | Claude Desktop Host | Widely reported as an Electron application using web technologies for macOS and Windows. Anthropic publishes MCP configuration guidance for the client but no client architecture manifest, so this rests on distribution-bundle inspection rather than a vendor statement. | `[DIRECTIONAL]` | [Anthropic MCP Documentation](https://modelcontextprotocol.io/docs/develop/connect-local-servers) (configuration only) | 3/5 |
+| 2 | GitHub Copilot Desktop App | Git worktree session isolation is an observable, documented Copilot coding-agent pattern. The host shell technology is **not** published by GitHub; Tauri v2 is Seventwos' own architectural choice for the desktop client, not a confirmed match to Copilot Desktop's internals. | `[DIRECTIONAL]` | [GitHub Copilot Documentation](https://docs.github.com/en/copilot) | 2/5 |
 | 3 | Element X Core SDK | Element X iOS and Element X Android share `matrix-rust-sdk` as their foundational synchronization and crypto engine. | `[VERIFIED]` | [Element X Official Announcement & GitHub Repositories](https://github.com/element-hq/element-x-ios) | 5/5 |
 | 4 | Element X iOS Tech Stack | Written in Swift and SwiftUI, interfacing with `matrix-rust-sdk` via Swift Package and UniFFI FFI bindings. | `[VERIFIED]` | [Element X iOS Repository](https://github.com/element-hq/element-x-ios) | 5/5 |
 | 5 | Element X Android Tech Stack | Written in Kotlin and Jetpack Compose, communicating with `matrix-rust-sdk` through UniFFI bindings. | `[VERIFIED]` | [Element X Android Repository](https://github.com/element-hq/element-x-android) | 5/5 |
@@ -236,5 +238,8 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 | 7 | E2EE Trust Boundary | Vodozemac (Olm / Megolm in Rust) executes inside each client's `matrix-sdk-crypto`. Homeservers and sync endpoints relay opaque `m.room.encrypted` payloads and never hold Megolm session keys. | `[VERIFIED]` | [matrix-org/vodozemac](https://github.com/matrix-org/vodozemac) & [Matrix E2EE Concepts](https://matrix.org/docs/matrix-concepts/end-to-end-encryption/) | 5/5 |
 | 8 | Matrix Application Service API | Homeservers push room events to registered Application Services in bulk transactions via `PUT /_matrix/app/v1/transactions/{txnId}`, without per-agent polling. | `[VERIFIED]` | [Matrix Application Service API Specification](https://spec.matrix.org/latest/application-service-api/) | 5/5 |
 | 9 | MCP Local Transport | MCP clients spawn local servers as subprocesses and exchange newline-delimited JSON-RPC 2.0 messages over stdio. | `[VERIFIED]` | [Model Context Protocol: Transports](https://modelcontextprotocol.io/specification/basic/transports) | 5/5 |
-| 10 | Cross-Platform Rust Synergy | Both Tauri v2 (Desktop) and Element X (Mobile) utilize Rust as their native foundation, allowing direct crate reuse of `matrix-rust-sdk`. | `[VERIFIED]` | [Tauri v2 Documentation](https://v2.tauri.app) & [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) | 5/5 |
+| 10 | MCP Remote Transport | Streamable HTTP was introduced in MCP revision `2025-03-26` and supersedes the HTTP+SSE transport defined in `2024-11-05`, which is deprecated and retained only for backward compatibility. | `[VERIFIED]` | [MCP Specification: Streamable HTTP](https://modelcontextprotocol.io/specification/basic/transports) | 5/5 |
+| 11 | Element X Local Persistence | Neither client uses CoreData or Room. Both delegate room state to the `matrix-rust-sdk` SQLite state store; Element X Android additionally uses SQLDelight (`app.cash.sqldelight` 2.3.2), and Element X iOS uses `KeychainAccess` for credential storage. | `[VERIFIED]` | [element-x-android `libs.versions.toml`](https://github.com/element-hq/element-x-android/blob/develop/gradle/libs.versions.toml) & [element-x-ios `project.yml`](https://github.com/element-hq/element-x-ios/blob/develop/project.yml) | 5/5 |
+| 12 | Element X iOS Deployment Target | `project.yml` declares a minimum deployment target of iOS 18.5 and consumes `matrix-rust-components-swift` as a pinned Swift Package. | `[VERIFIED]` | [element-x-ios `project.yml`](https://github.com/element-hq/element-x-ios/blob/develop/project.yml) | 5/5 |
+| 13 | Cross-Platform Rust Synergy | Both Tauri v2 (Desktop) and Element X (Mobile) utilize Rust as their native foundation, allowing direct crate reuse of `matrix-rust-sdk`. | `[VERIFIED]` | [Tauri v2 Documentation](https://v2.tauri.app) & [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) | 5/5 |
 
