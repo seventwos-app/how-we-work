@@ -1,5 +1,10 @@
 # Update Log
 
+## 2026-09-14 (2)
+* **Plan**: Replaced the [Repository Provenance](plans/repository-provenance.md) plan with a practical MVP: a minimal, dependency-free `.seventwos/provenance.json` (schema v0.1) capturing intent, human direction, agent involvement, review, and source outcome; three disclosure classes (`public`/`internal`/`restricted`); Graphify reconfirmed as an optional derived reader only, its license question already resolved and out of scope.
+* **Tooling**: Added `scripts/provenance/validate_provenance.py`, a dependency-free validator that reports violations as a JSON path plus a stable rule id (`PROV001`-`PROV005`) and never the offending value, and `tests/test_validate_provenance.py` covering a valid record, each missing required field, an invalid `outcome.origin`, disallowed sensitive/unsupported fields, and safe (value-free) error messages.
+* **CI**: Wired the provenance validator and its unit tests into the existing `test` job in `.github/workflows/ci.yml` -- no new workflow, job, or third-party dependency.
+* **Process**: Replaced `.github/pull_request_template.md` with four fields -- Intent, Human direction, Agent/tool involvement (none/assisted/generated-and-reviewed), Verification -- matching the provenance record schema.
 ## 2026-09-14
 * **Plan**: Added [Repository Provenance](plans/repository-provenance.md), defining a layered per-repository manifest, Git/SBOM/attestation evidence, a generated organization catalog, Graphify's non-authoritative indexing role, and a phased rollout. Corrected the installed Graphify `0.9.61` license classification to Apache-2.0 rather than MIT.
 * **Tooling**: Fixed OKF markdown discovery to apply excluded-directory rules only to repository-relative paths. Local checkouts stored beneath a parent `.copilot` directory no longer produce a false-clean `0/0 markdown files` baseline, and the test suite now guards against empty bundle discovery and excluded parent-directory regressions.
