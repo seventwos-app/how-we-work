@@ -1,0 +1,19 @@
+# Default owners for all files
+* @seventwos-app
+
+# Agent and skill definitions.
+# These are executable instructions to AI agents, not documentation. A change
+# here alters what an agent will do on this repository, so it carries the same
+# weight as a workflow change and must not land unreviewed.
+/.github/agents/ @seventwos-app
+/.github/skills/ @seventwos-app
+/.github/copilot-instructions.md @seventwos-app
+
+# CI/CD and repository governance
+/.github/workflows/ @seventwos-app
+/.github/CODEOWNERS @seventwos-app
+
+# Published conventions other repositories are expected to conform to.
+# Downstream repositories validate against these, so a change here can
+# silently invalidate records elsewhere.
+/plans/ @seventwos-app
