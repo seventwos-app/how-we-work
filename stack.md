@@ -188,7 +188,7 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 
 ### 5.1. Why Matrix for Agentic Workflows?
 1. **Decentralized & Federatable**: Organizations own their data; private homeservers ensure sensitive workspace conversations never leak to third-party proprietary chat servers.
-2. **First-Class Agent Identity**: AI agents (e.g., `Fact Checker`, `Architect`, `Program Manager`) participate as first-class Matrix accounts or Application Service bots within shared rooms.
+2. **First-Class Agent Identity**: AI agents (e.g., `Fact Checker`, `Platform Architect`, `Program Manager`) participate as first-class Matrix accounts or Application Service bots within shared rooms.
 3. **End-to-End Encryption by Default**: All task deliberations, code diff reviews, and intent discussions are protected with state-of-the-art cryptographic isolation.
 4. **Sliding Sync (Matrix 2.0)**: Reduces room synchronization times from tens of seconds to milliseconds, enabling near-instantaneous mobile and desktop responsiveness.
 
