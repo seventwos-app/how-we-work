@@ -123,6 +123,41 @@ CI runs both as part of the existing `test` job in
 `.github/workflows/ci.yml` -- no new workflow, job runner, or third-party
 dependency was added.
 
+### Keeping the record true
+
+A provenance record makes claims that only a human can affirm: what a
+repository is for, who is accountable for it, and what may be disclosed.
+Those claims decay as the business changes, so the record needs a review
+cadence -- but the correction must stay manual.
+
+**Automate noticing; never automate asserting.** A record that a scheduled
+job rewrites to "stay current" no longer asserts what a human believes to
+be true; it asserts only that the job ran. That is precisely the property
+the record exists to provide, so auto-correction would hollow it out
+while leaving it looking healthier than before.
+
+So a record carries a `review` block naming what must be re-affirmed and
+when, and tooling reports **drift** -- the gap between what the record
+claims and what the repository observably shows -- as a prompt addressed
+to a person:
+
+- the review interval has lapsed;
+- the declared accountable party no longer matches the repository's
+  CODEOWNERS default owner.
+
+Two constraints follow from experience rather than theory:
+
+- **Drift is advisory, not a merge gate.** Blocking unrelated pull
+  requests on a lapsed review punishes the wrong change and pressures
+  whoever is blocked into a rubber-stamp update purely to ship. Raise it
+  on a schedule, as a tracking issue, and let the strict mode be opt-in.
+- **Drift output obeys the same disclosure rule as validation:** rule id
+  and JSON path only, never a field value. That keeps drift reports safe
+  to surface in CI logs, step summaries, and issue bodies.
+
+Responding to drift is an ordinary reviewed pull request. The review date
+moves forward only once a human has actually re-affirmed the claims.
+
 ### Pull requests
 
 `.github/pull_request_template.md` asks for exactly four fields --
