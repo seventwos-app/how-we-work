@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "repository": "seventwos-app/how-we-work",
+  "disclosure_class": "public",
+  "entries": [
+    {
+      "id": "2026-09-14-provenance-mvp",
+      "intent": "Introduce a practical, dependency-free provenance record and validator for this repository, replacing the earlier heavier repository-provenance plan draft with a minimal MVP.",
+      "human_direction": "A maintainer requested scoping repository provenance down to a minimal, public-safe MVP: a small JSON record, disclosure classes, a validator, and matching PR template fields.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request adding .seventwos/provenance.json v0.1, the provenance convention, its validator, and CI/PR-template integration"
+      }
+    }
+  ]
+}
