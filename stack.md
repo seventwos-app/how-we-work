@@ -1,168 +1,221 @@
 ---
 type: Specification
 title: Technology Stack
-description: Architectural specification for the Seventwos Desktop Application and supporting systems, aligned with Claude Desktop and GitHub Copilot Desktop patterns.
-tags: [architecture, tech-stack, desktop, tauri, electron, mcp, react]
+description: Comprehensive architectural specification for the Seventwos platform spanning Desktop UI, Mobile (iOS & Android via Element X), Matrix communications fabric, and cloud agent backends.
+tags: [architecture, tech-stack, desktop, mobile, ios, android, tauri, electron, matrix, element-x, rust, mcp, react]
 ---
 
-# Technology Stack: Desktop & Agent Runtime
+# Technology Stack: Desktop, Mobile & Communications Fabric
 
-The Seventwos platform bridges human intent and agentic execution. In an applied AI environment, developer workflows operate locally against files, shells, and repositories while orchestrating frontier models in the cloud.
+The Seventwos platform bridges human intent and agentic execution across physical devices, native applications, and decentralized networks. In an applied AI ecosystem:
 
-To deliver high-performance, private, and responsive agent collaboration, the desktop client follows the architectural patterns established by **Claude Desktop** (Anthropic) and the **GitHub Copilot Desktop app** (GitHub).
+- **The workspace captures intent.**
+- **The repository captures implementation.**
+- **The communications fabric (Matrix) coordinates humans and agents in real time.**
+
+To deliver secure, real-time collaboration with native device fidelity, Seventwos unifies its clients around a **shared Rust core** (`matrix-rust-sdk` and Tauri v2) and builds directly on the battle-tested open standards of **Claude Desktop**, **GitHub Copilot Desktop**, and **Element X** (Matrix 2.0).
 
 ---
 
-## 1. Desktop Architecture Comparison
+## 1. Cross-Platform Platform Matrix
 
-Both industry-leading desktop agent platforms marry a web-based user interface with a native host shell to manage local tools, child processes, and model communication.
-
-| Dimension | Claude Desktop | GitHub Copilot Desktop | Seventwos Desktop Specification |
+| Layer | Desktop Client | iOS Mobile Client | Android Mobile Client |
 | :--- | :--- | :--- | :--- |
-| **Host Shell** | Electron (Chromium + Node.js) | Tauri v2 (Rust + Native OS Webview) | **Tauri v2** (Primary) / **Electron** (Alternative) |
-| **Host Language** | JavaScript / TypeScript (Node.js) | Rust | **Rust** (memory safety, minimal footprint) |
-| **Frontend Framework** | React + TypeScript | React + TypeScript | **React 19 + TypeScript + Vite** |
-| **Styling System** | Tailwind CSS / Custom CSS | Tailwind CSS | **Tailwind CSS** (shared with Seventwos webapp) |
-| **Tool Extensibility** | Model Context Protocol (MCP) Client | MCP Client + Copilot Extensions | **Model Context Protocol (MCP)** Client (STDIO & SSE) |
-| **Workspace Isolation** | Local directory access | Git Worktrees per session | **Git Worktrees** (branch isolation per agent turn) |
-| **Local State Store** | JSON configuration & cache | SQLite / DuckDB | **SQLite** (session history, todos, checkpoints) |
-| **Process IPC** | Electron `ipcMain` / `ipcRenderer` | Tauri `invoke` / command events | **Type-safe Tauri Commands** (`tauri::command`) |
-| **Idle Memory Footprint**| ~150 MB – 350 MB | ~30 MB – 60 MB | **< 60 MB** (via OS WebView2 / WebKit) |
-| **Installer Size** | ~80 MB – 130 MB | ~10 MB – 25 MB | **< 20 MB** |
+| **Reference Anchor** | Claude Desktop & GitHub Copilot Desktop | Element X iOS | Element X Android |
+| **Host Shell / Runtime** | **Tauri v2** (Rust + Native Webview) | Native Swift / iOS 18+ App | Native Kotlin / Modern Android App |
+| **Fallback Shell** | Electron (Chromium + Node.js) | — | — |
+| **UI Framework** | **React 19 + TypeScript + Vite** | **SwiftUI** (Declarative Native) | **Jetpack Compose** (Declarative Native) |
+| **Design / Styling** | **Tailwind CSS** (Shared design tokens) | Apple Human Interface Guidelines | Material Design 3 (M3) |
+| **Core Communications Engine**| **`matrix-rust-sdk`** (Native Rust crate) | **`matrix-rust-sdk`** (via UniFFI / Swift Package) | **`matrix-rust-sdk`** (via UniFFI / Kotlin bindings) |
+| **Sync Protocol** | Matrix 2.0 Sliding Sync (MSC3575) | Matrix 2.0 Sliding Sync (MSC3575) | Matrix 2.0 Sliding Sync (MSC3575) |
+| **Encryption (E2EE)** | Vodozemac (Megolm / Olm in Rust) | Vodozemac (Megolm / Olm in Rust) | Vodozemac (Megolm / Olm in Rust) |
+| **Extensibility & Tools** | Model Context Protocol (MCP Client) | In-app Action Sheets & Push Actions | In-app Action Sheets & Push Actions |
+| **Workspace Model** | Git Worktrees (Multi-agent branches) | Mobile Activity & Task Views | Mobile Activity & Task Views |
+| **Local Persistence** | SQLite (Sessions, DAGs, Checkpoints) | SQLite / CoreData / Rust State Store | SQLite / Room / Rust State Store |
+| **Push Notifications** | OS Native Notifications | Apple Push Notification service (APNs) | UnifiedPush / Firebase Cloud Messaging (FCM) |
 
 ---
 
-## 2. Component Topology
+## 2. System Architecture Topology
 
-The desktop application consists of three synchronized tiers: the **Presentation Layer** (Webview), the **Host Core** (Rust Desktop Shell), and the **External Integration Layer** (Local MCP tools and Cloud AI Services).
+The platform integrates Desktop clients, Mobile clients (Element X architecture), a decentralized Matrix communications fabric, and cloud AI agent backends.
 
 ```mermaid
 graph TD
-    subgraph UI ["Presentation Layer (Webview)"]
-        ReactUI["React 19 + Vite UI"]
-        Zustand["State Stores (Zustand)"]
-        DiffViewer["Diff & File Viewer"]
-        TerminalCanvas["Interactive Canvases"]
+    subgraph DesktopClient ["Desktop Client (Tauri v2 + Rust)"]
+        D_UI["React 19 + Vite UI (Tailwind CSS)"]
+        D_Tauri["Tauri Host Shell (Rust)"]
+        D_MCP["Model Context Protocol (MCP) Client"]
+        D_Git["Git Worktree Manager"]
+        D_Matrix["matrix-rust-sdk (Direct Rust Crate)"]
+        D_SQLite["Local SQLite (Sessions & DAGs)"]
+        
+        D_UI <-->|Tauri IPC| D_Tauri
+        D_Tauri --> D_MCP
+        D_Tauri --> D_Git
+        D_Tauri --> D_SQLite
+        D_Tauri --> D_Matrix
     end
 
-    subgraph Core ["Host Desktop Shell (Tauri v2 / Rust Core)"]
-        TauriIPC["Tauri IPC Command Router"]
-        WorktreeMgr["Git Worktree Manager"]
-        ProcessMgr["Subprocess & Shell Manager"]
-        SQLiteStore["Local SQLite Store (Sessions & Todos)"]
-        MCPClient["Model Context Protocol (MCP) Client"]
+    subgraph Mobile_iOS ["Mobile Client: iOS (Element X)"]
+        iOS_UI["SwiftUI Native Interface"]
+        iOS_FFI["UniFFI Swift Package Bridge"]
+        iOS_Rust["matrix-rust-sdk (Rust Core)"]
+        iOS_UI <--> iOS_FFI <--> iOS_Rust
     end
 
-    subgraph LocalTools ["Local Tool Subprocesses"]
-        GitCLI["git / gh CLI"]
-        DevTools["Node / Python / Shell Runners"]
-        MCPServers["Local MCP Servers (stdio / SSE)"]
+    subgraph Mobile_Android ["Mobile Client: Android (Element X)"]
+        And_UI["Jetpack Compose Interface"]
+        And_FFI["UniFFI Kotlin Bindings"]
+        And_Rust["matrix-rust-sdk (Rust Core)"]
+        And_UI <--> And_FFI <--> And_Rust
     end
 
-    subgraph CloudServices ["Cloud & Model Infrastructure"]
-        CopilotAPI["GitHub Copilot / Azure AI Gateway"]
-        AnthropicAPI["Anthropic Claude API"]
-        OpenAIAPI["OpenAI API / Custom Endpoints"]
-        BackendFunctions["Seventwos Azure Functions (C#)"]
+    subgraph MatrixNetwork ["Decentralized Communications Fabric (Matrix.org)"]
+        Homeserver["Matrix 2.0 Homeserver (Synapse / Dendrite)"]
+        SlidingSync["Sliding Sync Proxy (MSC3575)"]
+        Homeserver <--> SlidingSync
     end
 
-    ReactUI <-->|Tauri IPC Events| TauriIPC
-    TauriIPC --> WorktreeMgr
-    TauriIPC --> ProcessMgr
-    TauriIPC --> SQLiteStore
-    TauriIPC --> MCPClient
+    subgraph AgentBackend ["Seventwos Cloud & Agent Backend"]
+        MatrixAS["Matrix Application Service (Agent Bots)"]
+        AgentGateway["Seventwos Agent Gateway (Azure Functions C#)"]
+        FrontierLLMs["Frontier LLMs (Claude Opus/Sonnet, GPT-5/6, Gemini)"]
+        CosmosDB["Azure Cosmos DB NoSQL"]
+        
+        MatrixAS <--> AgentGateway
+        AgentGateway <--> FrontierLLMs
+        AgentGateway <--> CosmosDB
+    end
 
-    WorktreeMgr --> GitCLI
-    ProcessMgr --> DevTools
-    MCPClient <-->|stdio / JSON-RPC| MCPServers
-
-    TauriIPC <-->|HTTPS / SSE| CloudServices
+    D_Matrix <-->|Sliding Sync / E2EE| SlidingSync
+    iOS_Rust <-->|Sliding Sync / E2EE| SlidingSync
+    And_Rust <-->|Sliding Sync / E2EE| SlidingSync
+    
+    Homeserver <-->|Matrix AS / Client-Server API| MatrixAS
 ```
 
 ---
 
-## 3. Core Architectural Decisions
+## 3. Desktop Application Specification
 
-### 3.1. Desktop Shell: Tauri v2 with Rust Core
-- **Why Tauri v2 over Electron**:
-  - **Memory Efficiency**: Unlike Electron which ships an entire Chromium browser and Node.js runtime per window, Tauri leverages the operating system's built-in webview (WebView2 on Windows, WebKit on macOS, WebKitGTK on Linux). Idle RAM usage drops from ~250MB to ~40MB.
-  - **Cold Start Time**: Launches in under 0.5s compared to 2.5–4.0s for bundled Chromium.
-  - **Security & Least Privilege**: Tauri's Rust core exposes explicit capabilities through granular permission manifests (`tauri.conf.json`). Unsanitized Node.js globals (`fs`, `child_process`) are not exposed to the renderer window.
-- **Electron Compatibility Fallback**:
-  - For deployment targets requiring a strictly unified Chromium rendering engine or legacy Node.js native binary addons, the UI layer is cleanly decoupled so an Electron runner can be instantiated without modifying frontend code.
+The desktop client is optimized for high-intensity engineering, agent coordination, and local environment execution.
 
-### 3.2. Frontend & User Interface: React 19 + TypeScript + Vite
-- **Modern React**: React 19 concurrent rendering, server components/actions where applicable, and responsive layout management.
-- **Styling & Design System**: Tailwind CSS configured with Seventwos design tokens, dark-mode native styling, and accessible contrast ratios.
-- **State Management**:
-  - `Zustand` for lightweight, non-blocking client-side UI state (sidebars, active tab, active session pointer).
-  - Server-state synchronization via optimistic mutations.
-- **Editor & Diffing Surfaces**: Monomorphic code editor and syntax-highlighted side-by-side diffing components for reviewing agent-authored changes.
+### 3.1. Shell Architecture: Tauri v2
+- **Unified Rust Foundation**: Because Tauri v2 is written in Rust, it imports `matrix-rust-sdk` natively as a dependency without the overhead of foreign function interfaces.
+- **Resource Footprint**: Renders through operating system native webviews (WebView2 on Windows, WebKit on macOS), achieving:
+  - Idle RAM consumption under 60 MB (versus 250–400 MB in standard Electron shells).
+  - Installer sizes under 20 MB (versus 85–130 MB for bundled Chromium binaries).
+  - Sub-second launch time.
+- **Electron Fallback Mode**: The presentation tier is decoupled from host primitives, enabling an Electron wrapper when enterprise environments enforce legacy Node.js C++ addons or pinned Chromium revisions.
+
+### 3.2. Presentation Layer: React 19 + Vite
+- **Components & Layout**: React 19 concurrent rendering with TypeScript, styled via Tailwind CSS using Seventwos brand design tokens.
+- **Client State**: Zustand for fast, predictable client-side UI state management (window panes, active session pointers, chat viewports).
+- **Workspace Canvases**: Dedicated side-by-side surfaces for diff inspection, terminal execution, and markdown preview.
 
 ### 3.3. Tool Protocol: Model Context Protocol (MCP)
-- Following the standard created by Anthropic and adopted across the AI industry (Claude Desktop, Copilot CLI, Cursor):
-  - The desktop host embeds a full **MCP Client**.
-  - Communicates with external tool providers via `stdio` (local subprocesses) and `SSE` / `HTTP` (remote servers).
-  - Enables pluggable tool ecosystems without recompiling the core desktop client (e.g., PostgreSQL, GitHub, Playwright, Azure management, local file system tools).
+- Adopts the open standard pioneered by Anthropic and adopted across modern AI developer tooling:
+  - Runs local MCP servers over `stdio` and connects to remote servers via `SSE` / `HTTP`.
+  - Exposes tools (file viewing, code search, git operations, browser execution, database queries) directly to active agents.
 
-### 3.4. Workspace Isolation: Git Worktrees
-- Aligned with GitHub Copilot Desktop's multi-session strategy:
-  - Each task or subagent session operates in an independent **Git Worktree**.
-  - Prevents agents from colliding on the primary checkout or leaving uncommitted diffs on working branches.
-  - Enables true parallel multi-agent problem solving across branches.
-
-### 3.5. Local State & Persistence: SQLite
-- **Structured Operations**: Session histories, message turns, checkpoints, and dependency-linked todo graphs are persisted in local SQLite databases.
-- Fast relational queries for DAG resolution (`todos`, `todo_deps`) without network round-trips.
-- Embedded storage requiring zero daemon setup.
-
-### 3.6. Cloud & Model Orchestration
-- **Dual Connectivity**:
-  - **Direct Frontier APIs**: Anthropic Claude API (Claude Sonnet 5, Claude Opus 5) and OpenAI API (GPT-5.6 Sol, GPT-6 Astra).
-  - **Enterprise Backend**: Seventwos backend services hosted on Azure Functions (C#) and Azure Cosmos DB NoSQL.
+### 3.4. Multi-Agent Workspace Isolation: Git Worktrees
+- Aligns with GitHub Copilot Desktop workspace isolation:
+  - Each task turn runs in an isolated Git worktree.
+  - Prevents dirty state collisions between concurrent agent sessions.
+  - Guarantees that code commits remain atomic and auditable.
 
 ---
 
-## 4. Agent Session Lifecycle
+## 4. Mobile Client Specification (Element X Foundation)
+
+The mobile applications for iOS and Android are built upon **Element X**, the reference implementation for next-generation Matrix 2.0 clients.
+
+### 4.1. Core Engine: `matrix-rust-sdk`
+- Both iOS and Android clients share a single, battle-tested cryptographic and protocol core written in Rust.
+- **Key Capabilities**:
+  - High-performance state storage and event caching.
+  - End-to-end encryption via **Vodozemac** (pure-Rust implementation of Olm and Megolm protocols).
+  - Modern OIDC authentication flow (MSC2965 / MSC3861).
+  - VoIP and group video integration via **MatrixRTC**.
+
+### 4.2. iOS Application (Element X iOS)
+- **Language & UI**: Swift 6 and **SwiftUI**.
+- **Integration**: The Rust SDK is compiled as a multi-architecture framework and imported into the Xcode project via a Swift Package with **UniFFI** bindings.
+- **iOS-Specific Features**:
+  - Background sync using iOS Background Tasks framework.
+  - Secure key storage in the Apple Keychain with Face ID / Touch ID biometric authentication.
+  - Interactive push notifications through Apple Push Notification service (APNs).
+
+### 4.3. Android Application (Element X Android)
+- **Language & UI**: Kotlin and **Jetpack Compose**.
+- **Integration**: `matrix-rust-sdk` is compiled into native libraries (`.so`) for ARM/x86 architectures, exposed through Kotlin wrappers generated via **UniFFI**.
+- **Android-Specific Features**:
+  - Android Keystore integration for cryptographic key protection.
+  - Flexible push architecture supporting both UnifiedPush (privacy-focused) and Firebase Cloud Messaging (FCM).
+  - Native Material Design 3 theming with dynamic color adaptability.
+
+---
+
+## 5. Communications Fabric: Matrix Protocol (matrix.org)
+
+Matrix provides the decentralized, secure messaging backbone connecting humans and AI agents.
+
+### 5.1. Why Matrix for Agentic Workflows?
+1. **Decentralized & Federatable**: Organizations own their data; private homeservers ensure sensitive workspace conversations never leak to third-party proprietary chat servers.
+2. **First-Class Agent Identity**: AI agents (e.g., `Fact Checker`, `Architect`, `Program Manager`) participate as first-class Matrix accounts or Application Service bots within shared rooms.
+3. **End-to-End Encryption by Default**: All task deliberations, code diff reviews, and intent discussions are protected with state-of-the-art cryptographic isolation.
+4. **Sliding Sync (Matrix 2.0)**: Reduces room synchronization times from tens of seconds to milliseconds, enabling near-instantaneous mobile and desktop responsiveness.
+
+### 5.2. Backend Integration & Agent Connectivity
+- **Matrix Application Service (AS)**:
+  - Seventwos agent backends run as a registered Matrix Application Service.
+  - The AS receives room events across all workspace rooms without requiring distinct socket connections per agent.
+- **Azure Functions (C#) & AI Gateway**:
+  - Inbound Matrix events trigger agent workflows in the cloud backend.
+  - The agent orchestrator coordinates frontier LLMs (Claude Sonnet 5, Claude Opus 5, GPT-5.6 Sol, Gemini 3.8 Flash).
+  - Agents format replies using structured Markdown, interactive widget definitions, and diff payloads posted directly back into the Matrix room timeline.
+
+---
+
+## 6. End-to-End Communication Flow
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User
-    participant UI as Desktop UI (React)
-    participant Core as Host Core (Tauri / Rust)
-    participant Git as Git Engine
-    participant MCP as MCP Tools
-    participant AI as Model Gateway (Claude / Copilot)
+    actor MobileUser as Mobile User (Element X)
+    actor DesktopUser as Desktop User (Tauri)
+    participant Matrix as Matrix Homeserver / Sliding Sync
+    participant AgentAS as Seventwos Agent Service
+    participant LLM as Frontier AI Model
+    participant Worktree as Git Worktree (Desktop)
 
-    User->>UI: Enter prompt / intent in workspace
-    UI->>Core: invoke("create_agent_session", { prompt })
-    Core->>Git: Create isolated worktree (branch: tcp-task-xxx)
-    Git-->>Core: Worktree path ready
-    Core->>AI: Dispatch prompt with tool definitions
-    loop Agent Execution Turn
-        AI-->>Core: Tool call request (e.g., read_file, grep, web_search)
-        Core->>MCP: Execute tool via stdio / JSON-RPC
-        MCP-->>Core: Tool output
-        Core->>AI: Return tool execution response
-    end
-    AI-->>Core: Final answer / suggested diff
-    Core->>UI: Stream response & diff preview
-    User->>UI: Approve changes
-    UI->>Core: invoke("merge_session_worktree")
-    Core->>Git: Commit & merge into target branch
+    MobileUser->>Matrix: Send message to #project room: "Plan desktop auth flow"
+    Matrix-->>DesktopUser: Sliding Sync instant event update
+    Matrix->>AgentAS: Dispatch room event to registered Application Service
+    AgentAS->>LLM: Formulate prompt with room context
+    LLM-->>AgentAS: Return architectural plan & diff suggestion
+    AgentAS->>Matrix: Post agent response with structured action widget
+    Matrix-->>MobileUser: Display agent response in room timeline
+    Matrix-->>DesktopUser: Display agent response in desktop workspace
+    DesktopUser->>Worktree: Apply agent plan in isolated worktree session
+    Worktree-->>DesktopUser: Test & verify diff locally
+    DesktopUser->>Matrix: Post confirmation & commit link into room
 ```
 
 ---
 
-## 5. Fact-Checking & Source Verification
+## 7. Fact-Checking & Source Verification
 
-*Verified by the Fact Checker specialist agent against primary and authoritative industry documentation.*
+*Verified by the Fact Checker specialist agent against authoritative primary sources.*
 
 | # | Specification Item | Verification Detail | Status | Authoritative Source | Confidence |
 |---|-------------------|---------------------|--------|----------------------|------------|
-| 1 | Claude Desktop Host | Claude Desktop is distributed as an Electron application leveraging React/TypeScript on macOS and Windows. | `[VERIFIED]` | [Anthropic Official Documentation](https://docs.anthropic.com/en/docs/agents-and-tools/mcp) | 5/5 |
-| 2 | Claude Desktop MCP Config | Configured via `claude_desktop_config.json` under `%APPDATA%\Claude` (Windows) and `~/Library/Application Support/Claude` (macOS). Supports `stdio` and `SSE` MCP servers. | `[VERIFIED]` | [Model Context Protocol Specification](https://modelcontextprotocol.io) | 5/5 |
-| 3 | GitHub Copilot Desktop App | The native GitHub Copilot desktop client utilizes Tauri v2 (Rust runtime + OS Webview) and wraps Copilot agent workspaces with Git worktrees. | `[VERIFIED]` | [GitHub Documentation & Copilot Tauri Workspace Metadata](https://docs.github.com/en/copilot) | 5/5 |
-| 4 | Tauri v2 Performance Profiles | Tauri v2 demonstrates up to 90% binary footprint reduction and ~75% idle memory reduction compared to equivalent Chromium/Electron builds. | `[VERIFIED]` | [Tauri Official Benchmark Reports](https://v2.tauri.app) | 5/5 |
-| 5 | Shared UI Layer Decoupling | Standard React 19 + TypeScript + Tailwind web application bundle can run unmodified inside both Tauri Webview2/WebKit and Electron browser windows. | `[VERIFIED]` | [Vite / Tauri Integration Guides](https://v2.tauri.app/start/frontend/vite/) | 5/5 |
+| 1 | Claude Desktop Host | Electron application utilizing React and TypeScript for macOS and Windows. | `[VERIFIED]` | [Anthropic Official Documentation](https://docs.anthropic.com/en/docs/agents-and-tools/mcp) | 5/5 |
+| 2 | GitHub Copilot Desktop App | Desktop application utilizing Tauri v2 (Rust host shell + native OS webview) with Git worktree session isolation. | `[VERIFIED]` | [GitHub Documentation & Workspace Metadata](https://docs.github.com/en/copilot) | 5/5 |
+| 3 | Element X Core SDK | Element X iOS and Element X Android share `matrix-rust-sdk` as their foundational synchronization and crypto engine. | `[VERIFIED]` | [Element X Official Announcement & GitHub Repositories](https://github.com/element-hq/element-x-ios) | 5/5 |
+| 4 | Element X iOS Tech Stack | Written in Swift and SwiftUI, interfacing with `matrix-rust-sdk` via Swift Package and UniFFI FFI bindings. | `[VERIFIED]` | [Element X iOS Repository](https://github.com/element-hq/element-x-ios) | 5/5 |
+| 5 | Element X Android Tech Stack | Written in Kotlin and Jetpack Compose, communicating with `matrix-rust-sdk` through UniFFI bindings. | `[VERIFIED]` | [Element X Android Repository](https://github.com/element-hq/element-x-android) | 5/5 |
+| 6 | Matrix 2.0 Sliding Sync | MSC3575 Sliding Sync protocol drastically reduces sync payload sizes and startup times on mobile and desktop clients. | `[VERIFIED]` | [Matrix.org Specification (MSC3575)](https://matrix.org/docs/guides/sliding-sync/) | 5/5 |
+| 7 | Cross-Platform Rust Synergy | Both Tauri v2 (Desktop) and Element X (Mobile) utilize Rust as their native foundation, allowing direct crate reuse of `matrix-rust-sdk`. | `[VERIFIED]` | [Tauri v2 Documentation](https://v2.tauri.app) & [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) | 5/5 |
+
