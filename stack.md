@@ -15,6 +15,8 @@ Seventwos bridges human intent and agentic execution across physical devices, na
 
 To deliver secure, real-time collaboration with native device fidelity, Seventwos unifies its clients around a **shared Rust core** (`matrix-rust-sdk` and Tauri v2) and adopts the battle-tested frontend frameworks proven in **Element X** (Matrix 2.0), following the desktop patterns established by **Claude Desktop** and **GitHub Copilot Desktop**. Where applicable and permitted, we build upon and extend these existing open-source foundations rather than reinventing them.
 
+This specification is intentionally stack-scoped: it defines runtime, protocol, storage, and licensing choices. Agent rosters, workflow choreography, and prompt policy are maintained in repository-level collaboration artifacts, not in this document.
+
 ---
 
 ## 1. Cross-Platform Platform Matrix
@@ -276,4 +278,3 @@ This is what the opening statement means by *where applicable and permitted*: th
 | 19 | Push Gateway Indirection | Homeservers do not contact APNs or FCM directly; they notify a push gateway via `POST /_matrix/push/v1/notify`, which holds platform credentials and forwards the wake signal. | `[VERIFIED]` | [Matrix Push Gateway API](https://spec.matrix.org/latest/push-gateway-api/) | 5/5 |
 | 20 | Sync Protocol Is Downstream-Only | MSC4186 streams timeline and state to clients. Sending events, uploading and querying one-time keys, to-device key distribution, and OIDC authentication all use separate Client-Server API endpoints, so a client wired only to the sync endpoint could receive but never send. | `[VERIFIED]` | [Matrix Client-Server API](https://spec.matrix.org/latest/client-server-api/) | 5/5 |
 | 21 | Tauri / SDK Runtime Compatibility | Both Tauri v2 and `matrix-rust-sdk` are built on Tokio; SDK futures are spawned onto the runtime Tauri manages. A second runtime must not be initialised independently, as nested runtimes conflict. | `[DIRECTIONAL]` | [Tauri v2 Documentation](https://v2.tauri.app) | 4/5 |
-
