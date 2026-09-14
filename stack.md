@@ -42,57 +42,82 @@ The platform integrates Desktop clients, Mobile clients (Element X architecture)
 
 ```mermaid
 graph TD
-    subgraph DesktopClient ["Desktop Client (Tauri v2 + Rust)"]
-        D_UI["React 19 + Vite UI (Tailwind CSS)"]
-        D_Tauri(["Tauri v2 Host Shell (Rust)"])
-        D_MCP["Model Context Protocol (MCP) Client"]
-        D_Git["Git Worktree Manager"]
-        D_Matrix["matrix-rust-sdk (Direct Rust Crate)"]
-        D_SQLite[("Local SQLite (Sessions & DAGs)")]
-        
-        D_UI <-->|Tauri IPC| D_Tauri
-        D_Tauri --> D_MCP
-        D_Tauri --> D_Git
-        D_Tauri --> D_SQLite
-        D_Tauri --> D_Matrix
+    %% Styling Classes for Zoned Architecture
+    classDef clientZone fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef matrixZone fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f0fdf4;
+    classDef execZone fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#e0e7ff;
+    classDef cloudZone fill:#451a03,stroke:#fb923c,stroke-width:2px,color:#fff7ed;
+
+    %% Tier 1: Client Interfaces (Intent Capture)
+    subgraph Clients ["1. Client Interfaces — Human Intent Capture"]
+        subgraph DesktopClient ["Desktop Client (Tauri v2 Shell)"]
+            D_UI["Desktop UI (React 19 + Vite)"]
+            D_Tauri(["Tauri v2 Host Core (Rust)"])
+            D_Matrix["matrix-rust-sdk (Native Crate)"]
+            D_UI <-->|Tauri IPC| D_Tauri
+            D_Tauri --> D_Matrix
+        end
+
+        subgraph MobileClients ["Mobile Clients (Element X Foundation)"]
+            iOS_UI["iOS App (SwiftUI)"]
+            iOS_Rust(["matrix-rust-sdk via UniFFI"])
+            iOS_UI <--> iOS_Rust
+
+            And_UI["Android App (Jetpack Compose)"]
+            And_Rust(["matrix-rust-sdk via UniFFI"])
+            And_UI <--> And_Rust
+        end
     end
 
-    subgraph Mobile_iOS ["Mobile Client: iOS (Element X)"]
-        iOS_UI["SwiftUI Native Interface"]
-        iOS_FFI["UniFFI Swift Package Bridge"]
-        iOS_Rust(["matrix-rust-sdk (Rust Core)"])
-        iOS_UI <--> iOS_FFI <--> iOS_Rust
-    end
-
-    subgraph Mobile_Android ["Mobile Client: Android (Element X)"]
-        And_UI["Jetpack Compose Interface"]
-        And_FFI["UniFFI Kotlin Bindings"]
-        And_Rust(["matrix-rust-sdk (Rust Core)"])
-        And_UI <--> And_FFI <--> And_Rust
-    end
-
-    subgraph MatrixNetwork ["Decentralized Communications Fabric (Matrix.org)"]
+    %% Tier 2: Communications Fabric (Real-Time Decentralized Coordination)
+    subgraph Fabric ["2. Communications Fabric — Matrix 2.0 Network"]
         Homeserver["Matrix 2.0 Homeserver (Synapse / Dendrite)"]
         SlidingSync["Sliding Sync Proxy (MSC3575)"]
+        Vodozemac["Vodozemac E2EE Crypto Engine"]
         Homeserver <--> SlidingSync
+        SlidingSync <--> Vodozemac
     end
 
-    subgraph AgentBackend ["Seventwos Cloud & Agent Backend"]
-        MatrixAS["Matrix Application Service (Agent Bots)"]
-        AgentGateway["Agent Gateway (Azure Functions C#)"]
-        FrontierLLMs{{"Frontier LLMs (Claude, GPT, Gemini)"}}
-        CosmosDB[("Azure Cosmos DB NoSQL")]
-        
-        MatrixAS <--> AgentGateway
-        AgentGateway <--> FrontierLLMs
-        AgentGateway <--> CosmosDB
+    %% Tier 3: Execution & Agent Intelligence
+    subgraph Execution ["3. Execution & Implementation Tier"]
+        subgraph LocalExecution ["Local Desktop Sandbox"]
+            D_Git["Git Worktree Manager (Branch Isolation)"]
+            D_SQLite[("Local SQLite Store (Sessions & DAGs)")]
+            D_MCP["Model Context Protocol (MCP) Client"]
+            LocalTools["Local Dev Tools (Node / Python / Shell)"]
+            
+            D_Tauri --> D_Git
+            D_Tauri --> D_SQLite
+            D_Tauri --> D_MCP
+            D_MCP <-->|stdio / JSON-RPC| LocalTools
+        end
+
+        subgraph CloudBackend ["Seventwos Cloud & Agent Services"]
+            MatrixAS["Matrix Application Service (Agent Bots)"]
+            AgentGateway["Agent Gateway (Azure Functions C#)"]
+            FrontierLLMs{{"Frontier LLMs (Claude Opus/Sonnet, GPT-5/6, Gemini)"}}
+            CosmosDB[("Azure Cosmos DB NoSQL")]
+
+            MatrixAS <--> AgentGateway
+            AgentGateway <--> FrontierLLMs
+            AgentGateway <--> CosmosDB
+        end
     end
 
+    %% Cross-Tier Connections
     D_Matrix <-->|Sliding Sync / E2EE| SlidingSync
     iOS_Rust <-->|Sliding Sync / E2EE| SlidingSync
     And_Rust <-->|Sliding Sync / E2EE| SlidingSync
-    
+
     Homeserver <-->|Matrix AS Protocol| MatrixAS
+    AgentGateway -.->|Task Dispatch & Diffs| D_UI
+
+    %% Apply Class Styles
+    class D_UI,iOS_UI,And_UI clientZone;
+    class D_Tauri,iOS_Rust,And_Rust,D_Matrix clientZone;
+    class Homeserver,SlidingSync,Vodozemac matrixZone;
+    class D_Git,D_SQLite,D_MCP,LocalTools execZone;
+    class MatrixAS,AgentGateway,FrontierLLMs,CosmosDB cloudZone;
 ```
 
 ---
