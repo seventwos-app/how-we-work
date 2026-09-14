@@ -1,8 +1,8 @@
 ---
 type: Specification
 title: Technology Stack
-description: Comprehensive architectural specification for the Seventwos platform spanning Desktop UI, Mobile (iOS & Android via Element X), Matrix communications fabric, and cloud agent backends.
-tags: [architecture, tech-stack, desktop, mobile, ios, android, tauri, electron, matrix, element-x, rust, mcp, react]
+description: Comprehensive architectural specification for the Seventwos platform spanning Desktop UI, Mobile (iOS & Android via Element X), Matrix communications fabric, cloud agent backends, and the licensing posture governing reuse of each foundation.
+tags: [architecture, tech-stack, desktop, mobile, ios, android, tauri, electron, matrix, element-x, rust, mcp, react, licensing]
 ---
 
 # Technology Stack: Desktop, Mobile & Communications Fabric
@@ -171,9 +171,9 @@ The desktop client is optimized for high-intensity engineering, agent coordinati
 
 ---
 
-## 4. Mobile Client Specification (Element X Foundation)
+## 4. Mobile Client Specification (Element X Architecture)
 
-The mobile applications for iOS and Android are built upon **Element X**, the reference implementation for next-generation Matrix 2.0 clients.
+The mobile applications for iOS and Android follow the **Element X** architecture — the reference implementation for next-generation Matrix 2.0 clients. They adopt its structural pattern (native declarative UI over a shared Rust core) and embed the same Apache-2.0 engine, rather than forking the AGPL-3.0 application shell. See §6 for the licensing rationale.
 
 ### 4.1. Core Engine: `matrix-rust-sdk`
 - Both iOS and Android clients share a single, battle-tested cryptographic and protocol core written in Rust.
@@ -196,6 +196,7 @@ The mobile applications for iOS and Android are built upon **Element X**, the re
 - **Integration**: `matrix-rust-sdk` is compiled into native libraries (`.so`) for ARM/x86 architectures, exposed through Kotlin wrappers generated via **UniFFI**.
 - **Android-Specific Features**:
   - Android Keystore integration for cryptographic key protection.
+  - Local persistence via the SDK state store, with **SQLDelight** for typed application-side queries.
   - Flexible push architecture supporting both UnifiedPush (privacy-focused) and Firebase Cloud Messaging (FCM).
   - Native Material Design 3 theming with dynamic color adaptability.
 
@@ -223,7 +224,25 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 
 ---
 
-## 6. Fact-Checking & Source Verification
+## 6. Licensing & Reuse Posture
+
+The foundations this specification builds on do not share a single licence, and the split runs exactly along the boundary that matters. The layers Seventwos embeds are permissive; the layers Seventwos merely interoperates with are copyleft.
+
+| Component | Licence | Reuse Implication |
+| :--- | :--- | :--- |
+| `matrix-rust-sdk` (incl. `matrix-sdk-crypto`, `matrix-sdk-sqlite`) | Apache-2.0 | Embeddable as a dependency in a proprietary client without source-disclosure obligations. |
+| Vodozemac | Apache-2.0 | Embeddable; consumed transitively through `matrix-sdk-crypto`. |
+| Tauri v2 | MIT / Apache-2.0 | Embeddable as the desktop host shell. |
+| Element X iOS / Android | AGPL-3.0 | Reference implementation. Forking the application shell triggers network-copyleft obligations. |
+| Synapse | AGPL-3.0, or commercial licence from Element | Operating a modified homeserver as a network service requires publishing source, or a commercial agreement. |
+
+**Consequence for this architecture.** Seventwos depends directly on the Apache-2.0 tier — `matrix-rust-sdk` compiled natively into the Tauri host, with Vodozemac beneath it. Element X is treated as an architectural **reference**, not a codebase to fork: the mobile clients adopt its structural pattern (native declarative UI over a shared Rust core via UniFFI) while remaining separately authored. Synapse is deployed unmodified, which keeps the AGPL obligation dormant; any patch to the homeserver moves it into scope.
+
+This is what the opening statement means by *where applicable and permitted*: the permissive tier is extended directly, and the copyleft tier is either referenced or run stock.
+
+---
+
+## 7. Fact-Checking & Source Verification
 
 *Each specification item below carries a verification status. `[VERIFIED]` items are confirmed against a primary source — a protocol specification, official announcement, or the vendor's own public repository. `[DIRECTIONAL]` items are widely reported and consistent with observable evidence, but no vendor publishes an authoritative architecture manifest for them; they are recorded here as working assumptions rather than established fact.*
 
@@ -242,4 +261,7 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 | 11 | Element X Local Persistence | Neither client uses CoreData or Room. Both delegate room state to the `matrix-rust-sdk` SQLite state store; Element X Android additionally uses SQLDelight (`app.cash.sqldelight` 2.3.2), and Element X iOS uses `KeychainAccess` for credential storage. | `[VERIFIED]` | [element-x-android `libs.versions.toml`](https://github.com/element-hq/element-x-android/blob/develop/gradle/libs.versions.toml) & [element-x-ios `project.yml`](https://github.com/element-hq/element-x-ios/blob/develop/project.yml) | 5/5 |
 | 12 | Element X iOS Deployment Target | `project.yml` declares a minimum deployment target of iOS 18.5 and consumes `matrix-rust-components-swift` as a pinned Swift Package. | `[VERIFIED]` | [element-x-ios `project.yml`](https://github.com/element-hq/element-x-ios/blob/develop/project.yml) | 5/5 |
 | 13 | Cross-Platform Rust Synergy | Both Tauri v2 (Desktop) and Element X (Mobile) utilize Rust as their native foundation, allowing direct crate reuse of `matrix-rust-sdk`. | `[VERIFIED]` | [Tauri v2 Documentation](https://v2.tauri.app) & [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) | 5/5 |
+| 14 | Permissive Core Licensing | `crates/matrix-sdk/Cargo.toml` declares `license = "Apache-2.0"`; Tauri v2 is dual-licensed MIT / Apache-2.0. Both are embeddable without source-disclosure obligations. | `[VERIFIED]` | [matrix-sdk `Cargo.toml`](https://github.com/matrix-org/matrix-rust-sdk/blob/main/crates/matrix-sdk/Cargo.toml) & [Tauri](https://github.com/tauri-apps/tauri) | 5/5 |
+| 15 | Copyleft Application Tier | Element X Android ships a GNU AGPL v3 `LICENSE` file. Synapse relicensed from Apache-2.0 to AGPL-3.0 in November 2023, with a commercial licence available from Element. | `[VERIFIED]` | [element-x-android `LICENSE`](https://github.com/element-hq/element-x-android/blob/develop/LICENSE) & [Element: Sustainable licensing with AGPL](https://element.io/blog/sustainable-licensing-at-element-with-agpl/) | 5/5 |
+| 16 | MatrixRTC Specification Anchor | The SDK workspace enables the `unstable-msc4143` ruma feature, confirming MSC4143 as the MatrixRTC anchor. | `[VERIFIED]` | [matrix-rust-sdk `Cargo.toml`](https://github.com/matrix-org/matrix-rust-sdk/blob/main/Cargo.toml) | 5/5 |
 
