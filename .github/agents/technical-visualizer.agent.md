@@ -62,4 +62,3 @@ Follow `.github/agents/_shared_safety_blocks.md#recovery-strategy`.
 1. If two consecutive attempts fail on the same root cause, stop iterating.
 2. Summarize what was tried, why it failed, and what changed.
 3. Restart with a different strategy or escalate to the user.
-3. Restart with a different strategy or escalate to the user.

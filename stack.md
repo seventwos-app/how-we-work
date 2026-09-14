@@ -38,44 +38,50 @@ To deliver secure, real-time collaboration with native device fidelity, Seventwo
 
 ## 2. System Architecture Topology
 
-The platform integrates Desktop clients, Mobile clients (Element X architecture), a decentralized Matrix communications fabric, and cloud AI agent backends.
+The platform integrates Desktop clients, Mobile clients (Element X architecture), a decentralized Matrix communications fabric, and cloud AI agent backends — the desktop tier consumes `matrix-rust-sdk` as a native Rust crate with zero FFI, while mobile clients reach the same engine only by crossing a UniFFI boundary.
 
 ```mermaid
 graph TD
-    %% Styling Classes for Zoned Architecture
+    %% Zone container styling (outer tiers vs nested sub-containers)
+    classDef zoneContainer fill:#020617,stroke:#334155,stroke-width:1px,color:#94a3b8;
+    classDef subContainer fill:#0b1220,stroke:#475569,stroke-width:1px,stroke-dasharray: 3 3,color:#94a3b8;
+
+    %% Leaf node styling
     classDef clientZone fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef nativeCore fill:#0f172a,stroke:#22d3ee,stroke-width:2px,color:#f8fafc;
+    classDef ffiCore fill:#0f172a,stroke:#f59e0b,stroke-width:2px,stroke-dasharray: 5 5,color:#f8fafc;
     classDef matrixZone fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f0fdf4;
     classDef execZone fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#e0e7ff;
     classDef cloudZone fill:#451a03,stroke:#fb923c,stroke-width:2px,color:#fff7ed;
 
     %% Tier 1: Client Interfaces (Intent Capture)
     subgraph Clients ["1. Client Interfaces — Human Intent Capture"]
-        subgraph DesktopClient ["Desktop Client (Tauri v2 Shell)"]
+        subgraph DesktopClient ["Desktop Client — Zero-FFI Rust Host"]
             D_UI["Desktop UI (React 19 + Vite)"]
             D_Tauri(["Tauri v2 Host Core (Rust)"])
-            D_Matrix["matrix-rust-sdk (Native Crate)"]
+            D_Matrix(["matrix-rust-sdk (Native Crate)"])
             D_UI <-->|Tauri IPC| D_Tauri
-            D_Tauri --> D_Matrix
+            D_Tauri -->|Direct call: zero FFI| D_Matrix
         end
 
-        subgraph MobileClients ["Mobile Clients (Element X Foundation)"]
+        subgraph MobileClients ["Mobile Clients — UniFFI Bridge to Rust"]
             iOS_UI["iOS App (SwiftUI)"]
             iOS_Rust(["matrix-rust-sdk via UniFFI"])
-            iOS_UI <--> iOS_Rust
+            iOS_UI <-->|UniFFI: Swift to Rust| iOS_Rust
 
             And_UI["Android App (Jetpack Compose)"]
             And_Rust(["matrix-rust-sdk via UniFFI"])
-            And_UI <--> And_Rust
+            And_UI <-->|UniFFI: Kotlin to Rust| And_Rust
         end
     end
 
     %% Tier 2: Communications Fabric (Real-Time Decentralized Coordination)
     subgraph Fabric ["2. Communications Fabric — Matrix 2.0 Network"]
-        Homeserver["Matrix 2.0 Homeserver (Synapse / Dendrite)"]
+        Homeserver(["Matrix 2.0 Homeserver (Synapse / Dendrite)"])
         SlidingSync["Sliding Sync Proxy (MSC3575)"]
         Vodozemac["Vodozemac E2EE Crypto Engine"]
-        Homeserver <--> SlidingSync
-        SlidingSync <--> Vodozemac
+        Homeserver <-->|Sync protocol| SlidingSync
+        SlidingSync <-->|Encrypted event payloads| Vodozemac
     end
 
     %% Tier 3: Execution & Agent Intelligence
@@ -84,23 +90,23 @@ graph TD
             D_Git["Git Worktree Manager (Branch Isolation)"]
             D_SQLite[("Local SQLite Store (Sessions & DAGs)")]
             D_MCP["Model Context Protocol (MCP) Client"]
-            LocalTools["Local Dev Tools (Node / Python / Shell)"]
-            
-            D_Tauri --> D_Git
-            D_Tauri --> D_SQLite
-            D_Tauri --> D_MCP
+            LocalTools{{"Local Dev Tools (Node / Python / Shell)"}}
+
+            D_Tauri -->|Session control| D_Git
+            D_Tauri -->|State persistence| D_SQLite
+            D_Tauri -->|Tool invocation| D_MCP
             D_MCP <-->|stdio / JSON-RPC| LocalTools
         end
 
         subgraph CloudBackend ["Seventwos Cloud & Agent Services"]
             MatrixAS["Matrix Application Service (Agent Bots)"]
-            AgentGateway["Agent Gateway (Azure Functions C#)"]
+            AgentGateway(["Agent Gateway (Azure Functions C#)"])
             FrontierLLMs{{"Frontier LLMs (Claude Opus/Sonnet, GPT-5/6, Gemini)"}}
             CosmosDB[("Azure Cosmos DB NoSQL")]
 
-            MatrixAS <--> AgentGateway
-            AgentGateway <--> FrontierLLMs
-            AgentGateway <--> CosmosDB
+            MatrixAS <-->|Event webhook| AgentGateway
+            AgentGateway <-->|Inference API| FrontierLLMs
+            AgentGateway <-->|State read/write| CosmosDB
         end
     end
 
@@ -113,8 +119,11 @@ graph TD
     AgentGateway -.->|Task Dispatch & Diffs| D_UI
 
     %% Apply Class Styles
-    class D_UI,iOS_UI,And_UI clientZone;
-    class D_Tauri,iOS_Rust,And_Rust,D_Matrix clientZone;
+    class Clients,Fabric,Execution zoneContainer;
+    class DesktopClient,MobileClients,LocalExecution,CloudBackend subContainer;
+    class D_UI,D_Tauri,iOS_UI,And_UI clientZone;
+    class D_Matrix nativeCore;
+    class iOS_Rust,And_Rust ffiCore;
     class Homeserver,SlidingSync,Vodozemac matrixZone;
     class D_Git,D_SQLite,D_MCP,LocalTools execZone;
     class MatrixAS,AgentGateway,FrontierLLMs,CosmosDB cloudZone;
@@ -210,35 +219,49 @@ sequenceDiagram
     autonumber
     actor MobileUser as Mobile User (Element X)
     actor DesktopUser as Desktop User (Tauri)
-    participant Matrix as Matrix Homeserver / Sliding Sync
+    participant Matrix as Matrix Homeserver (Sliding Sync)
     participant AgentAS as Agent Gateway (Azure Functions)
-    participant LLM as Frontier AI Model (Claude / GPT)
-    participant Worktree as Git Worktree (Desktop)
+    participant LLM as Frontier LLM (Claude / GPT)
+    participant Worktree as Git Worktree (Desktop Sandbox)
 
-    MobileUser->>Matrix: Send message to #project room: "Plan desktop auth flow"
-    Matrix-->>DesktopUser: Sliding Sync instant event update
-    Matrix->>AgentAS: Dispatch room event to registered Application Service
-    activate AgentAS
-    AgentAS->>LLM: Formulate prompt with conversation & repository context
-    activate LLM
-    LLM-->>AgentAS: Return architectural plan & diff suggestions
-    deactivate LLM
-    AgentAS->>Matrix: Post agent response with action widget & diff payload
-    deactivate AgentAS
-    Matrix-->>MobileUser: Render structured plan in mobile timeline
-    Matrix-->>DesktopUser: Display interactive plan in desktop workspace
-    
-    DesktopUser->>Worktree: Checkout branch & apply suggested diff
-    activate Worktree
-    DesktopUser->>Worktree: Run local tests & verify implementation
-    alt Verification Successful
-        Worktree-->>DesktopUser: Tests pass cleanly
-        DesktopUser->>Matrix: Post confirmation & commit link into room
-    else Verification Failed
-        Worktree-->>DesktopUser: Test errors encountered
-        DesktopUser->>Matrix: Reply with error logs to request agent revision
+    rect rgb(15, 23, 42)
+        Note over MobileUser,LLM: Phase 1 — Intent Capture & Planning
+        MobileUser->>Matrix: Send message to #project room: "Plan desktop auth flow"
+        Matrix-->>DesktopUser: Sliding Sync instant event update
+        Matrix->>AgentAS: Dispatch room event to registered Application Service
+        activate AgentAS
+        AgentAS->>LLM: Formulate prompt with conversation & repository context
+        activate LLM
+        LLM-->>AgentAS: Return architectural plan & diff suggestions
+        deactivate LLM
+        Note right of AgentAS: Execution state held here: draft plan & diff payload
+        AgentAS->>Matrix: Post agent response with action widget & diff payload
+        deactivate AgentAS
+        Matrix-->>MobileUser: Render structured plan in mobile timeline
+        Matrix-->>DesktopUser: Display interactive plan in desktop workspace
     end
-    deactivate Worktree
+
+    rect rgb(30, 27, 75)
+        Note over DesktopUser,Worktree: Phase 2 — Implementation (desktop-only, mobile stays a passive observer)
+        DesktopUser->>Worktree: Checkout branch & apply suggested diff
+        activate Worktree
+        Note right of Worktree: Execution state held here: working tree & test run
+        DesktopUser->>Worktree: Run local tests & verify implementation
+    end
+
+    rect rgb(6, 78, 59)
+        Note over DesktopUser,Matrix: Phase 3 — Verification & Sync-back to the room
+        alt Verification Successful
+            Worktree-->>DesktopUser: Tests pass cleanly
+            DesktopUser->>Matrix: Post confirmation & commit link into room
+            Matrix-->>MobileUser: Sync confirmation to mobile timeline
+        else Verification Failed
+            Worktree-->>DesktopUser: Test errors encountered
+            DesktopUser->>Matrix: Reply with error logs to request agent revision
+            Matrix->>AgentAS: Redispatch room event for plan revision
+        end
+        deactivate Worktree
+    end
 ```
 
 ---
