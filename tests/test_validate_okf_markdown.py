@@ -303,12 +303,28 @@ class RepoBundleTests(unittest.TestCase):
     def test_whole_bundle_conforms(self):
         clean = True
         offenders = []
-        for path in okf.iter_markdown_files():
+        files = list(okf.iter_markdown_files())
+        self.assertTrue(files, msg="validator did not discover any bundle markdown")
+        for path in files:
             violations = okf.check_file(path)
             if violations:
                 clean = False
                 offenders.append((path, violations))
         self.assertTrue(clean, msg=f"non-conformant files: {offenders}")
+
+    def test_parent_excluded_directory_name_does_not_hide_bundle(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp) / ".copilot" / "repos" / "bundle"
+            included = write(repo_root, "concept.md", "---\ntype: Note\n---\n")
+            write(repo_root, ".copilot/tooling.md", "# Tooling\n")
+            original_root = okf.REPO_ROOT
+            try:
+                okf.REPO_ROOT = repo_root
+                self.assertEqual(list(okf.iter_markdown_files()), [included])
+            finally:
+                okf.REPO_ROOT = original_root
 
 
 if __name__ == "__main__":

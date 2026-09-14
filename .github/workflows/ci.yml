@@ -41,10 +41,12 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Validator is syntactically valid
-        run: python -m py_compile scripts/okf/validate_okf_markdown.py
+      - name: Validators are syntactically valid
+        run: |
+          python -m py_compile scripts/okf/validate_okf_markdown.py
+          python -m py_compile scripts/provenance/validate_provenance.py
 
-      - name: Validator unit tests
+      - name: Unit tests
         run: python -m unittest discover -s tests -v
 
       - name: Whole bundle conforms to OKF v0.2
@@ -54,6 +56,9 @@ jobs:
             echo "::error::Non-conformant markdown found in the OKF bundle baseline."
             exit 1
           fi
+
+      - name: Provenance record conforms to schema v0.1
+        run: python scripts/provenance/validate_provenance.py --file .seventwos/provenance.json
 
   security:
     name: security
