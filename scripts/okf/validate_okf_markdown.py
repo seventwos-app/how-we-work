@@ -71,6 +71,7 @@ EXCLUDED_RELATIVE_PATHS = {
 }
 
 FOOTNOTE_LABEL_RE = re.compile(r"\[\^([^\]]+)\]")
+MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+\.md)(?:#[^)]+)?\)")
 
 
 def is_excluded(path):
@@ -336,6 +337,46 @@ def changed_markdown_files():
     return []
 
 
+def check_bundle_index():
+    """Ensure the root index is a complete, non-stale bundle manifest."""
+    index_path = REPO_ROOT / RESERVED_INDEX_NAME
+    if not index_path.exists():
+        return ["bundle-root index.md is missing"]
+
+    text = index_path.read_text(encoding="utf-8", errors="replace")
+    indexed_paths = {
+        (REPO_ROOT / target).resolve()
+        for target in MARKDOWN_LINK_RE.findall(frontmatter_body(text))
+    }
+    concept_paths = {
+        path.resolve()
+        for path in iter_markdown_files()
+        if path.name not in RESERVED_NAMES
+    }
+    violations = []
+
+    missing_entries = sorted(
+        path.relative_to(REPO_ROOT.resolve()).as_posix()
+        for path in concept_paths - indexed_paths
+    )
+    if missing_entries:
+        violations.append(
+            "missing index.md entry for " + ", ".join(missing_entries)
+        )
+
+    stale_entries = sorted(
+        path.relative_to(REPO_ROOT.resolve()).as_posix()
+        for path in indexed_paths
+        if not path.exists()
+    )
+    if stale_entries:
+        violations.append(
+            "index.md links to missing document(s): " + ", ".join(stale_entries)
+        )
+
+    return violations
+
+
 # --------------------------------------------------------------------------
 # Frontmatter shape checks (spec §5) -- only enforced when the family is
 # present, since all of these frontmatter fields remain optional.
@@ -484,6 +525,11 @@ def run_changed(strict=True):
                 print(f"FAIL {rel}: {v}")
         else:
             print(f"OK   {rel}")
+    index_violations = check_bundle_index()
+    if index_violations:
+        failed = True
+        for violation in index_violations:
+            print(f"FAIL {RESERVED_INDEX_NAME}: {violation}")
     if failed:
         print("\nokf-validate: one or more changed markdown files are non-conformant.")
         return 1 if strict else 0
@@ -503,6 +549,11 @@ def run_all():
                 print(f"REPORT {rel}: {v}")
         else:
             clean += 1
+    index_violations = check_bundle_index()
+    for violation in index_violations:
+        print(f"REPORT {RESERVED_INDEX_NAME}: {violation}")
+    if index_violations:
+        clean -= 1
     print(f"\nokf-validate baseline: {clean}/{total} markdown files conform.")
     return 0  # report-only, never fails the build
 

@@ -63,7 +63,9 @@ to declare a non-empty `resource`, and requires every body footnote label
 (`[^id]`) to correspond to a `sources[].id`. Copilot tooling directories
 (`.github/` and `.copilot/`) are excluded because they are configuration,
 not OKF content. Run `python -m unittest discover -s tests` after touching
-the validator.
+the validator. The root `index.md` is also a complete bundle manifest:
+every concept document must appear in it, and every linked Markdown document
+must exist.
 
 ## Engineering Workflow: Bounded PR Process (applies to all agent-driven PR work)
 
