@@ -7,7 +7,7 @@ tags: [architecture, tech-stack, desktop, mobile, ios, android, tauri, electron,
 
 # Technology Stack: Desktop, Mobile & Communications Fabric
 
-The Seventwos platform bridges human intent and agentic execution across physical devices, native applications, and decentralized networks. In an applied AI ecosystem:
+Seventwos bridges human intent and agentic execution across physical devices, native applications, and decentralized networks. In an applied AI ecosystem:
 
 - **The workspace captures intent.**
 - **The repository captures implementation.**
