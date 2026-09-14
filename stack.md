@@ -245,7 +245,7 @@ sequenceDiagram
 
 ## 7. Fact-Checking & Source Verification
 
-*Verified by the Fact Checker specialist agent against authoritative primary sources.*
+*All specification items below were verified against authoritative primary sources.*
 
 | # | Specification Item | Verification Detail | Status | Authoritative Source | Confidence |
 |---|-------------------|---------------------|--------|----------------------|------------|
