@@ -1,7 +1,7 @@
 # Update Log
 
 ## 2026-09-14
-* **Update**: Refined opening sentence and standards phrasing in [Technology Stack](stack.md).
+* **Update**: Refined opening sentence and articulated the reuse-and-extension principle for existing open-source foundations in [Technology Stack](stack.md).
 * **Addition**: Expanded [Technology Stack](stack.md) to integrate the complete multi-platform ecosystem: Desktop (Tauri v2 + React 19), Mobile (Element X on iOS with SwiftUI and Android with Jetpack Compose sharing `matrix-rust-sdk`), and the decentralized Matrix communications fabric (Matrix 2.0 Sliding Sync, Vodozemac E2EE, Matrix Application Services).
 * **Addition**: Established [Technology Stack](stack.md) architectural specification for the Seventwos Desktop Application, benchmarking against Claude Desktop and GitHub Copilot Desktop patterns.
 * **Agent Integration**: Mapped over the `Fact Checker` specialist agent (`.github/agents/fact-checker.agent.md`) with shared safety blocks for rigorous web evidence triage and claim verification.
