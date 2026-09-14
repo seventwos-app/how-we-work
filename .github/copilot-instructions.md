@@ -23,6 +23,7 @@ A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expr
 ## Gotchas
 - This is a docs/vision artifact, not a project with builds or tests — do not add more tooling, package files, or CI beyond the OKF validator below unless explicitly requested.
 - Remote has extra branches (`a-tcp-patch-1`, `a-tcp-patch-2`) beyond `main`; default branch is `main` — don't assume those are stale/mergeable without checking.
+- Apply repository exclusion rules to paths relative to the repository root, never absolute paths. Local Copilot checkouts commonly live beneath a parent `.copilot` directory; inspecting absolute path parts can silently exclude the entire bundle. Treat a `0/0 markdown files` baseline as a validator failure, not a successful empty scan.
 
 ## OKF Validation (added by explicit request; kept intentionally minimal)
 

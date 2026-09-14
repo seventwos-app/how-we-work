@@ -297,7 +297,8 @@ def frontmatter_body(text):
 
 def iter_markdown_files():
     for path in REPO_ROOT.rglob("*.md"):
-        if any(part in EXCLUDED_DIR_PARTS for part in path.parts):
+        relative_parts = path.relative_to(REPO_ROOT).parts
+        if any(part in EXCLUDED_DIR_PARTS for part in relative_parts):
             continue
         if is_excluded(path):
             continue
