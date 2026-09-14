@@ -212,61 +212,7 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 
 ---
 
-## 6. End-to-End Communication Flow
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor MobileUser as Mobile User (Element X)
-    actor DesktopUser as Desktop User (Tauri)
-    participant Matrix as Matrix Homeserver (Sliding Sync)
-    participant AgentAS as Agent Gateway (Azure Functions)
-    participant LLM as Frontier LLM (Claude / GPT)
-    participant Worktree as Git Worktree (Desktop Sandbox)
-
-    rect rgb(15, 23, 42)
-        Note over MobileUser,LLM: Phase 1 — Intent Capture & Planning
-        MobileUser->>Matrix: Send message to #project room: "Plan desktop auth flow"
-        Matrix-->>DesktopUser: Sliding Sync instant event update
-        Matrix->>AgentAS: Dispatch room event to registered Application Service
-        activate AgentAS
-        AgentAS->>LLM: Formulate prompt with conversation & repository context
-        activate LLM
-        LLM-->>AgentAS: Return architectural plan & diff suggestions
-        deactivate LLM
-        Note right of AgentAS: Execution state held here: draft plan & diff payload
-        AgentAS->>Matrix: Post agent response with action widget & diff payload
-        deactivate AgentAS
-        Matrix-->>MobileUser: Render structured plan in mobile timeline
-        Matrix-->>DesktopUser: Display interactive plan in desktop workspace
-    end
-
-    rect rgb(30, 27, 75)
-        Note over DesktopUser,Worktree: Phase 2 — Implementation (desktop-only, mobile stays a passive observer)
-        DesktopUser->>Worktree: Checkout branch & apply suggested diff
-        activate Worktree
-        Note right of Worktree: Execution state held here: working tree & test run
-        DesktopUser->>Worktree: Run local tests & verify implementation
-    end
-
-    rect rgb(6, 78, 59)
-        Note over DesktopUser,Matrix: Phase 3 — Verification & Sync-back to the room
-        alt Verification Successful
-            Worktree-->>DesktopUser: Tests pass cleanly
-            DesktopUser->>Matrix: Post confirmation & commit link into room
-            Matrix-->>MobileUser: Sync confirmation to mobile timeline
-        else Verification Failed
-            Worktree-->>DesktopUser: Test errors encountered
-            DesktopUser->>Matrix: Reply with error logs to request agent revision
-            Matrix->>AgentAS: Redispatch room event for plan revision
-        end
-        deactivate Worktree
-    end
-```
-
----
-
-## 7. Fact-Checking & Source Verification
+## 6. Fact-Checking & Source Verification
 
 *All specification items below were verified against authoritative primary sources.*
 
