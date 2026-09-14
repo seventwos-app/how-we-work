@@ -13,7 +13,7 @@ The Seventwos platform bridges human intent and agentic execution across physica
 - **The repository captures implementation.**
 - **The communications fabric (Matrix) coordinates humans and agents in real time.**
 
-To deliver secure, real-time collaboration with native device fidelity, Seventwos unifies its clients around a **shared Rust core** (`matrix-rust-sdk` and Tauri v2) and builds directly on the battle-tested open standards of **Claude Desktop**, **GitHub Copilot Desktop**, and **Element X** (Matrix 2.0).
+To deliver secure, real-time collaboration with native device fidelity, Seventwos unifies its clients around a **shared Rust core** (`matrix-rust-sdk` and Tauri v2) and builds directly on the battle-tested standards used also by **Claude Desktop**, **GitHub Copilot Desktop**, and **Element X** (Matrix 2.0).
 
 ---
 
