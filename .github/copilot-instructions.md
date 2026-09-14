@@ -26,6 +26,10 @@ None — no install/build/test/lint tooling exists in this repo.
 
 ## Agents
 - **Fact Checker** (`.github/agents/fact-checker.agent.md`, pinned to `Gemini 3.8 Flash`): Web search, evidence triage, and fact-checking specialist. Use when searching the web for technical specifications, verifying claims, investigating external libraries or desktop frameworks, and validating facts against primary sources before adding them to bundle documentation.
+- **Visual Architect** (`.github/agents/visual-architect.agent.md`, pinned to `Claude Sonnet 5`): Technical diagramming, architecture visualization, and chart design specialist. Use when creating or refining system diagrams, sequence flows, data topologies, state machines, or Mermaid charts to make complex technical architectures immediately intuitive and visually rigorous.
+
+## Skills
+- **`mermaid-diagrams`** (`.github/skills/mermaid-diagrams/SKILL.md`): Technical standards for generating clean, syntax-valid, and visually compelling Mermaid diagrams (architecture topologies, sequence flows, state diagrams, class relationships, and system charts).
 
 ## Workflow Optimization (quality-neutral, applies to all work in this repo)
 

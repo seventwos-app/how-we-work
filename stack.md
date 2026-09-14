@@ -44,11 +44,11 @@ The platform integrates Desktop clients, Mobile clients (Element X architecture)
 graph TD
     subgraph DesktopClient ["Desktop Client (Tauri v2 + Rust)"]
         D_UI["React 19 + Vite UI (Tailwind CSS)"]
-        D_Tauri["Tauri Host Shell (Rust)"]
+        D_Tauri(["Tauri v2 Host Shell (Rust)"])
         D_MCP["Model Context Protocol (MCP) Client"]
         D_Git["Git Worktree Manager"]
         D_Matrix["matrix-rust-sdk (Direct Rust Crate)"]
-        D_SQLite["Local SQLite (Sessions & DAGs)"]
+        D_SQLite[("Local SQLite (Sessions & DAGs)")]
         
         D_UI <-->|Tauri IPC| D_Tauri
         D_Tauri --> D_MCP
@@ -60,14 +60,14 @@ graph TD
     subgraph Mobile_iOS ["Mobile Client: iOS (Element X)"]
         iOS_UI["SwiftUI Native Interface"]
         iOS_FFI["UniFFI Swift Package Bridge"]
-        iOS_Rust["matrix-rust-sdk (Rust Core)"]
+        iOS_Rust(["matrix-rust-sdk (Rust Core)"])
         iOS_UI <--> iOS_FFI <--> iOS_Rust
     end
 
     subgraph Mobile_Android ["Mobile Client: Android (Element X)"]
         And_UI["Jetpack Compose Interface"]
         And_FFI["UniFFI Kotlin Bindings"]
-        And_Rust["matrix-rust-sdk (Rust Core)"]
+        And_Rust(["matrix-rust-sdk (Rust Core)"])
         And_UI <--> And_FFI <--> And_Rust
     end
 
@@ -79,9 +79,9 @@ graph TD
 
     subgraph AgentBackend ["Seventwos Cloud & Agent Backend"]
         MatrixAS["Matrix Application Service (Agent Bots)"]
-        AgentGateway["Seventwos Agent Gateway (Azure Functions C#)"]
-        FrontierLLMs["Frontier LLMs (Claude Opus/Sonnet, GPT-5/6, Gemini)"]
-        CosmosDB["Azure Cosmos DB NoSQL"]
+        AgentGateway["Agent Gateway (Azure Functions C#)"]
+        FrontierLLMs{{"Frontier LLMs (Claude, GPT, Gemini)"}}
+        CosmosDB[("Azure Cosmos DB NoSQL")]
         
         MatrixAS <--> AgentGateway
         AgentGateway <--> FrontierLLMs
@@ -92,7 +92,7 @@ graph TD
     iOS_Rust <-->|Sliding Sync / E2EE| SlidingSync
     And_Rust <-->|Sliding Sync / E2EE| SlidingSync
     
-    Homeserver <-->|Matrix AS / Client-Server API| MatrixAS
+    Homeserver <-->|Matrix AS Protocol| MatrixAS
 ```
 
 ---
@@ -186,21 +186,34 @@ sequenceDiagram
     actor MobileUser as Mobile User (Element X)
     actor DesktopUser as Desktop User (Tauri)
     participant Matrix as Matrix Homeserver / Sliding Sync
-    participant AgentAS as Seventwos Agent Service
-    participant LLM as Frontier AI Model
+    participant AgentAS as Agent Gateway (Azure Functions)
+    participant LLM as Frontier AI Model (Claude / GPT)
     participant Worktree as Git Worktree (Desktop)
 
     MobileUser->>Matrix: Send message to #project room: "Plan desktop auth flow"
     Matrix-->>DesktopUser: Sliding Sync instant event update
     Matrix->>AgentAS: Dispatch room event to registered Application Service
-    AgentAS->>LLM: Formulate prompt with room context
-    LLM-->>AgentAS: Return architectural plan & diff suggestion
-    AgentAS->>Matrix: Post agent response with structured action widget
-    Matrix-->>MobileUser: Display agent response in room timeline
-    Matrix-->>DesktopUser: Display agent response in desktop workspace
-    DesktopUser->>Worktree: Apply agent plan in isolated worktree session
-    Worktree-->>DesktopUser: Test & verify diff locally
-    DesktopUser->>Matrix: Post confirmation & commit link into room
+    activate AgentAS
+    AgentAS->>LLM: Formulate prompt with conversation & repository context
+    activate LLM
+    LLM-->>AgentAS: Return architectural plan & diff suggestions
+    deactivate LLM
+    AgentAS->>Matrix: Post agent response with action widget & diff payload
+    deactivate AgentAS
+    Matrix-->>MobileUser: Render structured plan in mobile timeline
+    Matrix-->>DesktopUser: Display interactive plan in desktop workspace
+    
+    DesktopUser->>Worktree: Checkout branch & apply suggested diff
+    activate Worktree
+    DesktopUser->>Worktree: Run local tests & verify implementation
+    alt Verification Successful
+        Worktree-->>DesktopUser: Tests pass cleanly
+        DesktopUser->>Matrix: Post confirmation & commit link into room
+    else Verification Failed
+        Worktree-->>DesktopUser: Test errors encountered
+        DesktopUser->>Matrix: Reply with error logs to request agent revision
+    end
+    deactivate Worktree
 ```
 
 ---
