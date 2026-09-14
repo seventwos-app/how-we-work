@@ -27,8 +27,8 @@ To deliver secure, real-time collaboration with native device fidelity, Seventwo
 | **UI Framework** | **React 19 + TypeScript + Vite** | **SwiftUI** (Declarative Native) | **Jetpack Compose** (Declarative Native) |
 | **Design / Styling** | **Tailwind CSS** (Shared design tokens) | Apple Human Interface Guidelines | Material Design 3 (M3) |
 | **Core Communications Engine**| **`matrix-rust-sdk`** (Native Rust crate) | **`matrix-rust-sdk`** (via UniFFI / Swift Package) | **`matrix-rust-sdk`** (via UniFFI / Kotlin bindings) |
-| **Sync Protocol** | Matrix 2.0 Sliding Sync (MSC3575) | Matrix 2.0 Sliding Sync (MSC3575) | Matrix 2.0 Sliding Sync (MSC3575) |
-| **Encryption (E2EE)** | Vodozemac (Megolm / Olm in Rust) | Vodozemac (Megolm / Olm in Rust) | Vodozemac (Megolm / Olm in Rust) |
+| **Sync Protocol** | Simplified Sliding Sync (MSC4186) | Simplified Sliding Sync (MSC4186) | Simplified Sliding Sync (MSC4186) |
+| **Encryption (E2EE)** | Vodozemac client-side (Megolm / Olm) | Vodozemac client-side (Megolm / Olm) | Vodozemac client-side (Megolm / Olm) |
 | **Extensibility & Tools** | Model Context Protocol (MCP Client) | In-app Action Sheets & Push Actions | In-app Action Sheets & Push Actions |
 | **Workspace Model** | Git Worktrees (Multi-agent branches) | Mobile Activity & Task Views | Mobile Activity & Task Views |
 | **Local Persistence** | SQLite (Sessions, DAGs, Checkpoints) | SQLite / CoreData / Rust State Store | SQLite / Room / Rust State Store |
@@ -38,7 +38,7 @@ To deliver secure, real-time collaboration with native device fidelity, Seventwo
 
 ## 2. System Architecture Topology
 
-The platform integrates Desktop clients, Mobile clients (Element X architecture), a decentralized Matrix communications fabric, and cloud AI agent backends — the desktop tier consumes `matrix-rust-sdk` as a native Rust crate with zero FFI, while mobile clients reach the same engine only by crossing a UniFFI boundary.
+The platform integrates Desktop clients, Mobile clients (Element X architecture), a decentralized Matrix communications fabric, and cloud AI agent backends — the desktop tier consumes `matrix-rust-sdk` as a native Rust crate with zero FFI, while mobile clients reach the same engine only by crossing a UniFFI boundary. End-to-end encryption is strictly client-side: Vodozemac runs inside every client SDK, and the homeserver relays only opaque ciphertext.
 
 ```mermaid
 graph TD
@@ -50,6 +50,7 @@ graph TD
     classDef clientZone fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
     classDef nativeCore fill:#0f172a,stroke:#22d3ee,stroke-width:2px,color:#f8fafc;
     classDef ffiCore fill:#0f172a,stroke:#f59e0b,stroke-width:2px,stroke-dasharray: 5 5,color:#f8fafc;
+    classDef cryptoZone fill:#1a0b2e,stroke:#c084fc,stroke-width:2px,color:#faf5ff;
     classDef matrixZone fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f0fdf4;
     classDef execZone fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#e0e7ff;
     classDef cloudZone fill:#451a03,stroke:#fb923c,stroke-width:2px,color:#fff7ed;
@@ -60,28 +61,34 @@ graph TD
             D_UI["Desktop UI (React 19 + Vite)"]
             D_Tauri(["Tauri v2 Host Core (Rust)"])
             D_Matrix(["matrix-rust-sdk (Native Crate)"])
+            D_Crypto["Vodozemac E2EE (Olm / Megolm)"]
             D_UI <-->|Tauri IPC| D_Tauri
             D_Tauri -->|Direct call: zero FFI| D_Matrix
+            D_Matrix <-->|Encrypt / decrypt in process| D_Crypto
         end
 
         subgraph MobileClients ["Mobile Clients — UniFFI Bridge to Rust"]
             iOS_UI["iOS App (SwiftUI)"]
             iOS_Rust(["matrix-rust-sdk via UniFFI"])
+            iOS_Crypto["Vodozemac E2EE (Olm / Megolm)"]
             iOS_UI <-->|UniFFI: Swift to Rust| iOS_Rust
+            iOS_Rust <-->|Encrypt / decrypt in process| iOS_Crypto
 
             And_UI["Android App (Jetpack Compose)"]
             And_Rust(["matrix-rust-sdk via UniFFI"])
+            And_Crypto["Vodozemac E2EE (Olm / Megolm)"]
             And_UI <-->|UniFFI: Kotlin to Rust| And_Rust
+            And_Rust <-->|Encrypt / decrypt in process| And_Crypto
         end
     end
 
     %% Tier 2: Communications Fabric (Real-Time Decentralized Coordination)
-    subgraph Fabric ["2. Communications Fabric — Matrix 2.0 Network"]
-        Homeserver(["Matrix 2.0 Homeserver (Synapse / Dendrite)"])
-        SlidingSync["Sliding Sync Proxy (MSC3575)"]
-        Vodozemac["Vodozemac E2EE Crypto Engine"]
-        Homeserver <-->|Sync protocol| SlidingSync
-        SlidingSync <-->|Encrypted event payloads| Vodozemac
+    subgraph Fabric ["2. Communications Fabric — Matrix 2.0 Network (zero-knowledge relay)"]
+        Homeserver(["Matrix 2.0 Homeserver (Synapse)"])
+        NativeSync["Native Sliding Sync Endpoint (MSC4186)"]
+        Federation{{"Federated Homeservers (Matrix network)"}}
+        Homeserver -->|Serves sync natively| NativeSync
+        Homeserver <-->|Server-to-server federation| Federation
     end
 
     %% Tier 3: Execution & Agent Intelligence
@@ -111,9 +118,9 @@ graph TD
     end
 
     %% Cross-Tier Connections
-    D_Matrix <-->|Sliding Sync / E2EE| SlidingSync
-    iOS_Rust <-->|Sliding Sync / E2EE| SlidingSync
-    And_Rust <-->|Sliding Sync / E2EE| SlidingSync
+    D_Matrix <-->|MSC4186 sync: ciphertext only| NativeSync
+    iOS_Rust <-->|MSC4186 sync: ciphertext only| NativeSync
+    And_Rust <-->|MSC4186 sync: ciphertext only| NativeSync
 
     Homeserver <-->|Matrix AS Protocol| MatrixAS
     AgentGateway -.->|Task Dispatch & Diffs| D_UI
@@ -124,7 +131,8 @@ graph TD
     class D_UI,D_Tauri,iOS_UI,And_UI clientZone;
     class D_Matrix nativeCore;
     class iOS_Rust,And_Rust ffiCore;
-    class Homeserver,SlidingSync,Vodozemac matrixZone;
+    class D_Crypto,iOS_Crypto,And_Crypto cryptoZone;
+    class Homeserver,NativeSync,Federation matrixZone;
     class D_Git,D_SQLite,D_MCP,LocalTools execZone;
     class MatrixAS,AgentGateway,FrontierLLMs,CosmosDB cloudZone;
 ```
@@ -169,7 +177,7 @@ The mobile applications for iOS and Android are built upon **Element X**, the re
 - Both iOS and Android clients share a single, battle-tested cryptographic and protocol core written in Rust.
 - **Key Capabilities**:
   - High-performance state storage and event caching.
-  - End-to-end encryption via **Vodozemac** (pure-Rust implementation of Olm and Megolm protocols).
+  - End-to-end encryption via **Vodozemac** (pure-Rust implementation of Olm and Megolm protocols), executed entirely on-device — the homeserver never holds decryption keys.
   - Modern OIDC authentication flow (MSC2965 / MSC3861).
   - VoIP and group video integration via **MatrixRTC**.
 
@@ -198,13 +206,14 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 ### 5.1. Why Matrix for Agentic Workflows?
 1. **Decentralized & Federatable**: Organizations own their data; private homeservers ensure sensitive workspace conversations never leak to third-party proprietary chat servers.
 2. **First-Class Agent Identity**: Each AI agent participates as a first-class Matrix account or Application Service bot within shared rooms — addressable, attributable, and subject to the same room membership and permission model as human participants.
-3. **End-to-End Encryption by Default**: All task deliberations, code diff reviews, and intent discussions are protected with state-of-the-art cryptographic isolation.
-4. **Sliding Sync (Matrix 2.0)**: Reduces room synchronization times from tens of seconds to milliseconds, enabling near-instantaneous mobile and desktop responsiveness.
+3. **Client-Side End-to-End Encryption**: Task deliberations, code diff reviews, and intent discussions are encrypted on-device via Vodozemac. Homeservers relay opaque ciphertext and never hold Megolm session keys.
+4. **Simplified Sliding Sync (MSC4186)**: Reduces room synchronization times from tens of seconds to milliseconds. Served natively by the homeserver — the standalone MSC3575 proxy was sunset in November 2024 and is not part of this architecture.
 
 ### 5.2. Backend Integration & Agent Connectivity
 - **Matrix Application Service (AS)**:
   - Seventwos agent backends run as a registered Matrix Application Service.
   - The AS receives room events across all workspace rooms without requiring distinct socket connections per agent.
+  - **Encryption constraint**: an Application Service receives events as the homeserver stores them, so in an encrypted room it sees only `m.room.encrypted` ciphertext. Agent coordination therefore runs either in unencrypted management rooms or through a registered machine client holding its own E2EE device identity and session keys.
 - **Azure Functions (C#) & AI Gateway**:
   - Inbound Matrix events trigger agent workflows in the cloud backend.
   - The agent orchestrator coordinates frontier LLMs (Claude Sonnet 5, Claude Opus 5, GPT-5.6 Sol, Gemini 3.8 Flash).
@@ -223,6 +232,9 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 | 3 | Element X Core SDK | Element X iOS and Element X Android share `matrix-rust-sdk` as their foundational synchronization and crypto engine. | `[VERIFIED]` | [Element X Official Announcement & GitHub Repositories](https://github.com/element-hq/element-x-ios) | 5/5 |
 | 4 | Element X iOS Tech Stack | Written in Swift and SwiftUI, interfacing with `matrix-rust-sdk` via Swift Package and UniFFI FFI bindings. | `[VERIFIED]` | [Element X iOS Repository](https://github.com/element-hq/element-x-ios) | 5/5 |
 | 5 | Element X Android Tech Stack | Written in Kotlin and Jetpack Compose, communicating with `matrix-rust-sdk` through UniFFI bindings. | `[VERIFIED]` | [Element X Android Repository](https://github.com/element-hq/element-x-android) | 5/5 |
-| 6 | Matrix 2.0 Sliding Sync | MSC3575 Sliding Sync protocol drastically reduces sync payload sizes and startup times on mobile and desktop clients. | `[VERIFIED]` | [Matrix.org Specification (MSC3575)](https://matrix.org/docs/guides/sliding-sync/) | 5/5 |
-| 7 | Cross-Platform Rust Synergy | Both Tauri v2 (Desktop) and Element X (Mobile) utilize Rust as their native foundation, allowing direct crate reuse of `matrix-rust-sdk`. | `[VERIFIED]` | [Tauri v2 Documentation](https://v2.tauri.app) & [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) | 5/5 |
+| 6 | Matrix 2.0 Sync Protocol | Simplified Sliding Sync (MSC4186) is served natively by Synapse. It supersedes MSC3575; the standalone sliding-sync proxy was shut down on 21 November 2024 and client support was dropped in January 2025. | `[VERIFIED]` | [Matrix.org: Sunsetting the Sliding Sync Proxy](https://matrix.org/blog/2024/11/14/moving-to-native-sliding-sync/) | 5/5 |
+| 7 | E2EE Trust Boundary | Vodozemac (Olm / Megolm in Rust) executes inside each client's `matrix-sdk-crypto`. Homeservers and sync endpoints relay opaque `m.room.encrypted` payloads and never hold Megolm session keys. | `[VERIFIED]` | [matrix-org/vodozemac](https://github.com/matrix-org/vodozemac) & [Matrix E2EE Concepts](https://matrix.org/docs/matrix-concepts/end-to-end-encryption/) | 5/5 |
+| 8 | Matrix Application Service API | Homeservers push room events to registered Application Services in bulk transactions via `PUT /_matrix/app/v1/transactions/{txnId}`, without per-agent polling. | `[VERIFIED]` | [Matrix Application Service API Specification](https://spec.matrix.org/latest/application-service-api/) | 5/5 |
+| 9 | MCP Local Transport | MCP clients spawn local servers as subprocesses and exchange newline-delimited JSON-RPC 2.0 messages over stdio. | `[VERIFIED]` | [Model Context Protocol: Transports](https://modelcontextprotocol.io/specification/basic/transports) | 5/5 |
+| 10 | Cross-Platform Rust Synergy | Both Tauri v2 (Desktop) and Element X (Mobile) utilize Rust as their native foundation, allowing direct crate reuse of `matrix-rust-sdk`. | `[VERIFIED]` | [Tauri v2 Documentation](https://v2.tauri.app) & [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) | 5/5 |
 
