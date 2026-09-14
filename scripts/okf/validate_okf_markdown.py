@@ -53,25 +53,35 @@ VALID_STATUSES = {"draft", "stable", "deprecated"}
 
 # `.copilot/` holds assistant tooling (e.g. installed skills), not
 # knowledge-bundle content, so it is outside the OKF frontmatter contract.
-EXCLUDED_DIR_PARTS = {"node_modules", ".git", "dist", "build", "vendor", ".copilot"}
+EXCLUDED_DIR_PARTS = {
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    "vendor",
+    ".copilot",
+    ".github",
+}
 
 # GitHub Copilot tooling-config files carry their own contract (or none),
-# not OKF's `type` -- out of scope for this content convention, same as
-# .agent.md / SKILL.md / .prompt.md files elsewhere.
+# not OKF's `type` -- out of scope for this content convention.
 EXCLUDED_RELATIVE_PATHS = {
     ".github/copilot-instructions.md",
     ".github/pull_request_template.md",
 }
 
 FOOTNOTE_LABEL_RE = re.compile(r"\[\^([^\]]+)\]")
+MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+\.md)(?:#[^)]+)?\)")
 
 
 def is_excluded(path):
     try:
-        rel_posix = path.relative_to(REPO_ROOT).as_posix()
+        rel_path = path.relative_to(REPO_ROOT)
     except ValueError:
         return False
-    return rel_posix in EXCLUDED_RELATIVE_PATHS
+    if any(part in EXCLUDED_DIR_PARTS for part in rel_path.parts):
+        return True
+    return rel_path.as_posix() in EXCLUDED_RELATIVE_PATHS
 
 
 # --------------------------------------------------------------------------
@@ -297,9 +307,6 @@ def frontmatter_body(text):
 
 def iter_markdown_files():
     for path in REPO_ROOT.rglob("*.md"):
-        relative_parts = path.relative_to(REPO_ROOT).parts
-        if any(part in EXCLUDED_DIR_PARTS for part in relative_parts):
-            continue
         if is_excluded(path):
             continue
         yield path
@@ -328,6 +335,46 @@ def changed_markdown_files():
         if files:
             return files
     return []
+
+
+def check_bundle_index():
+    """Ensure the root index is a complete, non-stale bundle manifest."""
+    index_path = REPO_ROOT / RESERVED_INDEX_NAME
+    if not index_path.exists():
+        return ["bundle-root index.md is missing"]
+
+    text = index_path.read_text(encoding="utf-8", errors="replace")
+    indexed_paths = {
+        (REPO_ROOT / target).resolve()
+        for target in MARKDOWN_LINK_RE.findall(frontmatter_body(text))
+    }
+    concept_paths = {
+        path.resolve()
+        for path in iter_markdown_files()
+        if path.name not in RESERVED_NAMES
+    }
+    violations = []
+
+    missing_entries = sorted(
+        path.relative_to(REPO_ROOT.resolve()).as_posix()
+        for path in concept_paths - indexed_paths
+    )
+    if missing_entries:
+        violations.append(
+            "missing index.md entry for " + ", ".join(missing_entries)
+        )
+
+    stale_entries = sorted(
+        path.relative_to(REPO_ROOT.resolve()).as_posix()
+        for path in indexed_paths
+        if not path.exists()
+    )
+    if stale_entries:
+        violations.append(
+            "index.md links to missing document(s): " + ", ".join(stale_entries)
+        )
+
+    return violations
 
 
 # --------------------------------------------------------------------------
@@ -478,6 +525,11 @@ def run_changed(strict=True):
                 print(f"FAIL {rel}: {v}")
         else:
             print(f"OK   {rel}")
+    index_violations = check_bundle_index()
+    if index_violations:
+        failed = True
+        for violation in index_violations:
+            print(f"FAIL {RESERVED_INDEX_NAME}: {violation}")
     if failed:
         print("\nokf-validate: one or more changed markdown files are non-conformant.")
         return 1 if strict else 0
@@ -497,6 +549,11 @@ def run_all():
                 print(f"REPORT {rel}: {v}")
         else:
             clean += 1
+    index_violations = check_bundle_index()
+    for violation in index_violations:
+        print(f"REPORT {RESERVED_INDEX_NAME}: {violation}")
+    if index_violations:
+        clean -= 1
     print(f"\nokf-validate baseline: {clean}/{total} markdown files conform.")
     return 0  # report-only, never fails the build
 
