@@ -2,10 +2,10 @@
 type: Specification
 title: Technology Stack
 description: Comprehensive architectural specification for the Seventwos platform spanning Desktop UI, Mobile (iOS & Android via Element X), Matrix communications fabric, cloud agent backends, and the licensing posture governing reuse of each foundation.
-tags: [architecture, tech-stack, desktop, mobile, ios, android, tauri, electron, matrix, element-x, rust, mcp, react, licensing]
+tags: [architecture, tech-stack, frontend, licensing]
 ---
 
-# Technology Stack: Desktop, Mobile & Communications Fabric
+# Technology Stack (User Frontend)
 
 Seventwos bridges human intent and agentic execution across physical devices, native applications, and decentralized networks. In an applied AI ecosystem:
 
@@ -13,7 +13,7 @@ Seventwos bridges human intent and agentic execution across physical devices, na
 - **The repository captures implementation.**
 - **The communications fabric (Matrix) coordinates humans and agents in real time.**
 
-To deliver secure, real-time collaboration with native device fidelity, Seventwos unifies its clients around a **shared Rust core** (`matrix-rust-sdk` and Tauri v2) and adopts the battle-tested frontend frameworks proven in **Element X** (Matrix 2.0), following the desktop patterns established by **Claude Desktop** and **GitHub Copilot Desktop**. Where applicable and permitted, we build upon and extend these existing open-source foundations rather than reinventing them.
+To deliver secure, real-time collaboration with native device fidelity, Seventwos unifies its clients around a **shared Rust core** (`matrix-rust-sdk` and Tauri v2) and adopts the battle-tested frontend frameworks proven in **Element X** (Matrix 2.0), following the desktop UI patterns established by **Hermes Agent Desktop** and **GitHub Copilot Desktop**. Where applicable and permitted, we build upon and extend these existing open-source foundations rather than reinventing them.
 
 This specification is intentionally stack-scoped: it defines runtime, protocol, storage, and licensing choices. Agent rosters, workflow choreography, and prompt policy are maintained in repository-level collaboration artifacts, not in this document.
 
