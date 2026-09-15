@@ -1,6 +1,6 @@
 ---
 type: Specification
-title: Technology Stack
+title: Technology Stack for User Frontend
 description: Comprehensive architectural specification for the Seventwos platform spanning Desktop UI, Mobile (iOS & Android via Element X), Matrix communications fabric, cloud agent backends, and the licensing posture governing reuse of each foundation.
 tags: [architecture, tech-stack, frontend, licensing]
 ---
