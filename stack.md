@@ -225,7 +225,7 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
   - **Encryption constraint**: an Application Service receives events as the homeserver stores them, so in an encrypted room it sees only `m.room.encrypted` ciphertext. Agent coordination therefore runs either in unencrypted management rooms or through a registered machine client holding its own E2EE device identity and session keys.
 - **Azure Functions (C#) & AI Gateway**:
   - Inbound Matrix events trigger agent workflows in the cloud backend.
-  - The agent orchestrator coordinates frontier LLMs (Claude Sonnet 5, Claude Opus 5, GPT-5.6 Sol, Gemini 3.8 Flash).
+  - The agent orchestrator coordinates frontier LLMs.
   - Agents format replies using structured Markdown, interactive widget definitions, and diff payloads posted directly back into the Matrix room timeline.
   - **No out-of-band client channel**: the gateway never pushes to a client directly. Every dispatch, diff, and status update is a room event. This keeps agent output inside the room permission model and audit trail, ensures desktop and mobile observers converge on the same state, and avoids requiring inbound network reachability to clients behind NAT.
 - **Push Gateway (Sygnal)**:
