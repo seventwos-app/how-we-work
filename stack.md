@@ -5,7 +5,7 @@ description: Comprehensive architectural specification for the Seventwos platfor
 tags: [architecture, tech-stack, frontend, licensing]
 ---
 
-# Technology Stack (User Frontend)
+# 	Technology Stack for User Frontend
 
 Seventwos bridges human intent and agentic execution across physical devices, native applications, and decentralized networks. In an applied AI ecosystem:
 
