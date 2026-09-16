@@ -24,6 +24,28 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request refining the closing statement in README.md"
       }
+    },
+    {
+      "id": "2026-09-17-align-stack-with-client-forks",
+      "intent": "Align the technology-stack specification with the actual upstream foundations, runtime boundaries, transition state, and licensing posture of the desktop, iOS, and Android client forks.",
+      "human_direction": "A maintainer requested revised wording that uses the term applications, asked for fact-checking, and directed that the stack reflect the organization's existing forks.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request aligning the technology-stack specification with the three client forks"
+      }
+    },
+    {
+      "id": "2026-09-17-diagram-and-pages-publish",
+      "intent": "Render the technology-stack topology as an interactive Archify diagram, confirm the Matrix backend's deployment status in the specification, and publish the diagram via GitHub Pages so it is directly viewable.",
+      "human_direction": "A maintainer directed use of the MIT-licensed tt-a1i/archify tool to redraw the diagram, confirmed the Matrix backend is deployed, and asked for the rendered HTML to be hosted on GitHub Pages so it is clickable from the repository.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request adding diagrams/stack.architecture.json, diagrams/stack.architecture.html, and enabling GitHub Pages"
+      }
     }
   ]
 }
