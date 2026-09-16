@@ -156,6 +156,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request reordering README.md tags"
       }
+    },
+    {
+      "id": "2026-09-17-readme-dual-system-bold",
+      "intent": "Bold the sentence naming the human contributions that matter most in an agentic world, to emphasize it in the README.",
+      "human_direction": "A maintainer asked to bold the \"This dual system allows us to recognize...\" sentence.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request bolding a README sentence"
+      }
     }
   ]
 }
