@@ -167,6 +167,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request bolding a README sentence"
       }
+    },
+    {
+      "id": "2026-09-17-readme-applied-ai-bold",
+      "intent": "Extend bolding to cover the full Applied AI company sentence in README.md, not just its first clause.",
+      "human_direction": "A maintainer asked to bold the full sentence.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request extending README bolding"
+      }
     }
   ]
 }
