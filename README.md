@@ -2,7 +2,7 @@
 type: Vision
 title: How We Work
 description: How Seventwos turns intent into action.
-tags: [heuristic, principles, values]
+tags: [principles, heuristic, values]
 ---
 
 # How We Work

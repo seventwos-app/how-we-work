@@ -145,6 +145,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request expanding README.md tags"
       }
+    },
+    {
+      "id": "2026-09-17-readme-tag-reorder",
+      "intent": "Reorder README.md frontmatter tags to match the order in which the classifications were specified.",
+      "human_direction": "A maintainer asked to put the tags in the order they were shown, with values last.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request reordering README.md tags"
+      }
     }
   ]
 }
