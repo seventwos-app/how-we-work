@@ -27,7 +27,7 @@ This is how attribution becomes recognition.
 
 In an agentic world, the most valuable human contributions are often not lines of code, but ideas, context, decisions, leadership, and domain expertise. Our workspace makes those contributions visible and attributable, while our repositories make outcomes transparent and auditable.
 
-This dual system allows us to recognize the human contributions that matter most in an agentic world: strategic direction, contextual understanding, and creative vision.
+**This dual system allows us to recognize the human contributions that matter most in an agentic world: strategic direction, contextual understanding, and creative vision.**
 
 By connecting human influence to machine output, we create an environment where people and agents can collaborate at scale and in doing so, build the future of Seventwos.
 

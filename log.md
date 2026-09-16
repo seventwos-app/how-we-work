@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-09-17
+* **README Emphasis**: Bolded the "This dual system allows us to recognize the human contributions..." sentence in [How We Work](README.md), highlighting the passage naming the human contributions that matter most in an agentic world.
 * **README Tag Reorder**: Reordered [How We Work](README.md)'s frontmatter `tags` from `[heuristic, principles, values]` to `[principles, heuristic, values]`, matching the order in which those classifications were specified.
 * **README Tag Expansion**: Expanded [How We Work](README.md)'s frontmatter `tags` from `[heuristic]` to `[heuristic, principles, values]`, classifying the document by what it actually is — a statement of Seventwos' operating principles and values — rather than a single generic label.
 * **Diagram Title Update**: Retitled the interactive architecture diagram from "Seventwos System Architecture Topology" to "System Architecture For User Frontend" in [`diagrams/stack.architecture.json`](diagrams/stack.architecture.json), and regenerated [`diagrams/stack.architecture.html`](diagrams/stack.architecture.html) via Archify.
