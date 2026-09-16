@@ -79,6 +79,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request correcting the Agent Gateway description"
       }
+    },
+    {
+      "id": "2026-09-17-agent-gateway-sourcing",
+      "intent": "Substantiate the Agent Gateway Matrix Boundary claims in the technology-stack specification with a checkable source instead of an unsourced assertion, and link the gateway to its operational repository.",
+      "human_direction": "A maintainer directed cross-checking the claims against the Azure deployment and linking the gateway to the about_hermes repository.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request sourcing the Agent Gateway claims to Azure infrastructure inventory and the about_hermes repository"
+      }
     }
   ]
 }
