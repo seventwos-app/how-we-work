@@ -57,6 +57,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request removing the redundant Mermaid diagram from stack.md"
       }
+    },
+    {
+      "id": "2026-09-17-diagram-wip-caveat",
+      "intent": "Add a work-in-progress caveat to the interactive diagram references, clarifying some connection details are still being finalized.",
+      "human_direction": "A maintainer proposed caveat wording; the wording was tightened to avoid implying the diagram is speculative rather than provisional, and applied on approval.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request adding a work-in-progress caveat to the diagram references"
+      }
     }
   ]
 }

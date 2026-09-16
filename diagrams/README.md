@@ -9,7 +9,7 @@ tags: [architecture, diagrams, archify, documentation]
 
 [`stack.architecture.json`](stack.architecture.json) is the maintainable source for the system architecture diagram in [Technology Stack](../stack.md). It targets Archify `v2.16.0`; the generated HTML is self-contained and can be opened without installing application dependencies.
 
-**Live, interactive view**: once this change lands on `main`, the rendered diagram is published via GitHub Pages at [seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html](https://seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html) — no download required to click through it. This is a work-in-progress reference; regenerate and re-publish it (by pushing the updated HTML) whenever the source JSON changes.
+**Live, interactive view**: the rendered diagram is published via GitHub Pages at [seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html](https://seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html) — no download required to click through it. This is a work-in-progress reference based on the current architecture direction; some connection details are still being finalized. Regenerate and re-publish it (by pushing the updated HTML) whenever the source JSON changes.
 
 Archify is a documentation tool, not a runtime dependency. Download its pinned MIT-licensed release outside the repository, verify it, and use that copy to regenerate the artifact:
 
