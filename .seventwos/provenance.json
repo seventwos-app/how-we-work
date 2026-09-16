@@ -13,6 +13,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request adding .seventwos/provenance.json v0.1, the provenance convention, its validator, and CI/PR-template integration"
       }
+    },
+    {
+      "id": "2026-09-16-refine-vision-wording",
+      "intent": "Refine the How We Work closing statement so collaboration at scale leads directly into building the future of Seventwos.",
+      "human_direction": "A maintainer supplied the exact replacement wording for the closing sentence and asked for it to be published.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request refining the closing statement in README.md"
+      }
     }
   ]
 }
