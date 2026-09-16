@@ -123,6 +123,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request changing the diagram default preset and theme"
       }
+    },
+    {
+      "id": "2026-09-17-diagram-title-user-frontend",
+      "intent": "Retitle the published interactive architecture diagram to \"System Architecture For User Frontend\".",
+      "human_direction": "A maintainer directed changing the diagram title from \"Seventwos System Architecture Topology\" to \"System Architecture For User Frontend\".",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request updating the diagram title"
+      }
     }
   ]
 }
