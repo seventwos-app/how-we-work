@@ -1,16 +1,18 @@
 # Copilot Instructions
 
 ## Repo purpose
-A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expressing Seventwos' vision/heuristic for how humans and AI agents collaborate ("workspace captures intent, repository captures implementation"). Not a code repo — no app, no dependencies, no CI.
+A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expressing Seventwos' vision/heuristic for how humans and AI agents collaborate ("workspace captures intent, repository captures implementation"). It is not an application repository: it has no application runtime or package manifest, but it does retain lightweight pull-request CI for its in-repository validators.
 
 ## Stack
 - Pure Markdown content with a small in-repository Python OKF validator and pull-request CI; no application runtime or package manifest.
 - Uses OKF bundle conventions via YAML frontmatter (`okf_version: "0.2"` in `index.md`; `type`, `title`, `description`, `tags` in `README.md`).
 
 ## Repo shape
-- `README.md` — the actual content: the "How We Work" vision statement (frontmatter-tagged `type: Vision`).
-- `index.md` — OKF bundle index; links to `README.md` as the bundle's single entry.
-- `log.md` — dated "Update Log" of substantive changes to the bundle (init, classification, wording edits) — append-only style, newest section on top per date.
+- `README.md` — the "How We Work" vision statement (frontmatter-tagged `type: Vision`).
+- `stack.md` — a technology-stack specification, including the architecture's licensing posture.
+- `plans/` and `runbooks/` — provenance and operational concepts, each indexed as part of the bundle.
+- `index.md` — the complete OKF bundle index.
+- `log.md` — dated "Update Log" of substantive bundle changes — append-only style, newest section on top per date.
 
 ## Commands
 - `python scripts/okf/validate_okf_markdown.py --changed` — validates changed markdown against this repo's OKF v0.2 bundle convention (the `lint` CI check on pull requests). `--all` scans everything and reports a baseline without failing.

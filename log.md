@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-09-17
+* **Alignment**: Corrected the MCP transport source links in [Technology Stack](stack.md) to their versioned specifications, and clarified in [Repository Provenance](plans/repository-provenance.md) that schema v0.1 does not yet model review cadence, accountable ownership, or drift checking.
+
 ## 2026-09-16
 * **Wording**: Refined the closing statement in [How We Work](README.md) to connect collaboration at scale more directly with building the future of Seventwos.
 

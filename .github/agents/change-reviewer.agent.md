@@ -72,7 +72,7 @@ A merged instruction file is executable. Treat an addition here as privilege esc
 - [ ] Do referenced anchors actually resolve (e.g. `_shared_safety_blocks.md#prompt-protection` exists and has that heading)?
 - [ ] Frontmatter valid: `description` present and specific enough to route on, `name` unique, `tools` no broader than the job needs.
 
-For a deeper audit of the instruction system itself — discoverability, routing, validator coverage, docs drift — hand off to the `customization-auditor` skill rather than duplicating it here.
+Treat a deeper audit of the instruction system itself — discoverability, routing, validator coverage, and documentation drift — as separately scoped work rather than duplicating it here.
 
 ### Workflow & Supply Chain (when `.github/workflows/**` changed)
 

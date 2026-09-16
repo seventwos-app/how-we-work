@@ -126,9 +126,9 @@ dependency was added.
 ### Keeping the record true
 
 A provenance record makes claims that only a human can affirm: what a
-repository is for, who is accountable for it, and what may be disclosed.
-Those claims decay as the business changes, so the record needs a review
-cadence -- but the correction must stay manual.
+repository is for, who directed a change, and what may be disclosed. Those
+claims decay as the business changes, so a future review cadence must stay
+manual.
 
 **Automate noticing; never automate asserting.** A record that a scheduled
 job rewrites to "stay current" no longer asserts what a human believes to
@@ -136,10 +136,11 @@ be true; it asserts only that the job ran. That is precisely the property
 the record exists to provide, so auto-correction would hollow it out
 while leaving it looking healthier than before.
 
-So a record carries a `review` block naming what must be re-affirmed and
-when, and tooling reports **drift** -- the gap between what the record
-claims and what the repository observably shows -- as a prompt addressed
-to a person:
+Schema `v0.1` does not yet model a review date or accountable party, and
+its validator does not perform drift checking. It therefore must not claim
+to provide either mechanism. If a later schema adds advisory **drift**
+reporting -- the gap between what a record claims and what the repository
+observably shows -- it should prompt a person about:
 
 - the review interval has lapsed;
 - the declared accountable party no longer matches the repository's
@@ -155,8 +156,9 @@ Two constraints follow from experience rather than theory:
   and JSON path only, never a field value. That keeps drift reports safe
   to surface in CI logs, step summaries, and issue bodies.
 
-Responding to drift is an ordinary reviewed pull request. The review date
-moves forward only once a human has actually re-affirmed the claims.
+Responding to any future drift report should be an ordinary reviewed pull
+request. A review date, if introduced, should move forward only once a
+human has actually re-affirmed the claims.
 
 ### Pull requests
 
