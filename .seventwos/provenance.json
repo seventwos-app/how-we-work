@@ -90,6 +90,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request sourcing the Agent Gateway claims to Azure infrastructure inventory and the about_hermes repository"
       }
+    },
+    {
+      "id": "2026-09-17-diagram-title-alignment",
+      "intent": "Retitle the interactive architecture diagram to match its host section title and remove a redundant, section-specific reference to Matrix from the subtitle.",
+      "human_direction": "A maintainer supplied the exact replacement title and subtitle wording.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request retitling the interactive diagram to match Technology Stack section 2"
+      }
     }
   ]
 }
