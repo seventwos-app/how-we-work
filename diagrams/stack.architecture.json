@@ -2,8 +2,8 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Seventwos Cross-Platform Architecture",
-    "subtitle": "Fork-based clients coordinate humans and agents through Matrix",
+    "title": "Seventwos System Architecture Topology",
+    "subtitle": "Clients allow for coordination between humans and agents",
     "output": "stack.architecture.html",
     "quality_profile": "standard",
     "visual_preset": "blueprint",
