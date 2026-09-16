@@ -1,7 +1,7 @@
 ---
 type: Specification
 title: Technology Stack for User Frontend
-description: Comprehensive architectural specification for the Seventwos platform spanning Desktop UI, Mobile (iOS & Android via Element X), Matrix communications fabric, cloud agent backends, and the licensing posture governing reuse of each foundation.
+description: Comprehensive architectural specification for the Seventwos platform spanning the Element Web-based desktop client, Element X-based mobile clients, Matrix communications fabric, cloud agent backends, and the licensing posture governing each fork.
 tags: [architecture, tech-stack, frontend, licensing]
 ---
 
@@ -13,7 +13,7 @@ Seventwos bridges human intent and agentic execution across physical devices, na
 - **The repository captures implementation.**
 - **The communications fabric (Matrix) coordinates humans and agents in real time.**
 
-To deliver secure, real-time collaboration with native device fidelity, Seventwos unifies its clients around a **shared Rust core** (`matrix-rust-sdk` and Tauri v2) and adopts the battle-tested frontend frameworks proven in **Element X** (Matrix 2.0), following the desktop UI patterns established by **Hermes Agent Desktop** and **GitHub Copilot Desktop**. Where applicable and permitted, we build upon and extend these existing open-source foundations rather than reinventing them.
+To deliver secure, real-time collaboration with native device fidelity, Seventwos develops three upstream-derived clients: the desktop application is built from a fork of **Element Web / Element Desktop**, while the iOS and Android applications are built from forks of **Element X** for Matrix 2.0. The desktop uses Electron, React, `matrix-js-sdk`, and the Matrix Rust crypto stack compiled to WebAssembly; the native mobile applications use SwiftUI or Jetpack Compose over `matrix-rust-sdk`. Interaction patterns seen in applications such as **Claude Desktop** and the **GitHub Copilot app** remain design references only. Seventwos retains upstream attribution and publishes its modifications under AGPL-3.0.
 
 This specification is intentionally stack-scoped: it defines runtime, protocol, storage, and licensing choices. Agent rosters, workflow choreography, and prompt policy are maintained in repository-level collaboration artifacts, not in this document.
 
@@ -23,24 +23,25 @@ This specification is intentionally stack-scoped: it defines runtime, protocol, 
 
 | Layer | Desktop Client | iOS Mobile Client | Android Mobile Client |
 | :--- | :--- | :--- | :--- |
-| **Reference Anchor** | Claude Desktop & GitHub Copilot Desktop | Element X iOS | Element X Android |
-| **Host Shell / Runtime** | **Tauri v2** (Rust + Native Webview) | Native Swift / iOS 18.5+ App | Native Kotlin / Modern Android App |
-| **Fallback Shell** | Electron (Chromium + Node.js) | — | — |
-| **UI Framework** | **React 19 + TypeScript + Vite** | **SwiftUI** (Declarative Native) | **Jetpack Compose** (Declarative Native) |
-| **Design / Styling** | **Tailwind CSS** (Shared design tokens) | Apple Human Interface Guidelines | Material Design 3 (M3) |
-| **Core Communications Engine**| **`matrix-rust-sdk`** (Native Rust crate) | **`matrix-rust-sdk`** (via UniFFI / Swift Package) | **`matrix-rust-sdk`** (via UniFFI / Kotlin bindings) |
+| **Upstream Foundation** | Fork of Element Web / Element Desktop | Fork of Element X iOS | Fork of Element X Android |
+| **Host Shell / Runtime** | **Electron** (Chromium + Node.js) | Native Swift / iOS 18.5+ App | Native Kotlin / Modern Android App |
+| **UI Framework** | **React + TypeScript** | **SwiftUI** (Declarative Native) | **Jetpack Compose** (Declarative Native) |
+| **Design / Styling** | Element Web design system, evolving to Seventwos UI | Apple Human Interface Guidelines | Material Design 3 (M3) |
+| **Core Communications Engine**| **`matrix-js-sdk`** + Rust crypto via WebAssembly | **`matrix-rust-sdk`** (via UniFFI / Swift Package) | **`matrix-rust-sdk`** (via UniFFI / Kotlin bindings) |
 | **Sync Protocol** | Simplified Sliding Sync (MSC4186) | Simplified Sliding Sync (MSC4186) | Simplified Sliding Sync (MSC4186) |
 | **Encryption (E2EE)** | Vodozemac client-side (Megolm / Olm) | Vodozemac client-side (Megolm / Olm) | Vodozemac client-side (Megolm / Olm) |
 | **Extensibility & Tools** | Model Context Protocol (MCP Client) | In-app Action Sheets & Push Actions | In-app Action Sheets & Push Actions |
 | **Workspace Model** | Git Worktrees (Multi-agent branches) | Mobile Activity & Task Views | Mobile Activity & Task Views |
-| **Local Persistence** | SDK state store (SQLite) + app SQLite (Sessions, DAGs, Checkpoints) | `matrix-rust-sdk` state store (SQLite) + Keychain | `matrix-rust-sdk` state store (SQLite) + SQLDelight + Keystore |
+| **Local Persistence** | Matrix JS SDK stores + Seshat encrypted search index | `matrix-rust-sdk` state store (SQLite) + Keychain | `matrix-rust-sdk` state store (SQLite) + SQLDelight + Keystore |
 | **Push Notifications** | OS Native Notifications | Apple Push Notification service (APNs) | UnifiedPush / Firebase Cloud Messaging (FCM) |
 
 ---
 
 ## 2. System Architecture Topology
 
-The platform integrates Desktop clients, Mobile clients (Element X architecture), a decentralized Matrix communications fabric, and cloud AI agent backends. The desktop tier consumes `matrix-rust-sdk` as a native Rust crate — no FFI between the host core and the SDK, though decrypted events still cross a JSON-serialized IPC boundary to reach the React UI — while mobile clients reach the same engine across a UniFFI boundary and render natively. End-to-end encryption is strictly client-side: Vodozemac runs inside every client SDK, and the homeserver relays only opaque ciphertext. All agent output reaches clients through the Matrix timeline; there is no out-of-band channel from the cloud backend into any client.
+The platform integrates an Element Web-derived desktop client, Element X-derived mobile clients, a decentralized Matrix communications fabric, and cloud AI agent backends. The desktop application uses `matrix-js-sdk`; its Rust cryptographic implementation runs as WebAssembly inside the web application. The mobile clients call `matrix-rust-sdk` through UniFFI and render with native UI frameworks. End-to-end encryption remains client-side, and the homeserver relays only opaque ciphertext. All agent output reaches clients through the Matrix timeline; there is no out-of-band channel from the cloud backend into any client.
+
+An interactive, work-in-progress rendering of this topology is maintained in [`diagrams/`](diagrams/README.md) and published live at [seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html](https://seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html).
 
 ```mermaid
 graph TD
@@ -59,26 +60,24 @@ graph TD
 
     %% Tier 1: Client Interfaces (Intent Capture)
     subgraph Clients ["1. Client Interfaces — Human Intent Capture"]
-        subgraph DesktopClient ["Desktop Client — Native Rust Core"]
-            D_UI["Desktop UI (React 19 + Vite)"]
-            D_Tauri(["Tauri v2 Host Core (Rust)"])
-            D_Matrix(["matrix-rust-sdk (Native Crate)"])
-            D_Crypto["Vodozemac E2EE (Olm / Megolm)"]
-            D_UI <-->|Tauri IPC: JSON-serialized| D_Tauri
-            D_Tauri -->|Direct Rust call: no FFI| D_Matrix
-            D_Matrix <-->|Encrypt / decrypt in process| D_Crypto
+        subgraph DesktopClient ["Desktop Client — Element Web Fork"]
+            D_Electron(["Electron Host"])
+            D_UI["Desktop UI (React + TypeScript)"]
+            D_Matrix["matrix-js-sdk"]
+            D_Crypto["Rust Crypto (WebAssembly)"]
+            D_Electron <-->|Desktop IPC| D_UI
+            D_UI -->|Matrix API| D_Matrix
+            D_Matrix <-->|Encrypt / decrypt| D_Crypto
 
-            subgraph LocalExecution ["Local Execution Sandbox (same machine)"]
+            subgraph LocalExecution ["Planned Seventwos Extensions (same machine)"]
                 D_Git["Git Worktree Manager (Branch Isolation)"]
-                D_SQLite[("App SQLite Store (Sessions & DAGs)")]
                 D_MCP["Model Context Protocol (MCP) Client"]
                 LocalTools{{"Local Dev Tools (Node / Python / Shell)"}}
                 D_MCP <-->|stdio / JSON-RPC| LocalTools
             end
 
-            D_Tauri -->|Session control| D_Git
-            D_Tauri -->|State persistence| D_SQLite
-            D_Tauri -->|Tool invocation| D_MCP
+            D_Electron -->|Session control| D_Git
+            D_Electron -->|Tool invocation| D_MCP
         end
 
         subgraph MobileClients ["Mobile Clients — UniFFI Bridge to Rust"]
@@ -107,12 +106,10 @@ graph TD
 
     %% Tier 3: Cloud Agent Intelligence
     subgraph Execution ["3. Cloud Agent Services — Implementation Tier"]
-        MatrixAS["Matrix Application Service (Agent Bots)"]
         AgentGateway(["Agent Gateway (Azure Functions C#)"])
         FrontierLLMs{{"Frontier LLMs (Claude Opus/Sonnet, GPT-5/6, Gemini)"}}
         CosmosDB[("Azure Cosmos DB NoSQL")]
 
-        MatrixAS <-->|Event webhook| AgentGateway
         AgentGateway <-->|Inference API| FrontierLLMs
         AgentGateway <-->|State read/write| CosmosDB
     end
@@ -127,18 +124,18 @@ graph TD
     PushGateway -.->|"Wake signal: event ID only"| iOS_UI
     PushGateway -.->|"Wake signal: event ID only"| And_UI
 
-    Homeserver <-->|Matrix AS Protocol| MatrixAS
+    Homeserver <-->|Matrix backend deployment: client connection| AgentGateway
 
     %% Apply Class Styles
     class Clients,Fabric,Execution zoneContainer;
     class DesktopClient,MobileClients,LocalExecution subContainer;
-    class D_UI,D_Tauri,iOS_UI,And_UI clientZone;
+    class D_UI,D_Electron,iOS_UI,And_UI clientZone;
     class D_Matrix nativeCore;
     class iOS_Rust,And_Rust ffiCore;
     class D_Crypto,iOS_Crypto,And_Crypto cryptoZone;
     class Homeserver,PushGateway,Federation matrixZone;
-    class D_Git,D_SQLite,D_MCP,LocalTools execZone;
-    class MatrixAS,AgentGateway,FrontierLLMs,CosmosDB cloudZone;
+    class D_Git,D_MCP,LocalTools execZone;
+    class AgentGateway,FrontierLLMs,CosmosDB cloudZone;
 ```
 
 ---
@@ -147,30 +144,26 @@ graph TD
 
 The desktop client is optimized for high-intensity engineering, agent coordination, and local environment execution.
 
-### 3.1. Shell Architecture: Tauri v2
-- **Unified Rust Foundation**: Because Tauri v2 is written in Rust, it imports `matrix-rust-sdk` natively as a dependency, with no foreign function interface between the host core and the SDK. Both are built on the Tokio runtime, so SDK futures and background sync loops are spawned directly onto the runtime Tauri already manages.
-- **Presentation Boundary**: The Rust-to-Rust path is FFI-free, but the React UI runs in a webview, so decrypted timelines, state deltas, and diffs are JSON-serialized across Tauri IPC to reach it. High-throughput surfaces (streaming agent output, fast timeline scrolling) are designed around this boundary rather than assuming it is free.
-- **Resource Footprint**: Renders through operating system native webviews (WebView2 on Windows, WebKit on macOS, WebKitGTK on Linux). Published baseline measurements for minimal shells report:
-  - Idle RAM consumption under 60 MB (versus 250–400 MB in standard Electron shells).
-  - Installer sizes under 20 MB (versus 85–130 MB for bundled Chromium binaries).
-  - Sub-second launch time.
-  These are baseline figures for lightweight shells, not production footprints — real memory use scales with DOM complexity and varies by platform webview.
-- **Electron Fallback Mode**: The presentation tier is decoupled from host primitives, enabling an Electron wrapper when enterprise environments enforce legacy Node.js C++ addons or pinned Chromium revisions.
+### 3.1. Shell Architecture: Element Web / Electron Fork
+- **Upstream Foundation**: [`seventwos-app/usr-workspace-desktop`](https://github.com/seventwos-app/usr-workspace-desktop) is a fork of `element-hq/element-web`. Its `apps/desktop` package contains the Electron application previously maintained as Element Desktop.
+- **Presentation Boundary**: Electron packages the React application with Chromium and provides Node.js-backed desktop integration through its main and preload processes.
+- **Matrix Integration**: The application communicates through `matrix-js-sdk`. End-to-end encryption uses the Matrix Rust crypto stack compiled to WebAssembly, sharing the cryptographic implementation used by native clients without sharing their application SDK or UI code.
+- **Transition State**: The repository still contains inherited Element code, branding, configuration, and a pinned upstream web bundle. Replacing that bundle with a Seventwos-authored interface is future work; the current client must not be described as independently authored.
 
-### 3.2. Presentation Layer: React 19 + Vite
-- **Components & Layout**: React 19 concurrent rendering with TypeScript, styled via Tailwind CSS using Seventwos brand design tokens.
-- **Client State**: Zustand for fast, predictable client-side UI state management (window panes, active session pointers, chat viewports).
-- **Workspace Canvases**: Dedicated side-by-side surfaces for diff inspection, terminal execution, and markdown preview.
+### 3.2. Presentation Layer: React + TypeScript
+- **Components & Layout**: The current desktop repository packages a pinned upstream web UI bundle built with Element Web's React and TypeScript architecture and design system.
+- **Transition Direction**: A Seventwos-authored web bundle will replace the inherited bundle incrementally while preserving the Electron packaging and Matrix integration boundary.
+- **Planned Workspace Canvases**: The Seventwos interface will add side-by-side surfaces for diff inspection, terminal execution, and Markdown preview.
 
 ### 3.3. Tool Protocol: Model Context Protocol (MCP)
 - Adopts the open standard released by Anthropic in November 2024 and adopted across modern AI developer tooling:
   - Runs local MCP servers as subprocesses over `stdio` using newline-delimited JSON-RPC 2.0.
   - Connects to remote servers over **Streamable HTTP**, the transport introduced in MCP revision `2025-03-26` that superseded the deprecated HTTP+SSE transport. Legacy HTTP+SSE is supported only where older servers require it.
   - Exposes tools (file viewing, code search, git operations, browser execution, database queries) directly to active agents.
-- **Placement constraint**: the MCP client lives in the Rust host core, not the React frontend. Tauri v2's capability system requires statically allow-listed shell commands, which cannot express arbitrary user-configured MCP servers (`npx`, `python`, `docker`); spawning them from the host core via the Rust process API keeps tool invocation under host control rather than webview control.
+- **Placement constraint**: planned MCP process management belongs in Electron's trusted main process, not in renderer code. The renderer requests tool operations through a narrow preload API; the main process owns subprocess creation, permission checks, and lifecycle management.
 
 ### 3.4. Multi-Agent Workspace Isolation: Git Worktrees
-- Aligns with GitHub Copilot Desktop workspace isolation:
+- Aligns with the GitHub Copilot app's workspace-isolation pattern:
   - Each task turn runs in an isolated Git worktree.
   - Prevents dirty state collisions between concurrent agent sessions.
   - Guarantees that code commits remain atomic and auditable.
@@ -179,7 +172,7 @@ The desktop client is optimized for high-intensity engineering, agent coordinati
 
 ## 4. Mobile Client Specification (Element X Architecture)
 
-The mobile applications for iOS and Android follow the **Element X** architecture — the reference implementation for next-generation Matrix 2.0 clients. They adopt its structural pattern (native declarative UI over a shared Rust core) and embed the same Apache-2.0 engine, rather than forking the AGPL-3.0 application shell. See §6 for the licensing rationale.
+The mobile applications are direct forks of **Element X iOS** and **Element X Android**, the native reference clients used to showcase Matrix 2.0. Both repositories currently contain inherited Element X application code and are being evolved toward separately authored Seventwos application layers. They retain the native declarative UI over a shared Rust core, preserve upstream attribution, and distribute inherited and modified application code under AGPL-3.0. See §6 for the licensing implications.
 
 ### 4.1. Core Engine: `matrix-rust-sdk`
 - Both iOS and Android clients share a single, battle-tested cryptographic and protocol core written in Rust.
@@ -214,17 +207,14 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 
 ### 5.1. Why Matrix for Agentic Workflows?
 1. **Decentralized & Federatable**: Organizations own their data; private homeservers ensure sensitive workspace conversations never leak to third-party proprietary chat servers.
-2. **First-Class Agent Identity**: Each AI agent participates as a first-class Matrix account or Application Service bot within shared rooms — addressable, attributable, and subject to the same room membership and permission model as human participants.
+2. **First-Class Agent Identity**: Each AI agent is intended to participate through a Matrix account within shared rooms — addressable, attributable, and subject to the same room membership and permission model as human participants, against the deployed Matrix backend. The exact authentication and device model this backend exposes remain to be documented in this specification.
 3. **Client-Side End-to-End Encryption**: Task deliberations, code diff reviews, and intent discussions are encrypted on-device via Vodozemac. Homeservers relay opaque ciphertext and never hold Megolm session keys.
 4. **Simplified Sliding Sync (MSC4186)**: Reduces room synchronization times from tens of seconds to milliseconds. Served natively by the homeserver — the standalone MSC3575 proxy was sunset in November 2024 and is not part of this architecture.
 
 ### 5.2. Backend Integration & Agent Connectivity
-- **Matrix Application Service (AS)**:
-  - Seventwos agent backends run as a registered Matrix Application Service.
-  - The AS receives room events across all workspace rooms without requiring distinct socket connections per agent.
-  - **Encryption constraint**: an Application Service receives events as the homeserver stores them, so in an encrypted room it sees only `m.room.encrypted` ciphertext. Agent coordination therefore runs either in unencrypted management rooms or through a registered machine client holding its own E2EE device identity and session keys.
 - **Azure Functions (C#) & AI Gateway**:
-  - Inbound Matrix events trigger agent workflows in the cloud backend.
+  - A Matrix backend is deployed, and the Agent Gateway connects to it directly; the exact client authentication, event-consumption, and encryption mechanism this connection uses remain to be documented in this specification.
+  - Inbound Matrix events are intended to trigger agent workflows in the cloud backend.
   - The agent orchestrator coordinates frontier LLMs.
   - Agents format replies using structured Markdown, interactive widget definitions, and diff payloads posted directly back into the Matrix room timeline.
   - **No out-of-band client channel**: the gateway never pushes to a client directly. Every dispatch, diff, and status update is a room event. This keeps agent output inside the room permission model and audit trail, ensures desktop and mobile observers converge on the same state, and avoids requiring inbound network reachability to clients behind NAT.
@@ -235,19 +225,21 @@ Matrix provides the decentralized, secure messaging backbone connecting humans a
 
 ## 6. Licensing & Reuse Posture
 
-The foundations this specification builds on do not share a single licence, and the split runs exactly along the boundary that matters. The layers Seventwos embeds are permissive; the layers Seventwos merely interoperates with are copyleft.
+The foundations this specification builds on do not share a single licence. Low-level SDK and runtime dependencies are generally permissive, while all three current application repositories derive from AGPL-licensed Element clients.
 
 | Component | Licence | Reuse Implication |
 | :--- | :--- | :--- |
 | `matrix-rust-sdk` (incl. `matrix-sdk-crypto`, `matrix-sdk-sqlite`) | Apache-2.0 | Embeddable as a dependency in a proprietary client without source-disclosure obligations. |
+| `matrix-js-sdk` | Apache-2.0 | Embeddable as a dependency; used by the desktop fork. |
 | Vodozemac | Apache-2.0 | Embeddable; consumed transitively through `matrix-sdk-crypto`. |
-| Tauri v2 | MIT / Apache-2.0 | Embeddable as the desktop host shell. |
-| Element X iOS / Android | AGPL-3.0 **or** Element Commercial Licence | Dual-licensed. Reference implementation; a fork is possible under either AGPL network-copyleft terms or a paid commercial agreement with Element. |
+| Electron | MIT | Embeddable as the desktop host shell. |
+| Element Web / Desktop | AGPL-3.0 | Current desktop upstream. Seventwos publishes inherited code and its modifications under AGPL-3.0. |
+| Element X iOS / Android | AGPL-3.0 **or** Element Commercial Licence upstream; Seventwos forks use AGPL-3.0-only | Current mobile upstreams. The Seventwos repositories preserve attribution and publish modifications under AGPL-3.0. |
 | Synapse | AGPL-3.0, or commercial licence from Element | Operating a modified homeserver as a network service requires publishing source, or a commercial agreement. |
 
-**Consequence for this architecture.** Seventwos depends directly on the Apache-2.0 tier — `matrix-rust-sdk` compiled natively into the Tauri host, with Vodozemac beneath it. Element X is treated as an architectural **reference** rather than a codebase to fork: the mobile clients adopt its structural pattern (native declarative UI over a shared Rust core via UniFFI) while remaining separately authored. Because Element X is dual-licensed, forking remains commercially available under an Element agreement should that trade-off ever favour it. Synapse is deployed unmodified, which keeps its AGPL obligation dormant; any patch to the homeserver moves it into scope.
+**Consequence for this architecture.** The desktop, iOS, and Android repositories are application-level forks, not clean-room implementations that merely reference Element. Each repository identifies its upstream, retains the applicable copyright notices, and applies AGPL-3.0-only to Seventwos modifications and newly authored repository code. Corresponding source must remain available when modified applications are distributed or made available for network interaction under the AGPL. A future replacement of inherited application layers can narrow this obligation only after provenance confirms that no AGPL-derived application code remains. Synapse is deployed unmodified; modifying it would create a separate source-availability obligation.
 
-This is what the opening statement means by *where applicable and permitted*: the permissive tier is extended directly, and the copyleft tier is either referenced or run stock.
+Claude Desktop and the GitHub Copilot app are not implementation foundations. They remain proprietary design references, with no source-code reuse or implied affiliation.
 
 ---
 
@@ -258,23 +250,23 @@ This is what the opening statement means by *where applicable and permitted*: th
 | # | Specification Item | Verification Detail | Status | Authoritative Source | Confidence |
 |---|-------------------|---------------------|--------|----------------------|------------|
 | 1 | Claude Desktop Host | Widely reported as an Electron application using web technologies for macOS and Windows. Anthropic publishes MCP configuration guidance for the client but no client architecture manifest, so this rests on distribution-bundle inspection rather than a vendor statement. | `[DIRECTIONAL]` | [Anthropic MCP Documentation](https://modelcontextprotocol.io/docs/develop/connect-local-servers) (configuration only) | 3/5 |
-| 2 | GitHub Copilot Desktop App | Git worktree session isolation is an observable, documented Copilot coding-agent pattern. The host shell technology is **not** published by GitHub; Tauri v2 is Seventwos' own architectural choice for the desktop client, not a confirmed match to Copilot Desktop's internals. | `[DIRECTIONAL]` | [GitHub Copilot Documentation](https://docs.github.com/en/copilot) | 2/5 |
+| 2 | GitHub Copilot App | Git worktree session isolation is an observable, documented Copilot coding-agent pattern. The application is a design reference only; its implementation is not an upstream source for Seventwos. | `[DIRECTIONAL]` | [GitHub Copilot Documentation](https://docs.github.com/en/copilot) | 3/5 |
 | 3 | Element X Core SDK | Element X iOS and Element X Android share `matrix-rust-sdk` as their foundational synchronization and crypto engine. | `[VERIFIED]` | [Element X Official Announcement & GitHub Repositories](https://github.com/element-hq/element-x-ios) | 5/5 |
 | 4 | Element X iOS Tech Stack | Written in Swift and SwiftUI, interfacing with `matrix-rust-sdk` via Swift Package and UniFFI FFI bindings. | `[VERIFIED]` | [Element X iOS Repository](https://github.com/element-hq/element-x-ios) | 5/5 |
 | 5 | Element X Android Tech Stack | Written in Kotlin and Jetpack Compose, communicating with `matrix-rust-sdk` through UniFFI bindings. | `[VERIFIED]` | [Element X Android Repository](https://github.com/element-hq/element-x-android) | 5/5 |
 | 6 | Matrix 2.0 Sync Protocol | Simplified Sliding Sync (MSC4186) is served natively by Synapse. It supersedes MSC3575; the standalone sliding-sync proxy was shut down on 21 November 2024 and client support was dropped in January 2025. | `[VERIFIED]` | [Matrix.org: Sunsetting the Sliding Sync Proxy](https://matrix.org/blog/2024/11/14/moving-to-native-sliding-sync/) | 5/5 |
 | 7 | E2EE Trust Boundary | Vodozemac (Olm / Megolm in Rust) executes inside each client's `matrix-sdk-crypto`. Homeservers and sync endpoints relay opaque `m.room.encrypted` payloads and never hold Megolm session keys. | `[VERIFIED]` | [matrix-org/vodozemac](https://github.com/matrix-org/vodozemac) & [Matrix E2EE Concepts](https://matrix.org/docs/matrix-concepts/end-to-end-encryption/) | 5/5 |
-| 8 | Matrix Application Service API | Homeservers push room events to registered Application Services in bulk transactions via `PUT /_matrix/app/v1/transactions/{txnId}`, without per-agent polling. | `[VERIFIED]` | [Matrix Application Service API Specification](https://spec.matrix.org/latest/application-service-api/) | 5/5 |
+| 8 | Agent Gateway Matrix Boundary | No separate Matrix Application Service is part of the Seventwos architecture. A Matrix backend is deployed, and the Agent Gateway connects to it directly; its exact protocol, authentication, and E2EE implementation are not yet documented in this specification. | `[DIRECTIONAL]` | Seventwos architecture direction | 3/5 |
 | 9 | MCP Local Transport | MCP clients spawn local servers as subprocesses and exchange newline-delimited JSON-RPC 2.0 messages over stdio. | `[VERIFIED]` | [Model Context Protocol: Transports](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports) | 5/5 |
 | 10 | MCP Remote Transport | Streamable HTTP was introduced in MCP revision `2025-03-26` and supersedes the HTTP+SSE transport defined in `2024-11-05`, which is deprecated and retained only for backward compatibility. | `[VERIFIED]` | [MCP Specification: Streamable HTTP](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports) | 5/5 |
 | 11 | Element X Local Persistence | Neither client uses CoreData or Room. Both delegate room state to the `matrix-rust-sdk` SQLite state store; Element X Android additionally uses SQLDelight (`app.cash.sqldelight` 2.3.2), and Element X iOS uses `KeychainAccess` for credential storage. | `[VERIFIED]` | [element-x-android `libs.versions.toml`](https://github.com/element-hq/element-x-android/blob/develop/gradle/libs.versions.toml) & [element-x-ios `project.yml`](https://github.com/element-hq/element-x-ios/blob/develop/project.yml) | 5/5 |
 | 12 | Element X iOS Deployment Target | `project.yml` declares a minimum deployment target of iOS 18.5 and consumes `matrix-rust-components-swift` as a pinned Swift Package. | `[VERIFIED]` | [element-x-ios `project.yml`](https://github.com/element-hq/element-x-ios/blob/develop/project.yml) | 5/5 |
-| 13 | Cross-Platform Rust Synergy | Both Tauri v2 (Desktop) and Element X (Mobile) utilize Rust as their native foundation, allowing direct crate reuse of `matrix-rust-sdk`. | `[VERIFIED]` | [Tauri v2 Documentation](https://v2.tauri.app) & [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) | 5/5 |
-| 14 | Permissive Core Licensing | `crates/matrix-sdk/Cargo.toml` declares `license = "Apache-2.0"`; Tauri v2 is dual-licensed MIT / Apache-2.0. Both are embeddable without source-disclosure obligations. | `[VERIFIED]` | [matrix-sdk `Cargo.toml`](https://github.com/matrix-org/matrix-rust-sdk/blob/main/crates/matrix-sdk/Cargo.toml) & [Tauri](https://github.com/tauri-apps/tauri) | 5/5 |
-| 15 | Copyleft Application Tier | Element X Android ships a GNU AGPL v3 `LICENSE` file. Synapse relicensed from Apache-2.0 to AGPL-3.0 in November 2023, with a commercial licence available from Element. | `[VERIFIED]` | [element-x-android `LICENSE`](https://github.com/element-hq/element-x-android/blob/develop/LICENSE) & [Element: Sustainable licensing with AGPL](https://element.io/blog/sustainable-licensing-at-element-with-agpl/) | 5/5 |
+| 13 | Desktop SDK Boundary | The desktop fork uses `matrix-js-sdk`, with Matrix's Rust crypto implementation compiled to WebAssembly. It shares cryptographic implementation with mobile, not a single cross-platform application SDK. | `[VERIFIED]` | [Seventwos Workspace for Desktop](https://github.com/seventwos-app/usr-workspace-desktop) | 5/5 |
+| 14 | Permissive Core Licensing | `matrix-rust-sdk` and `matrix-js-sdk` are Apache-2.0 dependencies, while Electron is MIT-licensed. Their permissive licences do not override the AGPL obligations inherited by the application forks. | `[VERIFIED]` | [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk), [Matrix JS SDK](https://github.com/matrix-org/matrix-js-sdk), and [Electron](https://github.com/electron/electron) | 5/5 |
+| 15 | Copyleft Application Tier | The three Seventwos client repositories are forks of Element Web, Element X iOS, and Element X Android, and identify their repository-owned modifications as AGPL-3.0-only. | `[VERIFIED]` | [Desktop](https://github.com/seventwos-app/usr-workspace-desktop), [iOS](https://github.com/seventwos-app/usr-workspace-ios), and [Android](https://github.com/seventwos-app/usr-workspace-android) repositories | 5/5 |
 | 16 | MatrixRTC Specification Anchor | The SDK workspace enables the `unstable-msc4143` ruma feature, confirming MSC4143 as the MatrixRTC anchor. | `[VERIFIED]` | [matrix-rust-sdk `Cargo.toml`](https://github.com/matrix-org/matrix-rust-sdk/blob/main/Cargo.toml) | 5/5 |
 | 17 | Element X Dual Licensing | Element X is dual-licensed: its README offers use under AGPL-3.0 **or** a paid Element Commercial Licence, and source files carry `SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial`. Characterising it as AGPL-only understates the available terms. | `[VERIFIED]` | [element-x-ios `README.md`](https://github.com/element-hq/element-x-ios/blob/develop/README.md) | 5/5 |
 | 18 | Encrypted Push Requires On-Device Decryption | E2EE push payloads carry only event and routing identifiers. Element X iOS ships a dedicated `NSE` target whose `NSEUserSession` constructs a `matrix-rust-sdk` client (`makeNSEClient`) to fetch and decrypt the referenced event before display. | `[VERIFIED]` | [element-x-ios `NSE/Sources/NSEUserSession.swift`](https://github.com/element-hq/element-x-ios/blob/develop/NSE/Sources/NSEUserSession.swift) | 5/5 |
 | 19 | Push Gateway Indirection | Homeservers do not contact APNs or FCM directly; they notify a push gateway via `POST /_matrix/push/v1/notify`, which holds platform credentials and forwards the wake signal. | `[VERIFIED]` | [Matrix Push Gateway API](https://spec.matrix.org/latest/push-gateway-api/) | 5/5 |
 | 20 | Sync Protocol Is Downstream-Only | MSC4186 streams timeline and state to clients. Sending events, uploading and querying one-time keys, to-device key distribution, and OIDC authentication all use separate Client-Server API endpoints, so a client wired only to the sync endpoint could receive but never send. | `[VERIFIED]` | [Matrix Client-Server API](https://spec.matrix.org/latest/client-server-api/) | 5/5 |
-| 21 | Tauri / SDK Runtime Compatibility | Both Tauri v2 and `matrix-rust-sdk` are built on Tokio; SDK futures are spawned onto the runtime Tauri manages. A second runtime must not be initialised independently, as nested runtimes conflict. | `[DIRECTIONAL]` | [Tauri v2 Documentation](https://v2.tauri.app) | 4/5 |
+| 21 | Fork Provenance | GitHub records the desktop repository as a fork of `element-hq/element-web`, and the iOS and Android repositories as forks of their corresponding Element X clients. Their READMEs describe the inherited code and transition state explicitly. | `[VERIFIED]` | [Desktop](https://github.com/seventwos-app/usr-workspace-desktop), [iOS](https://github.com/seventwos-app/usr-workspace-ios), and [Android](https://github.com/seventwos-app/usr-workspace-android) repositories | 5/5 |
