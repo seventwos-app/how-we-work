@@ -24,7 +24,7 @@
       {
         "id": "agent-path",
         "label": "Agent path",
-        "focus": ["homeserver", "agent-gateway", "models", "agent-state"],
+        "focus": ["homeserver", "agent-gateway", "models"],
         "note": "Agent output returns through the Matrix timeline, never an out-of-band client channel."
       }
     ]
@@ -95,7 +95,7 @@
       "id": "agent-gateway",
       "type": "cloud",
       "label": "Agent Gateway",
-      "sublabel": "Azure Functions · orchestration",
+      "sublabel": "VM-hosted · orchestration",
       "pos": [980, 230],
       "size": [270, 76]
     },
@@ -103,16 +103,8 @@
       "id": "models",
       "type": "external",
       "label": "Frontier Models",
-      "sublabel": "Claude · GPT · Gemini",
+      "sublabel": "via Azure AI Foundry",
       "pos": [980, 485],
-      "size": [270, 72]
-    },
-    {
-      "id": "agent-state",
-      "type": "database",
-      "label": "Agent State",
-      "sublabel": "Azure Cosmos DB",
-      "pos": [980, 690],
       "size": [270, 72]
     }
   ],
@@ -256,24 +248,6 @@
       "to": "agent-gateway",
       "fromSide": "top",
       "toSide": "bottom"
-    },
-    {
-      "id": "gateway-to-state",
-      "from": "agent-gateway",
-      "to": "agent-state",
-      "label": "state read / write",
-      "fromSide": "bottom",
-      "toSide": "right",
-      "via": [[1115, 420], [1325, 420], [1325, 726]],
-      "labelAt": [1250, 575]
-    },
-    {
-      "id": "state-to-gateway",
-      "from": "agent-state",
-      "to": "agent-gateway",
-      "fromSide": "right",
-      "toSide": "right",
-      "via": [[1325, 726], [1325, 268]]
     }
   ]
 }

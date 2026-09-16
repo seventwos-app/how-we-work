@@ -68,6 +68,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request adding a work-in-progress caveat to the diagram references"
       }
+    },
+    {
+      "id": "2026-09-17-correct-agent-gateway-details",
+      "intent": "Correct the Agent Gateway description in the technology-stack specification and diagram, which previously stated an inaccurate implementation (Azure Functions, Cosmos DB).",
+      "human_direction": "A maintainer confirmed the Agent Gateway is VM-hosted and reaches frontier models via Azure AI Foundry, without a Cosmos DB dependency, while asking that the underlying product name remain undisclosed.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request correcting the Agent Gateway description"
+      }
     }
   ]
 }
