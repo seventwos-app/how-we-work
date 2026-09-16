@@ -11,7 +11,7 @@ tags: [architecture, diagrams, archify, documentation]
 
 **Live, interactive view**: the rendered diagram is published via GitHub Pages at [seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html](https://seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html) — no download required to click through it. This is a work-in-progress reference based on the current architecture direction; some connection details are still being finalized. Regenerate and re-publish it (by pushing the updated HTML) whenever the source JSON changes.
 
-The **Agent Gateway** node is VM-hosted; its deployment, dashboard access, and administration are tracked separately in [`seventwos-app/about_hermes`](https://github.com/seventwos-app/about_hermes), not in this diagram's source.
+The **Agent Gateway** node is VM-hosted; its deployment, dashboard access, and administration are tracked in an internal, non-public repository, not in this diagram's source.
 
 Archify is a documentation tool, not a runtime dependency. Download its pinned MIT-licensed release outside the repository, verify it, and use that copy to regenerate the artifact:
 
