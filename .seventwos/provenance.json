@@ -46,6 +46,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request adding diagrams/stack.architecture.json, diagrams/stack.architecture.html, and enabling GitHub Pages"
       }
+    },
+    {
+      "id": "2026-09-17-remove-redundant-mermaid-diagram",
+      "intent": "Remove the static Mermaid diagram from the technology-stack specification now that the interactive, published Archify diagram is the single source of the system topology.",
+      "human_direction": "A maintainer reported the diagram appearing below the interactive-diagram link as unnecessary.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request removing the redundant Mermaid diagram from stack.md"
+      }
     }
   ]
 }
