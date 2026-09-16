@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-09-16
+* **Wording**: Refined the closing statement in [How We Work](README.md) to connect collaboration at scale more directly with building the future of Seventwos.
+
 ## 2026-09-14 (3)
 * **Plan**: Added a "Keeping the record true" section to the [Repository Provenance](plans/repository-provenance.md) plan. A provenance record makes claims only a human can affirm -- purpose, accountable party, disclosure -- and those claims decay as the business changes, so a record carries a review cadence. The correction stays manual on purpose: a record a scheduled job rewrites to "stay current" asserts only that the job ran, which hollows out the exact property the record exists to provide. The convention is therefore to **automate noticing, never asserting** -- report *drift* (review interval lapsed; declared accountable party no longer matching the CODEOWNERS default owner) as a prompt addressed to a person. Two constraints are recorded as convention rather than preference: drift is advisory and must not gate merges, because blocking unrelated pull requests on a lapsed review punishes the wrong change and pressures a rubber-stamp update purely to ship; and drift output carries a rule id and JSON path only, never a field value, so reports stay safe in CI logs, step summaries, and issue bodies.
 
