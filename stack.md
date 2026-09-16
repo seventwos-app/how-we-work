@@ -41,7 +41,7 @@ This specification is intentionally stack-scoped: it defines runtime, protocol, 
 
 The platform integrates an Element Web-derived desktop client, Element X-derived mobile clients, a decentralized Matrix communications fabric, and cloud AI agent backends. The desktop application uses `matrix-js-sdk`; its Rust cryptographic implementation runs as WebAssembly inside the web application. The mobile clients call `matrix-rust-sdk` through UniFFI and render with native UI frameworks. End-to-end encryption remains client-side, and the homeserver relays only opaque ciphertext. All agent output reaches clients through the Matrix timeline; there is no out-of-band channel from the cloud backend into any client.
 
-An interactive rendering of this topology is maintained in [`diagrams/`](diagrams/README.md) and published live at [seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html](https://seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html).
+An interactive rendering of this topology is maintained in [`diagrams/`](diagrams/README.md) and published live at [seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html](https://seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html). This topology is a work-in-progress reference based on the current architecture direction; some connection details (protocols, exact backend boundaries) are still being finalized and will be updated as they're confirmed.
 
 ---
 
