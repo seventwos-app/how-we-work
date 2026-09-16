@@ -30,3 +30,9 @@ In an agentic world, the most valuable human contributions are often not lines o
 This dual system allows us to recognize the human contributions that matter most in an agentic world: strategic direction, contextual understanding, and creative vision.
 
 By connecting human influence to machine output, we create an environment where people and agents can collaborate at scale and in doing so, build the future of Seventwos.
+
+## License
+
+© Seventwos Pte. Ltd. All rights reserved.
+
+Third-party materials remain under their respective licences. The bundled [Graphify skill](.copilot/skills/graphify) is distributed under the Apache License 2.0; see its [licence](.copilot/skills/graphify/LICENSE), [notice](.copilot/skills/graphify/NOTICE), and [MIT notice](.copilot/skills/graphify/LICENSE-MIT).
