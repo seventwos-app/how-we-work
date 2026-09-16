@@ -6,7 +6,7 @@
     "subtitle": "Clients allow for coordination between humans and agents",
     "output": "stack.architecture.html",
     "quality_profile": "standard",
-    "visual_preset": "blueprint",
+    "visual_preset": "classic",
     "viewBox": [1360, 800],
     "views": [
       {

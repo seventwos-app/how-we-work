@@ -112,6 +112,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request removing the private repository name and link from the Agent Gateway description"
       }
+    },
+    {
+      "id": "2026-09-17-diagram-default-theme-preset",
+      "intent": "Change the published interactive architecture diagram to default to the classic visual preset and always default to dark theme, regardless of the reader OS color-scheme preference.",
+      "human_direction": "A maintainer asked for the diagram to default to dark and use the classic preset.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request changing the diagram default preset and theme"
+      }
     }
   ]
 }
