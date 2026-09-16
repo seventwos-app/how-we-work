@@ -83,12 +83,12 @@
     {
       "id": "2026-09-17-agent-gateway-sourcing",
       "intent": "Substantiate the Agent Gateway Matrix Boundary claims in the technology-stack specification with a checkable source instead of an unsourced assertion, and link the gateway to its operational repository.",
-      "human_direction": "A maintainer directed cross-checking the claims against the Azure deployment and linking the gateway to the about_hermes repository.",
+      "human_direction": "A maintainer directed cross-checking the claims against the Azure deployment and noting that the gateway is tracked in an internal repository, without disclosing its name.",
       "agent_involvement": "assisted",
       "review": "reviewed-before-merge",
       "outcome": {
         "origin": "pull_request",
-        "reference": "seventwos-app/how-we-work pull request sourcing the Agent Gateway claims to Azure infrastructure inventory and the about_hermes repository"
+        "reference": "seventwos-app/how-we-work pull request sourcing the Agent Gateway claims to Azure infrastructure inventory"
       }
     },
     {
@@ -100,6 +100,17 @@
       "outcome": {
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request retitling the interactive diagram to match Technology Stack section 2"
+      }
+    },
+    {
+      "id": "2026-09-17-remove-private-repo-disclosure",
+      "intent": "Remove the name and link of a private internal repository from the technology-stack specification, since it is not publicly disclosed and how-we-work is a public repository.",
+      "human_direction": "A maintainer flagged that the linked repository is private and asked whether it should be disclosed; agreed to remove the name and link and keep the prose generic.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request removing the private repository name and link from the Agent Gateway description"
       }
     }
   ]
