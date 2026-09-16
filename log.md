@@ -1,6 +1,7 @@
 # Update Log
 
 ## 2026-09-17
+* **README Tag Reorder**: Reordered [How We Work](README.md)'s frontmatter `tags` from `[heuristic, principles, values]` to `[principles, heuristic, values]`, matching the order in which those classifications were specified.
 * **README Tag Expansion**: Expanded [How We Work](README.md)'s frontmatter `tags` from `[heuristic]` to `[heuristic, principles, values]`, classifying the document by what it actually is — a statement of Seventwos' operating principles and values — rather than a single generic label.
 * **Diagram Title Update**: Retitled the interactive architecture diagram from "Seventwos System Architecture Topology" to "System Architecture For User Frontend" in [`diagrams/stack.architecture.json`](diagrams/stack.architecture.json), and regenerated [`diagrams/stack.architecture.html`](diagrams/stack.architecture.html) via Archify.
 * **Diagram Default Theme and Preset**: Switched the interactive architecture diagram's visual preset from `blueprint` to `classic` in [`diagrams/stack.architecture.json`](diagrams/stack.architecture.json), regenerated the published HTML, and patched its first-paint theme resolution so the diagram always defaults to dark regardless of the reader's OS color-scheme preference (the toolbar theme toggle is unaffected).
