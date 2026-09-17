@@ -41,63 +41,7 @@ This specification is intentionally stack-scoped: it defines runtime, protocol, 
 
 The platform integrates an Element Web-derived desktop client, Element X-derived mobile clients, a decentralized Matrix communications fabric, and cloud AI agent backends. The desktop application uses `matrix-js-sdk`; its Rust cryptographic implementation runs as WebAssembly inside the web application. The mobile clients call `matrix-rust-sdk` through UniFFI and render with native UI frameworks. End-to-end encryption remains client-side, and the homeserver relays only opaque ciphertext. All agent output reaches clients through the Matrix timeline; there is no out-of-band channel from the cloud backend into any client.
 
-This topology is a work-in-progress reference based on the current architecture direction; some connection details (protocols and exact backend boundaries) are still being finalized and will be updated as they are confirmed.
-
-```mermaid
-graph TD
-    subgraph Clients["Client applications"]
-        subgraph Desktop["Desktop client"]
-            DesktopUI["React interface"]
-            DesktopHost(["Electron host"])
-            DesktopSDK["matrix-js-sdk"]
-            DesktopCrypto["Rust crypto WebAssembly"]
-            LocalTools{{"MCP and workspace tools"}}
-            DesktopUI <-->|Desktop IPC| DesktopHost
-            DesktopUI -->|Matrix API| DesktopSDK
-            DesktopSDK <-->|Encrypt and decrypt| DesktopCrypto
-            DesktopHost -->|Trusted host IPC| LocalTools
-        end
-
-        subgraph Mobile["Mobile clients"]
-            IOS["iOS SwiftUI"]
-            IOSSDK(["matrix-rust-sdk"])
-            Android["Android Compose"]
-            AndroidSDK(["matrix-rust-sdk"])
-            IOS <-->|UniFFI| IOSSDK
-            Android <-->|UniFFI| AndroidSDK
-        end
-    end
-
-    subgraph Matrix["Matrix communications fabric"]
-        Homeserver(["Synapse homeserver with MSC4186"])
-        Push["Sygnal push gateway"]
-        Federation{{"Federated homeservers"}}
-        Homeserver -->|Push Gateway API| Push
-        Homeserver <-->|Server-to-server| Federation
-    end
-
-    subgraph Cloud["Cloud agent services"]
-        Gateway["VM-hosted Agent Gateway"]
-        Models{{"Frontier models via Azure AI Foundry"}}
-        Gateway <-->|Inference API| Models
-    end
-
-    DesktopSDK <-->|Client-Server API and encrypted sync| Homeserver
-    IOSSDK <-->|Client-Server API and encrypted sync| Homeserver
-    AndroidSDK <-->|Client-Server API and encrypted sync| Homeserver
-    Push -.->|Event ID wake signal| IOS
-    Push -.->|Event ID wake signal| Android
-    Homeserver <-->|Encrypted Matrix room events| Gateway
-
-    classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    classDef crypto fill:#1a0b2e,stroke:#c084fc,stroke-width:2px,color:#faf5ff
-    classDef fabric fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f0fdf4
-    classDef cloud fill:#451a03,stroke:#fb923c,stroke-width:2px,color:#fff7ed
-    class DesktopUI,DesktopHost,DesktopSDK,IOS,IOSSDK,Android,AndroidSDK,LocalTools client
-    class DesktopCrypto crypto
-    class Homeserver,Push,Federation fabric
-    class Gateway,Models cloud
-```
+An interactive rendering of this topology is maintained in [`diagrams/`](diagrams/README.md) and published live at [seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html](https://seventwos-app.github.io/how-we-work/diagrams/stack.architecture.html). This topology is a work-in-progress reference based on the current architecture direction; some connection details (protocols, exact backend boundaries) are still being finalized and will be updated as they're confirmed.
 
 ---
 
