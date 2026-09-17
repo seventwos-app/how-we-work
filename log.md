@@ -1,7 +1,6 @@
 # Update Log
 
 ## 2026-09-17
-* **Static Topology**: Restored the system architecture topology as an inline Mermaid diagram in [Technology Stack](stack.md) and removed the separate Archify source, generated HTML, and GitHub Pages artifact. The specification is again the single, non-clickable representation of the topology.
 * **README Emphasis**: Extended the bolding in [How We Work](README.md) to cover the full "Seventwos is an Applied AI company..." sentence, rather than just its first clause.
 * **README Emphasis**: Bolded the "This dual system allows us to recognize the human contributions..." sentence in [How We Work](README.md), highlighting the passage naming the human contributions that matter most in an agentic world.
 * **README Tag Reorder**: Reordered [How We Work](README.md)'s frontmatter `tags` from `[heuristic, principles, values]` to `[principles, heuristic, values]`, matching the order in which those classifications were specified.

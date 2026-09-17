@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "System Architecture For User Frontend",
+    "subtitle": "Clients allow for coordination between humans and agents",
+    "output": "stack.architecture.html",
+    "quality_profile": "standard",
+    "visual_preset": "classic",
+    "viewBox": [1360, 800],
+    "views": [
+      {
+        "id": "client-foundations",
+        "label": "Client foundations",
+        "focus": ["desktop", "ios", "android", "local-extensions"],
+        "note": "Desktop derives from Element Web; mobile derives from Element X."
+      },
+      {
+        "id": "matrix-fabric",
+        "label": "Matrix fabric",
+        "focus": ["desktop", "ios", "android", "homeserver", "push", "federation"],
+        "note": "Clients exchange encrypted room events through Matrix."
+      },
+      {
+        "id": "agent-path",
+        "label": "Agent path",
+        "focus": ["homeserver", "agent-gateway", "models"],
+        "note": "Agent output returns through the Matrix timeline, never an out-of-band client channel."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "desktop",
+      "type": "frontend",
+      "label": "Desktop Client",
+      "sublabel": "Element Web fork · Electron + React",
+      "pos": [70, 145],
+      "size": [250, 76],
+      "tag": "AGPL-3.0"
+    },
+    {
+      "id": "ios",
+      "type": "frontend",
+      "label": "iOS Client",
+      "sublabel": "Element X fork · SwiftUI",
+      "pos": [70, 315],
+      "size": [250, 76],
+      "tag": "AGPL-3.0"
+    },
+    {
+      "id": "android",
+      "type": "frontend",
+      "label": "Android Client",
+      "sublabel": "Element X fork · Jetpack Compose",
+      "pos": [70, 485],
+      "size": [250, 76],
+      "tag": "AGPL-3.0"
+    },
+    {
+      "id": "local-extensions",
+      "type": "backend",
+      "label": "Local Extensions",
+      "sublabel": "MCP · worktrees · workspace tools",
+      "pos": [360, 690],
+      "size": [250, 76],
+      "tag": "planned"
+    },
+    {
+      "id": "homeserver",
+      "type": "messagebus",
+      "label": "Matrix Homeserver",
+      "sublabel": "Synapse · Client-Server API · MSC4186",
+      "pos": [535, 315],
+      "size": [270, 82],
+      "tag": "ciphertext relay"
+    },
+    {
+      "id": "push",
+      "type": "messagebus",
+      "label": "Push Gateway",
+      "sublabel": "Sygnal · APNs / FCM wake signals",
+      "pos": [535, 105],
+      "size": [270, 72]
+    },
+    {
+      "id": "federation",
+      "type": "external",
+      "label": "Federated Homeservers",
+      "sublabel": "Matrix server-to-server network",
+      "pos": [535, 535],
+      "size": [270, 72]
+    },
+    {
+      "id": "agent-gateway",
+      "type": "cloud",
+      "label": "Agent Gateway",
+      "sublabel": "VM-hosted · orchestration",
+      "pos": [980, 230],
+      "size": [270, 76]
+    },
+    {
+      "id": "models",
+      "type": "external",
+      "label": "Frontier Models",
+      "sublabel": "via Azure AI Foundry",
+      "pos": [980, 485],
+      "size": [270, 72]
+    }
+  ],
+  "connections": [
+    {
+      "id": "desktop-to-matrix",
+      "from": "desktop",
+      "to": "homeserver",
+      "label": "encrypted Matrix sync",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [420, 196]
+    },
+    {
+      "id": "matrix-to-desktop",
+      "from": "homeserver",
+      "to": "desktop",
+      "variant": "security",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "ios-to-matrix",
+      "from": "ios",
+      "to": "homeserver",
+      "label": "encrypted Matrix sync",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [410, 405]
+    },
+    {
+      "id": "matrix-to-ios",
+      "from": "homeserver",
+      "to": "ios",
+      "variant": "security",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "android-to-matrix",
+      "from": "android",
+      "to": "homeserver",
+      "label": "encrypted Matrix sync",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [420, 514]
+    },
+    {
+      "id": "matrix-to-android",
+      "from": "homeserver",
+      "to": "android",
+      "variant": "security",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "desktop-to-local",
+      "from": "desktop",
+      "to": "local-extensions",
+      "label": "trusted host IPC",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top",
+      "via": [[400, 183], [400, 650], [485, 650]],
+      "labelAt": [448, 642]
+    },
+    {
+      "id": "homeserver-to-push",
+      "from": "homeserver",
+      "to": "push",
+      "label": "Push Gateway API",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "push-to-ios",
+      "from": "push",
+      "to": "ios",
+      "label": "event ID wake signal",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "top"
+    },
+    {
+      "id": "push-to-android",
+      "from": "push",
+      "to": "android",
+      "label": "event ID wake signal",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "top"
+    },
+    {
+      "id": "homeserver-to-federation",
+      "from": "homeserver",
+      "to": "federation",
+      "label": "server-to-server",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [677, 411]
+    },
+    {
+      "id": "federation-to-homeserver",
+      "from": "federation",
+      "to": "homeserver",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "homeserver-to-gateway",
+      "from": "homeserver",
+      "to": "agent-gateway",
+      "label": "Matrix connection (deployed)",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "gateway-to-homeserver",
+      "from": "agent-gateway",
+      "to": "homeserver",
+      "label": "agent room events",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "gateway-to-models",
+      "from": "agent-gateway",
+      "to": "models",
+      "label": "inference API",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [1108, 405]
+    },
+    {
+      "id": "models-to-gateway",
+      "from": "models",
+      "to": "agent-gateway",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ]
+}
