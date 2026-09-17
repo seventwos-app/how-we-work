@@ -8,7 +8,7 @@ tags: [principles, heuristic, values]
 # How We Work
 The future of work only happens if we act.
 
-**Seventwos is an Applied AI company. We are our own first customer, adopting and adapting frontier technologies for ourselves before helping organisations deploy them with confidence through turnkey solutions that combine practical value with breakthrough innovation.**
+**Seventwos is an Applied AI company. We are our own first customer, adopting and adapting frontier technologies for ourselves before helping organisations deploy them with confidence through turnkey agentic solutions that combine practical value with breakthrough innovation.**
 
 As large language models make software development increasingly autonomous, agents can take on more of the implementation work, giving people more time to focus on strategy, creativity, and growth.
 
