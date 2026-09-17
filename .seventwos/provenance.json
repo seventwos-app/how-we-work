@@ -4,6 +4,17 @@
   "disclosure_class": "public",
   "entries": [
     {
+      "id": "2026-09-17-restore-static-topology",
+      "intent": "Restore the system architecture topology as a static inline Mermaid diagram in the technology-stack specification and remove the separate interactive publication artifacts.",
+      "human_direction": "A maintainer reported that the topology becoming clickable was undesirable and selected restoring a static inline diagram.",
+      "agent_involvement": "assisted",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request restoring the static topology in stack.md"
+      }
+    },
+    {
       "id": "2026-09-14-provenance-mvp",
       "intent": "Introduce a practical, dependency-free provenance record and validator for this repository, replacing the earlier heavier repository-provenance plan draft with a minimal MVP.",
       "human_direction": "A maintainer requested scoping repository provenance down to a minimal, public-safe MVP: a small JSON record, disclosure classes, a validator, and matching PR template fields.",
