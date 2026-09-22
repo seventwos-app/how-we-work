@@ -48,8 +48,29 @@ jobs:
           tar -xzf "${archive}" gitleaks
           chmod +x gitleaks
 
+      - name: Download trusted gitleaks ruleset (checksum verified)
+        # Pin to gitleaks' own default ruleset at the exact commit the
+        # v8.30.1 tag points to, downloaded outside the PR checkout so a
+        # PR cannot smuggle a permissive .gitleaks.toml/.gitleaksignore to
+        # silently disable rules for its own diff.
+        run: |
+          set -euo pipefail
+          commit=83d9cd684c87d95d656c1458ef04895a7f1cbd8e
+          checksum="e163e53b9e7e8a8511e77271e2b323ed057759542a6d988258afe3a1fa329caf"
+          config_path="${RUNNER_TEMP}/gitleaks.toml"
+          curl -fsSL -o "${config_path}" \
+            "https://raw.githubusercontent.com/gitleaks/gitleaks/${commit}/config/gitleaks.toml"
+          echo "${checksum}  ${config_path}" | sha256sum -c -
+          mkdir -p "${RUNNER_TEMP}/gitleaks-ignore-dir"
+
       - name: Scan Git history with gitleaks
-        run: ./gitleaks git --redact --no-banner --exit-code 1 .
+        run: |
+          ./gitleaks git \
+            --redact --no-banner --exit-code 1 \
+            --config "${RUNNER_TEMP}/gitleaks.toml" \
+            --gitleaks-ignore-path "${RUNNER_TEMP}/gitleaks-ignore-dir" \
+            --ignore-gitleaks-allow \
+            .
 
   dependency-review:
     name: advisory / dependency review
@@ -63,9 +84,18 @@ jobs:
 
       - name: Detect changed dependency manifests
         id: manifest-diff
+        # Matches every manifest/lockfile GitHub's dependency graph (and
+        # therefore dependency-review-action, which diffs that graph)
+        # recognizes, so the review step only runs when it can actually
+        # find something to compare. Deliberately excludes the GitHub
+        # Actions ecosystem (workflow `uses:` pins): those are already
+        # enforced independently by SECWF004 above, and this repo's own
+        # workflow files change far more often than any real dependency
+        # manifest would, so including them here would make this
+        # advisory job noisy without adding coverage.
         run: |
           set -euo pipefail
-          pattern='(^|/)(package-lock\.json|yarn\.lock|pnpm-lock\.yaml|requirements\.txt|Pipfile\.lock|poetry\.lock|go\.sum|Gemfile\.lock|Cargo\.lock|pom\.xml|packages\.lock\.json|composer\.lock|pubspec\.lock)$'
+          pattern='(^|/)(package\.json|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|requirements\.txt|Pipfile|Pipfile\.lock|poetry\.lock|pyproject\.toml|setup\.py|go\.mod|go\.sum|Gemfile|Gemfile\.lock|[^/]+\.gemspec|Cargo\.toml|Cargo\.lock|pom\.xml|packages\.config|packages\.lock\.json|[^/]+\.(csproj|fsproj|vbproj|vcxproj|nuspec)|composer\.json|composer\.lock|pubspec\.yaml|pubspec\.lock|Package\.resolved|Manifest\.toml|Project\.toml|deno\.json|deno\.jsonc|deno\.lock|MODULE\.bazel|MODULE\.bazel\.lock|WORKSPACE|maven_install\.json|[^/]+\.MODULE\.bazel)$'
           if git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" \
             | grep -Eq "${pattern}"; then
             echo "changed=true" >> "$GITHUB_OUTPUT"

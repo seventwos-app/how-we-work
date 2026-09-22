@@ -2,6 +2,8 @@
 """Deterministic workflow-policy and static-HTML security checks."""
 
 import argparse
+import base64
+import binascii
 import re
 import sys
 from html.parser import HTMLParser
@@ -21,9 +23,11 @@ PERMISSION_KEYS = {
     "id-token", "issues", "models", "packages", "pages", "pull-requests",
     "security-events", "statuses",
 }
-EXPRESSION_RE = re.compile(r"\$\{\{(.*?)\}\}", re.DOTALL)
 SECRETS_WORD_RE = re.compile(r"\bsecrets\b")
-SRI_RE = re.compile(r"^sha(256|384|512)-[A-Za-z0-9+/]+=*$")
+SRI_TOKEN_RE = re.compile(r"^sha(?P<bits>256|384|512)-(?P<digest>[A-Za-z0-9+/]+=*)$")
+SRI_DIGEST_BYTES = {"256": 32, "384": 48, "512": 64}
+ANCHOR_RE = re.compile(r"^&(?P<name>[A-Za-z0-9_-]+)(?:\s+(?P<rest>.*))?$")
+ALIAS_RE = re.compile(r"^\*(?P<name>[A-Za-z0-9_-]+)$")
 PR_EVENTS = {"pull_request", "pull_request_target"}
 
 
@@ -59,7 +63,7 @@ class StaticHTMLScanner(HTMLParser):
                 parsed.scheme in {"http", "https"} or source.startswith("//")
             )
             integrity = (values.get("integrity") or "").strip()
-            if external_script and not SRI_RE.match(integrity):
+            if external_script and not _valid_sri(integrity):
                 self.findings.append(
                     (
                         self.getpos()[0],
@@ -78,6 +82,28 @@ class StaticHTMLScanner(HTMLParser):
                         'target="_blank" links must use rel="noopener noreferrer"',
                     )
                 )
+
+
+def _valid_sri(value):
+    """Require at least one syntactically-and-length-valid SRI hash token.
+
+    A bare regex-shaped match is not sufficient: the base64 payload must
+    strictly decode (correct alphabet/padding) to the exact digest length
+    for its named algorithm (32/48/64 bytes for sha256/384/512). The
+    ``integrity`` attribute may list multiple space-separated hashes as
+    fallbacks per the SRI spec, so any single valid token is accepted.
+    """
+    for token in value.split():
+        match = SRI_TOKEN_RE.match(token)
+        if not match:
+            continue
+        try:
+            decoded = base64.b64decode(match.group("digest"), validate=True)
+        except (binascii.Error, ValueError):
+            continue
+        if len(decoded) == SRI_DIGEST_BYTES[match.group("bits")]:
+            return True
+    return False
 
 
 def _strip_yaml_comment(value):
@@ -112,6 +138,26 @@ FLOW_MAP_ITEM_RE = re.compile(
 )
 
 
+def _strip_anchor(value):
+    """Strip a leading YAML anchor tag (e.g. ``&name``) from a scalar value.
+
+    Anchors are resolved *before* testing for flow-mapping brackets or
+    scalar permission values so an anchor prefix (``&step {uses: ...}`` or
+    ``&perms write-all``) cannot hide dangerous content from the flow- and
+    scalar-value checks below. Aliases (``*name``) are intentionally left
+    unresolved: this scanner never executes YAML tags, so an alias that
+    only ever appears as a bare reference fails closed (still flagged as
+    unpinned/ambiguous by the existing checks) rather than being silently
+    trusted. Any real dangerous content defined under an anchor's own block
+    body is still ordinary indented text and is scanned independently of
+    the anchor tag on its parent line.
+    """
+    match = ANCHOR_RE.match(value)
+    if match:
+        return (match.group("rest") or "").strip()
+    return value
+
+
 def _flow_mapping_pairs(value):
     """Split a `{key: value, ...}` flow mapping into key/value pairs.
 
@@ -140,7 +186,7 @@ def _structural_lines(text):
         match = MAPPING_RE.match(line)
         if match:
             indent = len(match.group("indent").expandtabs(8))
-            value = _strip_yaml_comment(match.group("value")).strip()
+            value = _strip_anchor(_strip_yaml_comment(match.group("value")).strip())
             records.append(
                 {
                     "line": line_number,
@@ -158,7 +204,7 @@ def _structural_lines(text):
         match = SEQUENCE_RE.match(line)
         if match:
             indent = len(match.group("indent").expandtabs(8))
-            value = _strip_yaml_comment(match.group("value")).strip()
+            value = _strip_anchor(_strip_yaml_comment(match.group("value")).strip())
             records.append(
                 {
                     "line": line_number,
@@ -224,11 +270,54 @@ def _permission_value_present(records, keys, values):
     return False
 
 
+def _iter_expressions(text):
+    """Yield the raw contents of every ``${{ ... }}`` expression in text.
+
+    GitHub Actions expressions quote string literals with single quotes,
+    escaping an embedded quote by doubling it (``''``). A naive non-greedy
+    regex (``\\$\\{\\{(.*?)\\}\\}``) stops at the *first* ``}}`` it sees, so an
+    attacker can hide a real ``secrets.X`` reference after a decoy literal
+    that itself contains a ``}}`` substring inside quotes (e.g.
+    ``${{ format('{0}}}', secrets.TOKEN) }}``), truncating the match before
+    the dangerous text and leaving it unseen. This tokenizer tracks quote
+    state so an in-string ``}}`` cannot prematurely close the expression.
+    """
+    index = 0
+    length = len(text)
+    while True:
+        start = text.find("${{", index)
+        if start == -1:
+            return
+        cursor = start + 3
+        in_string = False
+        closed_at = None
+        while cursor < length:
+            character = text[cursor]
+            if in_string:
+                if character == "'":
+                    if cursor + 1 < length and text[cursor + 1] == "'":
+                        cursor += 2
+                        continue
+                    in_string = False
+                cursor += 1
+                continue
+            if character == "'":
+                in_string = True
+                cursor += 1
+                continue
+            if character == "}" and cursor + 1 < length and text[cursor + 1] == "}":
+                closed_at = cursor
+                break
+            cursor += 1
+        if closed_at is None:
+            # Unterminated expression; nothing further can be resolved safely.
+            return
+        yield text[start + 3 : closed_at]
+        index = closed_at + 2
+
+
 def _secrets_referenced(text):
-    for match in EXPRESSION_RE.finditer(text):
-        if SECRETS_WORD_RE.search(match.group(1)):
-            return True
-    return False
+    return any(SECRETS_WORD_RE.search(expression) for expression in _iter_expressions(text))
 
 
 def workflow_findings(path):
