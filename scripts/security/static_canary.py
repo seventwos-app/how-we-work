@@ -163,6 +163,9 @@ def _workflow_events(records):
             continue
         events.update(_event_names(record["value"]))
         for child in records[index + 1 :]:
+            if child["key"] is None and child["indent"] == record["indent"]:
+                events.update(_event_names(child["value"]))
+                continue
             if child["indent"] <= record["indent"]:
                 break
             if child["key"] is None:

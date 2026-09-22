@@ -118,6 +118,21 @@ jobs: {}
         rules = {finding[1] for finding in workflow_findings(path)}
         self.assertIn("SECWF001", rules)
 
+    def test_zero_indent_event_list_enforces_pull_request_target_boundary(self):
+        path = self._workflow(
+            """
+on:
+- push
+- pull_request_target
+permissions:
+  contents: write
+jobs: {}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF001", rules)
+        self.assertIn("SECWF005", rules)
+
     def test_rejects_multiline_named_step_with_movable_action_tag(self):
         path = self._workflow(
             """
