@@ -79,29 +79,15 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Detect changed dependency manifests
-        id: manifest-diff
-        # Matches every manifest/lockfile GitHub's dependency graph (and
-        # therefore dependency-review-action, which diffs that graph)
-        # recognizes, so the review step only runs when it can actually
-        # find something to compare. Deliberately excludes the GitHub
-        # Actions ecosystem (workflow `uses:` pins): this repo's own
-        # workflow files change far more often than any real dependency
-        # manifest would, so including them here would make this
-        # advisory job noisy without adding meaningful coverage; action
-        # pins are reviewed by hand as part of normal code review.
-        run: |
-          set -euo pipefail
-          pattern='(^|/)(package\.json|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|requirements\.txt|Pipfile|Pipfile\.lock|poetry\.lock|pyproject\.toml|setup\.py|go\.mod|go\.sum|Gemfile|Gemfile\.lock|[^/]+\.gemspec|Cargo\.toml|Cargo\.lock|pom\.xml|packages\.config|packages\.lock\.json|[^/]+\.(csproj|fsproj|vbproj|vcxproj|nuspec)|composer\.json|composer\.lock|pubspec\.yaml|pubspec\.lock|Package\.resolved|Manifest\.toml|Project\.toml|deno\.json|deno\.jsonc|deno\.lock|MODULE\.bazel|MODULE\.bazel\.lock|WORKSPACE|maven_install\.json|[^/]+\.MODULE\.bazel)$'
-          if git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" \
-            | grep -Eq "${pattern}"; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Review dependencies when the pull request changes a supported manifest
-        if: steps.manifest-diff.outputs.changed == 'true'
+      # Runs unconditionally on every pull request rather than gating on a
+      # hand-maintained manifest-name pattern. A gate has to enumerate every
+      # ecosystem GitHub's dependency graph supports, and any ecosystem
+      # added or renamed later (e.g. a new Gradle/Swift/etc. manifest name)
+      # would silently stop being reviewed until this file was updated by
+      # hand. dependency-review-action itself is a no-op when the pull
+      # request doesn't touch a supported manifest, so this is not more
+      # expensive in practice -- it is simply not fragile to keep in sync.
+      - name: Review dependencies
         uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
         with:
           comment-summary-in-pr: never
