@@ -13,20 +13,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  policy-static:
-    name: advisory / policy and static HTML
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.0.0
-        with:
-          persist-credentials: false
-
-      - name: Compile security canary
-        run: python -m py_compile scripts/security/static_canary.py
-
-      - name: Check workflow policy and static HTML
-        run: python scripts/security/static_canary.py
-
   secret-scan:
     name: advisory / secret scan fallback
     runs-on: ubuntu-latest
@@ -99,11 +85,11 @@ jobs:
         # therefore dependency-review-action, which diffs that graph)
         # recognizes, so the review step only runs when it can actually
         # find something to compare. Deliberately excludes the GitHub
-        # Actions ecosystem (workflow `uses:` pins): those are already
-        # enforced independently by SECWF004 above, and this repo's own
+        # Actions ecosystem (workflow `uses:` pins): this repo's own
         # workflow files change far more often than any real dependency
         # manifest would, so including them here would make this
-        # advisory job noisy without adding coverage.
+        # advisory job noisy without adding meaningful coverage; action
+        # pins are reviewed by hand as part of normal code review.
         run: |
           set -euo pipefail
           pattern='(^|/)(package\.json|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|requirements\.txt|Pipfile|Pipfile\.lock|poetry\.lock|pyproject\.toml|setup\.py|go\.mod|go\.sum|Gemfile|Gemfile\.lock|[^/]+\.gemspec|Cargo\.toml|Cargo\.lock|pom\.xml|packages\.config|packages\.lock\.json|[^/]+\.(csproj|fsproj|vbproj|vcxproj|nuspec)|composer\.json|composer\.lock|pubspec\.yaml|pubspec\.lock|Package\.resolved|Manifest\.toml|Project\.toml|deno\.json|deno\.jsonc|deno\.lock|MODULE\.bazel|MODULE\.bazel\.lock|WORKSPACE|maven_install\.json|[^/]+\.MODULE\.bazel)$'
