@@ -74,10 +74,57 @@ jobs:
           fi
           echo "No pull_request_target triggers found."
 
-      - name: Workflows do not request write permissions
+      - name: Trusted write-permission workflows have no pull-request triggers
+        # graphify.yml and graphify-catchup.yml legitimately need
+        # contents/pull-requests write to open their own automated PRs,
+        # but that trust is only safe because neither of them runs in a
+        # pull_request/pull_request_target context (i.e. never on
+        # untrusted, PR-controlled input). Assert that invariant
+        # explicitly, on an exact allowlist, before trusting their write
+        # permissions in the next step.
         run: |
-          if grep -rnE '^[[:space:]]*(contents|issues|pull-requests|packages|id-token):[[:space:]]*write' .github/workflows; then
-            echo "::error::Workflows in this repo are intended to be read-only PR checks."
+          set -euo pipefail
+          trusted="graphify.yml graphify-catchup.yml"
+          for f in $trusted; do
+            path=".github/workflows/$f"
+            if [ ! -f "$path" ]; then
+              echo "::error::Expected trusted workflow $path not found."
+              exit 1
+            fi
+            if grep -nE '^[[:space:]]*pull_request(_target)?:' "$path"; then
+              echo "::error::$path is only trusted to request write permissions because it has no pull_request trigger; one was found."
+              exit 1
+            fi
+          done
+          echo "Trusted write-permission workflows confirmed to have no pull_request/pull_request_target trigger."
+
+      - name: Other workflows do not request write permissions
+        # Every workflow except the explicitly-vetted allowlist above
+        # must stay read-only, since a workflow that runs on
+        # pull_request/pull_request_target with write permissions would
+        # let a fork PR write to this repo or exfiltrate secrets.
+        run: |
+          set -euo pipefail
+          trusted="./.github/workflows/graphify.yml ./.github/workflows/graphify-catchup.yml"
+          fail=0
+          for f in .github/workflows/*.yml .github/workflows/*.yaml; do
+            [ -f "$f" ] || continue
+            skip=0
+            for t in $trusted; do
+              if [ "./$f" = "$t" ]; then
+                skip=1
+              fi
+            done
+            if [ "$skip" -eq 1 ]; then
+              continue
+            fi
+            if grep -nE '^[[:space:]]*(contents|issues|pull-requests|packages|id-token):[[:space:]]*(write|write-all)' "$f" \
+              || grep -nE '^[[:space:]]*permissions:[[:space:]]*write-all' "$f"; then
+              echo "::error::$f requests write permissions but is not in the trusted write-permission allowlist."
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
             exit 1
           fi
-          echo "All workflows are read-only."
+          echo "All non-allowlisted workflows are read-only."

@@ -36,9 +36,18 @@ expected to enforce those checks (e.g. organization-wide policy tooling
 maintained outside pull-request-controlled code), rather than a
 repository-local script that a pull request could itself attempt to
 influence. `.github/workflows/ci.yml`'s existing lightweight `security`
-job (grep-based checks that workflows avoid `pull_request_target` and
-write permissions) continues to run as one of the required status
-checks and is unchanged by this canary.
+job continues to run as a required status check, unchanged in spirit by
+this canary: it still rejects any `pull_request_target` trigger
+repo-wide, and it still requires every workflow to stay read-only,
+*except* an explicit, exact allowlist (currently `graphify.yml` and
+`graphify-catchup.yml`) that is separately asserted, in the same job,
+to have no `pull_request`/`pull_request_target` trigger — those two
+workflows only ever run on `push`/`schedule`/`workflow_dispatch`, so
+their `contents: write`/`pull-requests: write` permissions (needed to
+open their own automated graph-update PRs) are never exercised against
+untrusted, pull-request-controlled input.
+(`tests/security/test_ci_write_permission_policy.sh` regresses that
+policy against fixture workflows.)
 
 Repository administrators should enable GitHub secret scanning and push
 protection when the organization plan permits them; Gitleaks is the
