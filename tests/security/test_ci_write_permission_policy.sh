@@ -24,11 +24,17 @@ check_pull_request_target() {
 }
 
 check_trusted_have_no_pr_trigger() {
+  # Deliberately conservative, matching ci.yml's inline check: rejects
+  # the standalone token pull_request/pull_request_target appearing
+  # anywhere in the file (block key, flow-style list, comment, quoted
+  # string), not just the block-mapping trigger key form, since a
+  # flow-style `on: [push, pull_request]` list would otherwise evade a
+  # start-of-line block-key regex.
   local trusted="graphify.yml graphify-catchup.yml"
   for f in $trusted; do
     local path=".github/workflows/$f"
     [ -f "$path" ] || return 1
-    if grep -nE '^[[:space:]]*pull_request(_target)?:' "$path"; then
+    if grep -nE '(^|[^A-Za-z0-9_])pull_request(_target)?([^A-Za-z0-9_]|$)' "$path"; then
       return 1
     fi
   done
@@ -147,6 +153,35 @@ permissions:
 EOF
 expect "trusted workflow gaining a pull_request_target trigger is rejected" fail check_trusted_have_no_pr_trigger
 expect "pull_request_target scan still catches it repo-wide" fail check_pull_request_target
+
+# --- Case 5: a trusted-named file switching to a flow-style `on: [...]`
+#     trigger list that includes pull_request must also be rejected --
+#     this is exactly the block-key-regex evasion the conservative
+#     standalone-token scan closes. It deliberately does not use the
+#     block-mapping `pull_request:` form at all, so a check anchored to
+#     start-of-line `pull_request:` would miss it. ---
+write_fixture .github/workflows/graphify.yml <<'EOF'
+on: [push, pull_request]
+permissions:
+  contents: write
+  pull-requests: write
+EOF
+expect "trusted workflow with flow-style pull_request trigger is rejected" fail check_trusted_have_no_pr_trigger
+
+write_fixture .github/workflows/graphify.yml <<'EOF'
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+  pull-requests: write
+EOF
+write_fixture .github/workflows/graphify-catchup.yml <<'EOF'
+on: [schedule, pull_request_target]
+permissions:
+  contents: write
+EOF
+expect "second trusted workflow with flow-style pull_request_target trigger is rejected" fail check_trusted_have_no_pr_trigger
 
 if [ "$fails" -ne 0 ]; then
   echo "One or more write-permission policy regressions failed." >&2
