@@ -15,10 +15,12 @@ Do not disclose security vulnerabilities in public issues.
 ## Advisory Security Canary
 
 The `Security Canary (advisory)` workflow runs on pull requests and pushes
-to `main`. It uses read-only permissions, cancels superseded runs, scans
-Git history with a SHA-pinned Gitleaks action, reviews dependencies when a
-supported manifest exists, and applies dependency-free workflow-policy and
-static-HTML checks. Its jobs are intentionally not required status checks.
+to `main`. It uses read-only permissions, cancels superseded runs, disables
+checkout credential persistence, scans Git history with a checksum-verified
+`gitleaks` CLI download (no gitleaks-action license dependency), reviews
+dependencies when the pull request actually changes a supported manifest,
+and applies dependency-free workflow-policy and static-HTML checks. Its
+jobs are intentionally not required status checks.
 
 Repository administrators should enable GitHub secret scanning and push
 protection when the organization plan permits them; Gitleaks is the

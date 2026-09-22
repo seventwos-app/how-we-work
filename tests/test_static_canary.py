@@ -133,6 +133,88 @@ jobs: {}
         self.assertIn("SECWF001", rules)
         self.assertIn("SECWF005", rules)
 
+    def test_rejects_quoted_write_all_permission_scalar(self):
+        path = self._workflow(
+            'on: push\npermissions: "write-all"\njobs: {}\n'
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF002", rules)
+
+    def test_rejects_quoted_write_permission_scalar_on_pr_workflow(self):
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: 'write'
+jobs: {}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
+    def test_rejects_flow_mapping_sequence_item_with_movable_action_tag(self):
+        path = self._workflow(
+            """
+on: push
+permissions:
+  contents: read
+jobs:
+  check:
+    steps:
+      - {uses: actions/checkout@v5}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF004", rules)
+
+    def test_accepts_flow_mapping_sequence_item_with_pinned_action(self):
+        path = self._workflow(
+            """
+on: push
+permissions:
+  contents: read
+jobs:
+  check:
+    steps:
+      - {name: Checkout, uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertNotIn("SECWF004", rules)
+
+    def test_rejects_bracket_notation_secret_reference_on_pr_workflow(self):
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    env:
+      TOKEN: ${{ secrets['DEPLOY_TOKEN'] }}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
+    def test_rejects_tojson_secrets_reference_on_pr_workflow(self):
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    env:
+      ALL: ${{ toJSON(secrets) }}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
     def test_rejects_multiline_named_step_with_movable_action_tag(self):
         path = self._workflow(
             """
@@ -188,6 +270,20 @@ class StaticHTMLTests(unittest.TestCase):
         )
         rules = {finding[1] for finding in html_findings(path)}
         self.assertEqual({"SECHTML004", "SECHTML005"}, rules)
+
+    def test_rejects_empty_integrity_attribute_on_remote_script(self):
+        path = self._html('<script src="https://example.com/app.js" integrity=""></script>')
+        rules = {finding[1] for finding in html_findings(path)}
+        self.assertIn("SECHTML004", rules)
+
+    def test_accepts_remote_script_with_valid_sri_hash(self):
+        path = self._html(
+            '<script src="https://example.com/app.js" '
+            'integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" '
+            'crossorigin="anonymous"></script>'
+        )
+        rules = {finding[1] for finding in html_findings(path)}
+        self.assertNotIn("SECHTML004", rules)
 
 
 if __name__ == "__main__":

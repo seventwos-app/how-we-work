@@ -16,13 +16,14 @@ MAPPING_RE = re.compile(
     r"(?P=quote)\s*:\s*(?P<value>.*)$"
 )
 SEQUENCE_RE = re.compile(r"^(?P<indent>\s*)-\s+(?P<value>[^#].*?)\s*$")
-WRITE_PERMISSION_RE = re.compile(
-    r"^\s*(actions|attestations|checks|contents|deployments|discussions|id-token|"
-    r"issues|models|packages|pages|pull-requests|security-events|statuses):\s*write\s*$",
-    re.MULTILINE,
-)
-INLINE_WRITE_PERMISSION_RE = re.compile(r"^\s*permissions:\s*\{[^}]*:\s*write\b", re.MULTILINE)
-SECRET_REFERENCE_RE = re.compile(r"\$\{\{\s*secrets\.")
+PERMISSION_KEYS = {
+    "actions", "attestations", "checks", "contents", "deployments", "discussions",
+    "id-token", "issues", "models", "packages", "pages", "pull-requests",
+    "security-events", "statuses",
+}
+EXPRESSION_RE = re.compile(r"\$\{\{(.*?)\}\}", re.DOTALL)
+SECRETS_WORD_RE = re.compile(r"\bsecrets\b")
+SRI_RE = re.compile(r"^sha(256|384|512)-[A-Za-z0-9+/]+=*$")
 PR_EVENTS = {"pull_request", "pull_request_target"}
 
 
@@ -57,12 +58,13 @@ class StaticHTMLScanner(HTMLParser):
             external_script = tag == "script" and (
                 parsed.scheme in {"http", "https"} or source.startswith("//")
             )
-            if external_script and "integrity" not in values:
+            integrity = (values.get("integrity") or "").strip()
+            if external_script and not SRI_RE.match(integrity):
                 self.findings.append(
                     (
                         self.getpos()[0],
                         "SECHTML004",
-                        "external HTTPS script must declare a subresource-integrity hash",
+                        "external HTTPS script must declare a valid subresource-integrity hash",
                     )
                 )
 
@@ -99,38 +101,78 @@ def _strip_yaml_comment(value):
     return value.rstrip()
 
 
+def _unquote(value):
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+        return value[1:-1]
+    return value
+
+
+FLOW_MAP_ITEM_RE = re.compile(
+    r"(?P<quote>['\"]?)(?P<key>[A-Za-z0-9_-]+)(?P=quote)\s*:\s*(?P<value>.*)"
+)
+
+
+def _flow_mapping_pairs(value):
+    """Split a `{key: value, ...}` flow mapping into key/value pairs.
+
+    This is a best-effort splitter (no nested flow collections/commas inside
+    quoted scalars are expected in the action metadata this scanner cares
+    about); it never executes or trusts the input as code.
+    """
+    inner = value.strip()
+    if inner.startswith("{") and inner.endswith("}"):
+        inner = inner[1:-1]
+    pairs = []
+    for item in inner.split(","):
+        item = item.strip()
+        if not item:
+            continue
+        match = FLOW_MAP_ITEM_RE.match(item)
+        if match:
+            pairs.append((match.group("key"), _unquote(match.group("value").strip())))
+    return pairs
+
+
 def _structural_lines(text):
     """Return simple YAML mapping/sequence records without executing YAML tags."""
     records = []
     for line_number, line in enumerate(text.splitlines(), start=1):
         match = MAPPING_RE.match(line)
         if match:
+            indent = len(match.group("indent").expandtabs(8))
+            value = _strip_yaml_comment(match.group("value")).strip()
             records.append(
                 {
                     "line": line_number,
-                    "indent": len(match.group("indent").expandtabs(8)),
+                    "indent": indent,
                     "key": match.group("key"),
-                    "value": _strip_yaml_comment(match.group("value")).strip(),
+                    "value": value,
                 }
             )
+            if value.startswith("{") and value.endswith("}"):
+                for key, item_value in _flow_mapping_pairs(value):
+                    records.append(
+                        {"line": line_number, "indent": indent + 1, "key": key, "value": item_value}
+                    )
             continue
         match = SEQUENCE_RE.match(line)
         if match:
+            indent = len(match.group("indent").expandtabs(8))
+            value = _strip_yaml_comment(match.group("value")).strip()
             records.append(
                 {
                     "line": line_number,
-                    "indent": len(match.group("indent").expandtabs(8)),
+                    "indent": indent,
                     "key": None,
-                    "value": _strip_yaml_comment(match.group("value")).strip(),
+                    "value": value,
                 }
             )
+            if value.startswith("{") and value.endswith("}"):
+                for key, item_value in _flow_mapping_pairs(value):
+                    records.append(
+                        {"line": line_number, "indent": indent + 1, "key": key, "value": item_value}
+                    )
     return records
-
-
-def _unquote(value):
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
-        return value[1:-1]
-    return value
 
 
 def _event_names(value):
@@ -175,6 +217,20 @@ def _workflow_events(records):
     return events
 
 
+def _permission_value_present(records, keys, values):
+    for record in records:
+        if record["key"] in keys and _unquote(record["value"]).strip() in values:
+            return True
+    return False
+
+
+def _secrets_referenced(text):
+    for match in EXPRESSION_RE.finditer(text):
+        if SECRETS_WORD_RE.search(match.group(1)):
+            return True
+    return False
+
+
 def workflow_findings(path):
     text = path.read_text(encoding="utf-8")
     records = _structural_lines(text)
@@ -184,7 +240,7 @@ def workflow_findings(path):
     if "pull_request_target" in events:
         findings.append((1, "SECWF001", "pull_request_target is not allowed"))
 
-    if re.search(r"^\s*permissions:\s*(write-all|read-all)\s*$", text, re.MULTILINE):
+    if _permission_value_present(records, {"permissions"}, {"write-all", "read-all"}):
         findings.append((1, "SECWF002", "permissions must be an explicit least-privilege map"))
 
     root_indent = min((record["indent"] for record in records), default=0)
@@ -212,12 +268,11 @@ def workflow_findings(path):
                 (line_number, "SECWF004", "third-party actions must be pinned to a full commit SHA")
             )
 
-    if events.intersection(PR_EVENTS) and (
-        WRITE_PERMISSION_RE.search(text)
-        or INLINE_WRITE_PERMISSION_RE.search(text)
-        or re.search(r"^\s*permissions:\s*write-all\s*$", text, re.MULTILINE)
-        or SECRET_REFERENCE_RE.search(text)
-    ):
+    grants_write = _permission_value_present(
+        records, PERMISSION_KEYS, {"write"}
+    ) or _permission_value_present(records, {"permissions"}, {"write-all"})
+
+    if events.intersection(PR_EVENTS) and (grants_write or _secrets_referenced(text)):
         findings.append(
             (
                 1,
