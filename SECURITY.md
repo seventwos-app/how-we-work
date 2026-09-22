@@ -38,3 +38,14 @@ protection when the organization plan permits them; Gitleaks is the
 deterministic fallback while those settings are disabled. Dependabot
 security updates are also currently disabled and may be enabled separately
 if this repository later gains package manifests.
+
+The workflow-policy check's pull-request `secrets`-context detection
+(`SECWF005`) is deliberately conservative: rather than parsing
+`${{ ... }}` expression boundaries and quoting (which can be evaded by
+unusual quoting, multiline literals, or expression-splitting tricks), it
+scans the whole workflow file's raw text for any case-sensitive,
+word-bounded `secrets` token — dotted, bracketed, passed to a function
+such as `toJSON(secrets)`, or split across lines. This can rarely flag the
+bare word appearing in an unrelated comment or string; that false-positive
+risk is an accepted trade-off for a fail-closed check that cannot be
+defeated by any way of hiding or splitting an actual context reference.

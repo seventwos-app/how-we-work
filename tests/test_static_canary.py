@@ -406,8 +406,58 @@ jobs:
         rules = {finding[1] for finding in workflow_findings(path)}
         self.assertIn("SECWF005", rules)
 
+    def test_detects_secrets_word_split_across_quoted_multiline_literal(self):
+        # The `secrets` context detection is deliberately a conservative,
+        # whole-document lexical scan for a standalone `secrets` token,
+        # independent of `${{ }}` expression-boundary or quote parsing.
+        # This proves the check still fires even when the reference is
+        # wrapped in an unusual multiline quoted/folded literal designed
+        # to look unlike a normal single-line expression.
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: use secret
+        run: >
+          echo '${{
+            secrets
+              .DEPLOY_TOKEN
+          }}'
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
 
-class ManifestDiffPatternTests(unittest.TestCase):
+    def test_rejects_secrets_word_in_comment_is_intentionally_conservative(self):
+        # The whole-document scan cannot distinguish a real `secrets`
+        # context reference from the bare word appearing in a comment.
+        # This is an accepted, documented trade-off: false positives are
+        # tolerable for a fail-closed advisory check, false negatives
+        # (an evadable detector) are not.
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      # TODO: never read secrets.* here
+      - run: echo hello
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
+
     """Mirrors the grep pattern used by the dependency-review workflow job."""
 
     PATTERN = (

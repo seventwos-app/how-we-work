@@ -270,85 +270,28 @@ def _permission_value_present(records, keys, values):
     return False
 
 
-def _iter_expressions(text):
-    """Yield the raw contents of every ``${{ ... }}`` expression in text.
-
-    GitHub Actions expressions quote string literals with single quotes,
-    escaping an embedded quote by doubling it (``''``). A naive non-greedy
-    regex (``\\$\\{\\{(.*?)\\}\\}``) stops at the *first* ``}}`` it sees, so an
-    attacker can hide a real ``secrets.X`` reference after a decoy literal
-    that itself contains a ``}}`` substring inside quotes (e.g.
-    ``${{ format('{0}}}', secrets.TOKEN) }}``), truncating the match before
-    the dangerous text and leaving it unseen. This tokenizer tracks quote
-    state so an in-string ``}}`` cannot prematurely close the expression.
-
-    Expression scanning is allowed to continue across physical lines (a
-    valid ``${{ ... }}`` expression may legitimately span multiple lines,
-    e.g. inside a YAML block scalar) as long as quote state stays
-    balanced. Only an *unterminated* single-quoted string (an odd number
-    of ``'`` characters reaching a newline while still "inside" a quote)
-    is treated as malformed: that is the only case a naive scanner could
-    otherwise be tricked by, and it is recovered from at the line
-    boundary where the quote broke, rather than letting the stuck
-    in-string state swallow the rest of the file and hide every later
-    expression from detection. The scanned fragment up to that point is
-    still yielded as-is (fail closed, so `secrets` text already present
-    in it is not missed), and scanning resumes on the next line.
-    """
-    length = len(text)
-    index = 0
-    while True:
-        start = text.find("${{", index)
-        if start == -1:
-            break
-        cursor = start + 3
-        in_string = False
-        closed_at = None
-        malformed_at = None
-        while cursor < length:
-            character = text[cursor]
-            if in_string:
-                if character == "'":
-                    if cursor + 1 < length and text[cursor + 1] == "'":
-                        cursor += 2
-                        continue
-                    in_string = False
-                    cursor += 1
-                    continue
-                if character == "\n":
-                    # A single-quoted string cannot legitimately span a
-                    # physical newline: this is an unterminated quote,
-                    # not a genuine multiline expression. Recover here.
-                    malformed_at = cursor
-                    break
-                cursor += 1
-                continue
-            if character == "'":
-                in_string = True
-                cursor += 1
-                continue
-            if character == "}" and cursor + 1 < length and text[cursor + 1] == "}":
-                closed_at = cursor
-                break
-            cursor += 1
-        if closed_at is not None:
-            yield text[start + 3 : closed_at]
-            index = closed_at + 2
-        elif malformed_at is not None:
-            # Fail closed: yield what was scanned up to the broken
-            # quote's line boundary, then resume scanning after that
-            # newline rather than aborting the whole file.
-            yield text[start + 3 : malformed_at]
-            index = malformed_at + 1
-        else:
-            # Reached end of text without a closing `}}` and without an
-            # unterminated quote forcing recovery: yield what remains.
-            yield text[start + 3 :]
-            break
-
-
 def _secrets_referenced(text):
-    return any(SECRETS_WORD_RE.search(expression) for expression in _iter_expressions(text))
+    """Detect any reference to the ``secrets`` context anywhere in the file.
+
+    Deliberately conservative/whole-document: rather than trying to parse
+    each ``${{ ... }}`` expression and only inspect its contents (which
+    requires correctly locating expression boundaries and handling quotes,
+    escaping, and multiline literals), this simply looks for a
+    case-sensitive standalone `secrets` token anywhere in the raw workflow
+    text -- dotted (`secrets.X`), bracketed (`secrets['X']`), passed as a
+    function argument (`toJSON(secrets)`), split across lines inside a
+    multiline literal or block scalar, or otherwise embedded in braces.
+    `secrets` is a reserved GitHub Actions context name, so this can only
+    be triggered by an actual reference to it or, rarely, by the literal
+    word appearing in an unrelated comment or string -- an acceptable
+    false-positive rate for a fail-closed advisory check that must not be
+    evadable by any expression-boundary or quoting trick. This is
+    deliberately independent of ``${{ }}`` expression parsing/boundary
+    detection entirely, so it cannot be defeated by any way of hiding or
+    splitting an expression (unterminated quotes, multiline literals,
+    bracket/function-call syntax, or embedded braces).
+    """
+    return bool(SECRETS_WORD_RE.search(text))
 
 
 def workflow_findings(path):
