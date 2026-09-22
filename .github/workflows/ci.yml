@@ -20,11 +20,11 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.0.0
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.0.0
         with:
           python-version: "3.x"
 
@@ -35,9 +35,9 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.0.0
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.0.0
         with:
           python-version: "3.x"
 
@@ -64,20 +64,7 @@ jobs:
     name: security
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.0.0
 
-      - name: Workflows avoid pull_request_target
-        run: |
-          if grep -rnE '^[[:space:]]*pull_request_target:' .github/workflows; then
-            echo "::error::pull_request_target runs with repo write scope on fork PRs; not appropriate for this public repo."
-            exit 1
-          fi
-          echo "No pull_request_target triggers found."
-
-      - name: Workflows do not request write permissions
-        run: |
-          if grep -rnE '^[[:space:]]*(contents|issues|pull-requests|packages|id-token):[[:space:]]*write' .github/workflows; then
-            echo "::error::Workflows in this repo are intended to be read-only PR checks."
-            exit 1
-          fi
-          echo "All workflows are read-only."
+      - name: Workflows preserve security boundaries
+        run: python scripts/security/static_canary.py

@@ -1,5 +1,8 @@
 # Update Log
 
+## 2026-09-23
+* **Advisory Security Canary**: Added a read-only, concurrency-cancelled security workflow for pull requests and pushes to `main`, with a SHA-pinned Gitleaks fallback, conditional dependency review, and deterministic workflow-policy/static-HTML checks. The canary remains advisory rather than a required status check; [`SECURITY.md`](SECURITY.md) records the optional administrator settings that can strengthen it.
+
 ## 2026-09-17
 * **README Emphasis**: Extended the bolding in [How We Work](README.md) to cover the full "Seventwos is an Applied AI company..." sentence, rather than just its first clause.
 * **README Emphasis**: Bolded the "This dual system allows us to recognize the human contributions..." sentence in [How We Work](README.md), highlighting the passage naming the human contributions that matter most in an agentic world.

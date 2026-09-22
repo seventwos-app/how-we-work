@@ -1,0 +1,52 @@
+name: Security Canary (advisory)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-canary-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  policy-static:
+    name: advisory / policy and static HTML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.0.0
+
+      - name: Compile security canary
+        run: python -m py_compile scripts/security/static_canary.py
+
+      - name: Check workflow policy and static HTML
+        run: python scripts/security/static_canary.py
+
+  secret-scan:
+    name: advisory / secret scan fallback
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Scan Git history with Gitleaks
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  dependency-review:
+    name: advisory / dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.0.0
+
+      - name: Review dependencies when a supported manifest exists
+        if: hashFiles('**/package-lock.json', '**/yarn.lock', '**/pnpm-lock.yaml', '**/requirements.txt', '**/Pipfile.lock', '**/poetry.lock', '**/go.sum', '**/Gemfile.lock', '**/Cargo.lock', '**/pom.xml', '**/packages.lock.json', '**/composer.lock', '**/pubspec.lock') != ''
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
+        with:
+          comment-summary-in-pr: never
