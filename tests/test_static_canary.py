@@ -57,6 +57,99 @@ jobs:
         rules = {finding[1] for finding in workflow_findings(path)}
         self.assertIn("SECWF006", rules)
 
+    def test_rejects_four_space_mapping_pull_request_target(self):
+        path = self._workflow(
+            """
+    on:
+        pull_request_target:
+    permissions:
+        contents: read
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF001", rules)
+
+    def test_rejects_scalar_pull_request_target(self):
+        path = self._workflow(
+            """
+on: pull_request_target
+permissions:
+  contents: read
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF001", rules)
+
+    def test_inline_event_list_enforces_pr_trust_boundary(self):
+        path = self._workflow(
+            """
+on: [push, pull_request]
+permissions:
+  contents: write
+jobs: {}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
+    def test_inline_event_list_rejects_pull_request_target(self):
+        path = self._workflow(
+            """
+on: [push, pull_request_target]
+permissions:
+  contents: read
+jobs: {}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF001", rules)
+
+    def test_block_event_list_rejects_pull_request_target(self):
+        path = self._workflow(
+            """
+on:
+  - push
+  - pull_request_target
+permissions:
+  contents: read
+jobs: {}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF001", rules)
+
+    def test_rejects_multiline_named_step_with_movable_action_tag(self):
+        path = self._workflow(
+            """
+on: push
+permissions:
+  contents: read
+jobs:
+  check:
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+"""
+        )
+        findings = workflow_findings(path)
+        rules = {finding[1] for finding in findings}
+        self.assertIn("SECWF004", rules)
+        self.assertIn(9, {finding[0] for finding in findings if finding[1] == "SECWF004"})
+
+    def test_rejects_job_level_movable_reusable_workflow(self):
+        path = self._workflow(
+            """
+on: push
+permissions:
+  contents: read
+jobs:
+  delegated:
+    uses: owner/repository/.github/workflows/check.yml@main
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF004", rules)
+
 
 class StaticHTMLTests(unittest.TestCase):
     def _html(self, contents):
