@@ -14,39 +14,52 @@ Do not disclose security vulnerabilities in public issues.
 
 ## Advisory Security Canary
 
-The `Security Canary (advisory)` workflow (`.github/workflows/security-canary.yml`)
-runs on pull requests and pushes to `main`. It uses read-only permissions,
-cancels superseded runs, disables checkout credential persistence, scans
-Git history with a checksum-verified `gitleaks` CLI download (no
-gitleaks-action license dependency) against a checksum-verified copy of
-gitleaks' own pinned default ruleset and an empty ignore-path fetched
-outside the pull request's checkout, additionally deleting any
+The `Gitleaks Secret-Scan Canary (advisory)` workflow
+(`.github/workflows/security-canary.yml`) runs on pull requests and
+pushes to `main`. It uses read-only permissions, cancels superseded
+runs, disables checkout credential persistence, and scans Git history
+with a checksum-verified `gitleaks` CLI download (no gitleaks-action
+license dependency) against a checksum-verified copy of gitleaks' own
+pinned default ruleset and an empty ignore-path fetched outside the
+pull request's checkout, additionally deleting any
 `.gitleaks.toml`/`.gitleaksignore` left in the working-tree checkout
 before scanning (gitleaks always also checks that path even when
 `--gitleaks-ignore-path` points elsewhere) — so a pull request cannot
 supply its own config, ignore file, or inline `gitleaks:allow` comment to
 weaken the scan of its own diff
 (`tests/security/test_gitleaks_ignore_regression.sh` proves this
-end-to-end) — and reviews dependencies on every pull request, rather than
-gating that step on a hand-maintained list of manifest/lockfile names.
-`dependency-review-action` is itself a no-op when a pull request touches
-no manifest it recognizes, so running it unconditionally costs nothing
-in practice and avoids silently losing coverage if GitHub's dependency
-graph later adds or renames a supported ecosystem (e.g. a new
-Gradle/Swift manifest) that a hand-maintained gate hadn't been updated
-for. All third-party actions it uses are pinned to immutable commit
-SHAs. Its jobs are intentionally **advisory**, not required status
-checks, and do not modify branch protection.
+end-to-end). All third-party actions it uses are pinned to immutable
+commit SHAs. Its job is intentionally **advisory**, not a required
+status check, and does not modify branch protection.
 
-This canary deliberately covers only secret scanning and dependency
-review; it does not attempt to enforce workflow-permission or
-trigger-event policy (e.g. rejecting `pull_request_target` or write
-permissions on untrusted triggers) from within this repository. Earlier
-iterations of *this pull request* added such checks as grep-based
-scripts — first a standalone Python YAML scanner
-(`scripts/security/static_canary.py`), later inline additions to
-`.github/workflows/ci.yml`'s pre-existing `security` job (a repo-wide "no
-write permissions" grep, then a trusted-file allowlist for
+**Dependency review is not currently available and is not run.** An
+earlier version of this canary included a `dependency-review` job using
+`actions/dependency-review-action`, but that action failed outright with
+`Dependency review is not supported on this repository. Please ensure
+that Dependency graph is enabled` — confirmed independently by probing
+the same `dependency-graph/compare` REST endpoint the action calls,
+which returns HTTP 403 for this repository. GitHub's Dependency Graph
+feature itself is disabled or unsupported here, which the workflow
+cannot enable or work around from inside a PR-controlled checkout; no
+amount of conditional logic in this repository turns that into a
+working scan, and treating the resulting no-op as a passing check would
+misrepresent an operational gap as a clean result. The job has been
+removed entirely rather than papered over with `continue-on-error` or a
+silent skip: **dependency review is a known, explicitly blocked gap in
+this repository's security coverage until an administrator enables
+Dependency Graph** (see the administrator follow-ups below). Any
+process reconciling this repository's security posture (this canary,
+manual review, or an external dashboard) should treat "dependency review
+coverage" as absent, not as advisory-passing, until that setting changes.
+
+This canary deliberately covers only secret scanning; it does not
+attempt to enforce workflow-permission or trigger-event policy (e.g.
+rejecting `pull_request_target` or write permissions on untrusted
+triggers) from within this repository. Earlier iterations of *this pull
+request* added such checks as grep-based scripts — first a standalone
+Python YAML scanner (`scripts/security/static_canary.py`), later inline
+additions to `.github/workflows/ci.yml`'s pre-existing `security` job (a
+repo-wide "no write permissions" grep, then a trusted-file allowlist for
 `graphify.yml` / `graphify-catchup.yml`) — but any such policy
 enforcement is itself just more pull-request-controlled YAML/shell that
 a sufficiently motivated pull request could target, weaken, or evade in
@@ -85,9 +98,12 @@ caught by ordinary code review, not by an automated check.
 
 Repository administrators should enable GitHub secret scanning and push
 protection when the organization plan permits them; Gitleaks is the
-deterministic fallback while those settings are disabled. Dependabot
-security updates are also currently disabled and may be enabled separately
-if this repository later gains package manifests. Administrators should
+deterministic fallback while those settings are disabled. Dependency
+review cannot run at all until an administrator enables GitHub's
+**Dependency Graph** for this repository (Settings > Security > Code
+security), which is required before `actions/dependency-review-action`
+can function; Dependabot security updates should be considered alongside
+it once this repository gains package manifests. Administrators should
 also consider adopting an organization-level required workflow or
 repository ruleset to enforce workflow-permission/trigger-event policy
 outside of pull-request-controlled code, since this repository's own
