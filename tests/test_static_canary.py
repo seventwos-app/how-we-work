@@ -341,6 +341,71 @@ jobs:
         )
         self.assertEqual([], workflow_findings(path))
 
+    def test_detects_secrets_after_earlier_unterminated_quote_expression(self):
+        # A malformed expression with an odd number of quotes (unterminated
+        # string) on one line must not swallow the rest of the file: a
+        # well-formed `secrets.*` expression on a later line must still be
+        # detected rather than being silently hidden by the parse failure.
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    env:
+      DECOY: ${{ 'unterminated
+      TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
+    def test_detects_secrets_word_within_unterminated_expression_itself(self):
+        # The malformed fragment itself must be scanned (fail closed) even
+        # though it has no closing `}}` on its line.
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    env:
+      TOKEN: ${{ secrets.DEPLOY_TOKEN
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
+    def test_detects_secrets_in_valid_multiline_block_scalar_expression(self):
+        # A genuine `${{ ... }}` expression may legitimately span physical
+        # lines inside a YAML block scalar (confirmed actionlint-valid).
+        # Quote state stays balanced across those lines, so this must
+        # still be recognized as one expression and flagged, rather than
+        # being mistaken for the unterminated-quote recovery case.
+        path = self._workflow(
+            """
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: use secret
+        run: |
+          echo "${{
+            secrets.DEPLOY_TOKEN
+          }}"
+"""
+        )
+        rules = {finding[1] for finding in workflow_findings(path)}
+        self.assertIn("SECWF005", rules)
+
 
 class ManifestDiffPatternTests(unittest.TestCase):
     """Mirrors the grep pattern used by the dependency-review workflow job."""

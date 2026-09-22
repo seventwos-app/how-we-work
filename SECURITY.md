@@ -19,9 +19,13 @@ to `main`. It uses read-only permissions, cancels superseded runs, disables
 checkout credential persistence, scans Git history with a checksum-verified
 `gitleaks` CLI download (no gitleaks-action license dependency) against a
 checksum-verified copy of gitleaks' own pinned default ruleset and an empty
-ignore-path fetched outside the pull request's checkout — so a pull request
-cannot supply its own `.gitleaks.toml`/`.gitleaksignore` or inline
-`gitleaks:allow` comment to weaken the scan of its own diff — reviews
+ignore-path fetched outside the pull request's checkout, additionally
+deleting any `.gitleaks.toml`/`.gitleaksignore` left in the working-tree
+checkout before scanning (gitleaks always also checks that path even when
+`--gitleaks-ignore-path` points elsewhere) — so a pull request cannot
+supply its own config, ignore file, or inline `gitleaks:allow` comment to
+weaken the scan of its own diff (`tests/security/test_gitleaks_ignore_regression.sh`
+proves this end-to-end) — reviews
 dependencies when the pull request actually changes one of the manifest or
 lockfile names GitHub's dependency graph recognizes (deliberately excluding
 the GitHub Actions ecosystem, since action pinning is already enforced by

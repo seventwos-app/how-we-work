@@ -63,6 +63,17 @@ jobs:
           echo "${checksum}  ${config_path}" | sha256sum -c -
           mkdir -p "${RUNNER_TEMP}/gitleaks-ignore-dir"
 
+      - name: Remove any PR-controlled gitleaks config/ignore files from the checkout
+        # gitleaks always additionally looks up ./.gitleaksignore relative
+        # to the scanned source path even when --gitleaks-ignore-path
+        # points elsewhere, so a working-tree .gitleaksignore checked out
+        # from the pull request would still be honored and could suppress
+        # findings in its own diff. Deleting the working-tree copies here
+        # (not from git history, which is what --config/-i above already
+        # supersede) closes that gap without affecting the git-log-based
+        # history scan below.
+        run: rm -f .gitleaksignore .gitleaks.toml
+
       - name: Scan Git history with gitleaks
         run: |
           ./gitleaks git \
