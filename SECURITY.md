@@ -36,24 +36,36 @@ checks, and do not modify branch protection.
 This canary deliberately covers only secret scanning and dependency
 review; it does not attempt to enforce workflow-permission or
 trigger-event policy (e.g. rejecting `pull_request_target` or write
-permissions on untrusted triggers) from within this repository. An
-earlier iteration of this change added such a check as a grep-based
-script inside `.github/workflows/ci.yml`, but any policy enforcement
-implemented as a workflow step is itself just more pull-request-controlled
-YAML/shell that a sufficiently motivated pull request could target,
-weaken, or evade in ways a repository-local reviewer may not catch (as
-several rounds of review on this PR demonstrated) — and a workflow
-change to `ci.yml`, `graphify.yml`, or `graphify-catchup.yml` cannot
-meaningfully enforce anything about *itself*. That check has been
-removed; `ci.yml`, `graphify.yml`, and `graphify-catchup.yml` are
+permissions on untrusted triggers) from within this repository. Earlier
+iterations of this change added such checks as grep-based scripts inside
+`.github/workflows/ci.yml` (first a repo-wide "no write permissions"
+grep, later a trusted-file allowlist for `graphify.yml` /
+`graphify-catchup.yml`), but any policy enforcement implemented as a
+workflow step is itself just more pull-request-controlled YAML/shell
+that a sufficiently motivated pull request could target, weaken, or
+evade in ways a repository-local reviewer may not catch (as several
+rounds of review on this PR demonstrated) — and a workflow change to
+`ci.yml`, `graphify.yml`, or `graphify-catchup.yml` cannot meaningfully
+enforce anything about *itself*. Those checks have been removed.
+`ci.yml`'s `security` job now only keeps the narrow, pre-existing
+`pull_request_target` trigger check; the broader "no write permissions
+anywhere in `.github/workflows`" grep was dropped rather than restored,
+because it is structurally incompatible with this repository's own
+legitimate automation — `graphify.yml` and `graphify-catchup.yml` are
+push/`workflow_dispatch`-triggered (never PR-triggered) and need
+`contents`/`pull-requests: write` to open their own update PRs, so a
+blanket write-permission grep can never pass alongside them without
+either false-failing on trusted automation or growing into exactly the
+kind of trigger-aware allowlist logic this repository has chosen not to
+maintain. `graphify.yml` and `graphify-catchup.yml` themselves are
 unchanged by this PR. Enforcing workflow-permission/trigger policy
 credibly requires either GitHub's own required-workflow/ruleset
 features or a review process anchored outside this repository, not a
 repository-local script running inside a PR-controlled workflow. Until
 an organization-level required workflow or ruleset is in place, this is
 a known limitation: a pull request that also modifies this repository's
-own workflow files is only caught by ordinary code review, not by an
-automated check.
+own workflow files (including their permissions or triggers) is only
+caught by ordinary code review, not by an automated check.
 
 Repository administrators should enable GitHub secret scanning and push
 protection when the organization plan permits them; Gitleaks is the

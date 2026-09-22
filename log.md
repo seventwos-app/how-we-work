@@ -2,6 +2,7 @@
 
 ## 2026-09-23
 * **Advisory Security Canary**: Added a read-only, concurrency-cancelled security workflow for pull requests and pushes to `main`, with a SHA-pinned Gitleaks secret scan (trusted pinned ruleset, PR-controlled ignore files sanitized from the ephemeral checkout) and conditional dependency review. The canary remains advisory rather than a required status check; [`SECURITY.md`](SECURITY.md) records its scope and the optional administrator settings that can strengthen it.
+* **CI Write-Permission Check Removed**: Removed the required `ci.yml` `security` job's repo-wide "no write permissions anywhere in `.github/workflows`" grep. It was structurally incompatible with this repository's existing push/`workflow_dispatch`-triggered automation (`graphify.yml`, `graphify-catchup.yml`), which legitimately needs write permissions and was never PR-triggered; several rounds of review also showed grep-based workflow-permission/trigger checks are inherently evadable by a sufficiently crafted pull request. The narrower `pull_request_target` trigger check remains. [`SECURITY.md`](SECURITY.md) documents this as an accepted limitation pending an organization-level required workflow or ruleset.
 
 ## 2026-09-17
 * **README Emphasis**: Extended the bolding in [How We Work](README.md) to cover the full "Seventwos is an Applied AI company..." sentence, rather than just its first clause.
