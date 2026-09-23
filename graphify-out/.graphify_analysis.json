@@ -1,0 +1,248 @@
+{
+  "communities": {
+    "0": [
+      "copy",
+      "pathlib",
+      "sys",
+      "tests_test_validate_okf_markdown",
+      "tests_test_validate_okf_markdown_rationale_2",
+      "tests_test_validate_provenance",
+      "tests_test_validate_provenance_duplicateidtests",
+      "tests_test_validate_provenance_duplicateidtests_test_duplicate_entry_ids_fail",
+      "tests_test_validate_provenance_invalidorigintests",
+      "tests_test_validate_provenance_invalidorigintests_test_invalid_disclosure_class_fails",
+      "tests_test_validate_provenance_invalidorigintests_test_invalid_outcome_origin_fails",
+      "tests_test_validate_provenance_missingrequiredfieldtests",
+      "tests_test_validate_provenance_missingrequiredfieldtests_test_missing_entry_field_fails",
+      "tests_test_validate_provenance_missingrequiredfieldtests_test_missing_outcome_field_fails",
+      "tests_test_validate_provenance_missingrequiredfieldtests_test_missing_top_level_field_fails",
+      "tests_test_validate_provenance_rationale_2",
+      "tests_test_validate_provenance_safeerrormessagetests",
+      "tests_test_validate_provenance_safeerrormessagetests_test_error_messages_never_include_the_offending_value",
+      "tests_test_validate_provenance_safeerrormessagetests_test_violations_report_path_and_rule_id",
+      "tests_test_validate_provenance_sensitiveandunsupportedfieldtests",
+      "tests_test_validate_provenance_sensitiveandunsupportedfieldtests_test_nested_sensitive_field_name_fails",
+      "tests_test_validate_provenance_sensitiveandunsupportedfieldtests_test_sensitive_field_name_fails",
+      "tests_test_validate_provenance_sensitiveandunsupportedfieldtests_test_unsupported_entry_field_fails",
+      "tests_test_validate_provenance_sensitiveandunsupportedfieldtests_test_unsupported_top_level_field_fails",
+      "tests_test_validate_provenance_valid_document",
+      "tests_test_validate_provenance_validrecordtests",
+      "tests_test_validate_provenance_validrecordtests_test_actual_repo_record_is_valid",
+      "tests_test_validate_provenance_validrecordtests_test_valid_record_has_no_violations",
+      "unittest"
+    ],
+    "1": [
+      "argparse",
+      "re",
+      "scripts_okf_validate_okf_markdown",
+      "scripts_okf_validate_okf_markdown_changed_markdown_files",
+      "scripts_okf_validate_okf_markdown_check_bundle_index",
+      "scripts_okf_validate_okf_markdown_check_file",
+      "scripts_okf_validate_okf_markdown_check_optional_shape",
+      "scripts_okf_validate_okf_markdown_check_sources_and_footnotes",
+      "scripts_okf_validate_okf_markdown_frontmatter_body",
+      "scripts_okf_validate_okf_markdown_is_excluded",
+      "scripts_okf_validate_okf_markdown_iter_markdown_files",
+      "scripts_okf_validate_okf_markdown_main",
+      "scripts_okf_validate_okf_markdown_parse_frontmatter",
+      "scripts_okf_validate_okf_markdown_rationale_2",
+      "scripts_okf_validate_okf_markdown_rationale_271",
+      "scripts_okf_validate_okf_markdown_rationale_297",
+      "scripts_okf_validate_okf_markdown_rationale_316",
+      "scripts_okf_validate_okf_markdown_rationale_341",
+      "scripts_okf_validate_okf_markdown_rationale_422",
+      "scripts_okf_validate_okf_markdown_rationale_467",
+      "scripts_okf_validate_okf_markdown_run_all",
+      "scripts_okf_validate_okf_markdown_run_changed",
+      "subprocess"
+    ],
+    "2": [
+      "tests_test_validate_okf_markdown_conceptfrontmattertests",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_setup",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_teardown",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_empty_type_fails",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_generated_flow_mapping_passes",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_generated_requires_by",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_minimal_valid_concept_passes",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_missing_closing_delimiter_is_malformed",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_missing_frontmatter_fails",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_missing_type_fails",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_status_must_be_known_value",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_tags_flow_list_passes",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_tags_must_be_a_list",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_verified_bare_mapping_is_one_element_list",
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_test_verified_list_entry_missing_by_fails",
+      "tests_test_validate_okf_markdown_reservedfiletests_write"
+    ],
+    "3": [
+      "collections",
+      "json",
+      "scripts_provenance_validate_provenance",
+      "scripts_provenance_validate_provenance_check_entry",
+      "scripts_provenance_validate_provenance_check_non_empty_string",
+      "scripts_provenance_validate_provenance_check_outcome",
+      "scripts_provenance_validate_provenance_load",
+      "scripts_provenance_validate_provenance_main",
+      "scripts_provenance_validate_provenance_rationale_199",
+      "scripts_provenance_validate_provenance_rationale_2",
+      "scripts_provenance_validate_provenance_rationale_95",
+      "scripts_provenance_validate_provenance_require_type",
+      "scripts_provenance_validate_provenance_scan_sensitive_fields",
+      "scripts_provenance_validate_provenance_sorted",
+      "scripts_provenance_validate_provenance_validate"
+    ],
+    "4": [
+      "scripts_okf_validate_okf_markdown_indent_of",
+      "scripts_okf_validate_okf_markdown_parse_block_list",
+      "scripts_okf_validate_okf_markdown_parse_block_mapping",
+      "scripts_okf_validate_okf_markdown_parse_scalar_or_flow",
+      "scripts_okf_validate_okf_markdown_rationale_101",
+      "scripts_okf_validate_okf_markdown_rationale_162",
+      "scripts_okf_validate_okf_markdown_rationale_195",
+      "scripts_okf_validate_okf_markdown_rationale_97",
+      "scripts_okf_validate_okf_markdown_split_flow",
+      "scripts_okf_validate_okf_markdown_yamlerror",
+      "valueerror"
+    ],
+    "5": [
+      "tests_test_validate_okf_markdown_conceptfrontmattertests_write",
+      "tests_test_validate_okf_markdown_rationale_259",
+      "tests_test_validate_okf_markdown_repobundletests",
+      "tests_test_validate_okf_markdown_repobundletests_test_assistant_tooling_directories_are_excluded",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_rejects_stale_document_link",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_requires_each_concept_document",
+      "tests_test_validate_okf_markdown_repobundletests_test_parent_excluded_directory_name_does_not_hide_bundle",
+      "tests_test_validate_okf_markdown_repobundletests_test_whole_bundle_conforms",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_write",
+      "tests_test_validate_okf_markdown_write"
+    ],
+    "6": [
+      "tests_test_validate_okf_markdown_reservedfiletests",
+      "tests_test_validate_okf_markdown_reservedfiletests_setup",
+      "tests_test_validate_okf_markdown_reservedfiletests_teardown",
+      "tests_test_validate_okf_markdown_reservedfiletests_test_log_with_frontmatter_fails",
+      "tests_test_validate_okf_markdown_reservedfiletests_test_log_without_frontmatter_passes",
+      "tests_test_validate_okf_markdown_reservedfiletests_test_root_index_missing_okf_version_fails",
+      "tests_test_validate_okf_markdown_reservedfiletests_test_root_index_with_extra_keys_fails",
+      "tests_test_validate_okf_markdown_reservedfiletests_test_root_index_with_only_okf_version_passes",
+      "tests_test_validate_okf_markdown_reservedfiletests_test_subdirectory_index_must_not_have_frontmatter",
+      "tests_test_validate_okf_markdown_reservedfiletests_test_subdirectory_index_without_frontmatter_passes"
+    ],
+    "7": [
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_setup",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_teardown",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_duplicate_source_ids_fail",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_matching_source_id_passes",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_not_matching_any_source_id_fails",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_without_sources_fails",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_missing_resource_fails",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_with_resource_passes"
+    ],
+    "8": [
+      "scripts_okf_validate_okf_markdown_frontmatter",
+      "scripts_okf_validate_okf_markdown_frontmatter_get",
+      "scripts_okf_validate_okf_markdown_frontmatter_has_okf_version",
+      "scripts_okf_validate_okf_markdown_frontmatter_has_type",
+      "scripts_okf_validate_okf_markdown_frontmatter_init",
+      "scripts_okf_validate_okf_markdown_frontmatter_keys"
+    ],
+    "9": [
+      "tests_security_test_gitleaks_ignore_regression",
+      "tests_security_test_gitleaks_ignore_regression_run_gitleaks",
+      "tests_security_test_gitleaks_ignore_regression_sh__entry"
+    ]
+  },
+  "cohesion": {
+    "0": 0.10591133004926108,
+    "1": 0.15019762845849802,
+    "2": 0.21666666666666667,
+    "3": 0.26666666666666666,
+    "4": 0.23636363636363636,
+    "5": 0.24444444444444444,
+    "6": 0.2,
+    "7": 0.2222222222222222,
+    "8": 0.3333333333333333,
+    "9": 1.0
+  },
+  "gods": [
+    {
+      "id": "tests_test_validate_okf_markdown_conceptfrontmattertests",
+      "label": "ConceptFrontmatterTests",
+      "degree": 16
+    },
+    {
+      "id": "tests_test_validate_provenance_valid_document",
+      "label": "valid_document()",
+      "degree": 14
+    },
+    {
+      "id": "tests_test_validate_okf_markdown_reservedfiletests",
+      "label": "ReservedFileTests",
+      "degree": 11
+    },
+    {
+      "id": "tests_test_validate_okf_markdown_sourcesandfootnotetests",
+      "label": "SourcesAndFootnoteTests",
+      "degree": 10
+    },
+    {
+      "id": "scripts_okf_validate_okf_markdown_parse_block_mapping",
+      "label": "_parse_block_mapping()",
+      "degree": 9
+    },
+    {
+      "id": "scripts_okf_validate_okf_markdown_check_file",
+      "label": "check_file()",
+      "degree": 8
+    },
+    {
+      "id": "scripts_okf_validate_okf_markdown_parse_scalar_or_flow",
+      "label": "_parse_scalar_or_flow()",
+      "degree": 7
+    },
+    {
+      "id": "scripts_okf_validate_okf_markdown_frontmatter",
+      "label": "Frontmatter",
+      "degree": 7
+    },
+    {
+      "id": "scripts_provenance_validate_provenance_validate",
+      "label": "validate()",
+      "degree": 7
+    },
+    {
+      "id": "tests_test_validate_okf_markdown_write",
+      "label": "write()",
+      "degree": 7
+    }
+  ],
+  "surprises": [
+    {
+      "source": "parse_frontmatter()",
+      "target": "_parse_block_mapping()",
+      "source_files": [
+        "scripts/okf/validate_okf_markdown.py",
+        "scripts/okf/validate_okf_markdown.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "note": "Bridges community 4 \u2192 community 1"
+    },
+    {
+      "source": "parse_frontmatter()",
+      "target": "Frontmatter",
+      "source_files": [
+        "scripts/okf/validate_okf_markdown.py",
+        "scripts/okf/validate_okf_markdown.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "note": "Bridges community 8 \u2192 community 1"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}
