@@ -74,10 +74,14 @@ jobs:
           fi
           echo "No pull_request_target triggers found."
 
-      - name: Workflows do not request write permissions
-        run: |
-          if grep -rnE '^[[:space:]]*(contents|issues|pull-requests|packages|id-token):[[:space:]]*write' .github/workflows; then
-            echo "::error::Workflows in this repo are intended to be read-only PR checks."
-            exit 1
-          fi
-          echo "All workflows are read-only."
+      # There used to be a companion "no write permissions anywhere in
+      # .github/workflows" grep here. It was removed: this repo legitimately
+      # has push/workflow_dispatch-triggered automation (graphify.yml,
+      # graphify-catchup.yml) that needs contents/pull-requests write to open
+      # its own PRs, and a text grep cannot reliably distinguish that trusted,
+      # non-PR-triggered write access from an untrusted PR-triggered one
+      # without exactly the kind of fragile custom YAML/permission parsing
+      # this repo has deliberately chosen not to maintain (see SECURITY.md).
+      # The pull_request_target check above remains because it is narrow
+      # (only the trigger keyword) and doesn't collide with legitimate,
+      # non-PR-triggered write permissions elsewhere in the repo.

@@ -178,6 +178,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request extending README bolding"
       }
+    },
+    {
+      "id": "2026-09-23-advisory-security-canary",
+      "intent": "Add a minimal advisory security canary for the public static repository without changing required checks or branch protection.",
+      "human_direction": "A maintainer requested pull-request and main-push coverage, least privilege, concurrency cancellation, immutable action pins, safe trust boundaries, deterministic static-repository checks, concise documentation, validation, and a committed result.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request adding the advisory security canary"
+      }
     }
   ]
 }
