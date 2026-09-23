@@ -1,0 +1,44 @@
+{
+  ".seventwos/provenance.json": {
+    "mtime": 1790138482.2539506,
+    "seen": 1790138582.4495986,
+    "ast_hash": "beeddff092bf21e2f2d8c940170d5c39",
+    "semantic_hash": "beeddff092bf21e2f2d8c940170d5c39"
+  },
+  "diagrams/stack.architecture.json": {
+    "mtime": 1790138482.2560241,
+    "seen": 1790138582.449602,
+    "ast_hash": "a1b245335b5f2521f6565564fd4042f4",
+    "semantic_hash": "a1b245335b5f2521f6565564fd4042f4"
+  },
+  "scripts/okf/validate_okf_markdown.py": {
+    "mtime": 1790138482.2573717,
+    "seen": 1790138582.449603,
+    "ast_hash": "06bd2d32a7c13184ac04d27e351423b3",
+    "semantic_hash": "06bd2d32a7c13184ac04d27e351423b3"
+  },
+  "scripts/provenance/validate_provenance.py": {
+    "mtime": 1790138482.2573717,
+    "seen": 1790138582.449604,
+    "ast_hash": "b82caf4882cd1342c3e21b4fbc865d4c",
+    "semantic_hash": "b82caf4882cd1342c3e21b4fbc865d4c"
+  },
+  "tests/security/test_gitleaks_ignore_regression.sh": {
+    "mtime": 1790138482.2576976,
+    "seen": 1790138582.4496045,
+    "ast_hash": "1d763636333f4b2e538f6199178c8662",
+    "semantic_hash": "1d763636333f4b2e538f6199178c8662"
+  },
+  "tests/test_validate_okf_markdown.py": {
+    "mtime": 1790138482.2576976,
+    "seen": 1790138582.4496055,
+    "ast_hash": "a1d6bf457311fc50c57cef19ecc1a7f7",
+    "semantic_hash": "a1d6bf457311fc50c57cef19ecc1a7f7"
+  },
+  "tests/test_validate_provenance.py": {
+    "mtime": 1790138482.2576976,
+    "seen": 1790138582.449606,
+    "ast_hash": "368bcf909dd792379aa21d9972847124",
+    "semantic_hash": "368bcf909dd792379aa21d9972847124"
+  }
+}
