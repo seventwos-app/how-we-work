@@ -1,0 +1,98 @@
+{
+  ".seventwos/provenance.json": {
+    "mtime": 1790566829.0377378,
+    "seen": 1790566910.6636608,
+    "ast_hash": "beeddff092bf21e2f2d8c940170d5c39",
+    "semantic_hash": "beeddff092bf21e2f2d8c940170d5c39"
+  },
+  "diagrams/stack.architecture.json": {
+    "mtime": 1790566829.0415237,
+    "seen": 1790566910.6636653,
+    "ast_hash": "a1b245335b5f2521f6565564fd4042f4",
+    "semantic_hash": "a1b245335b5f2521f6565564fd4042f4"
+  },
+  "scripts/okf/validate_okf_markdown.py": {
+    "mtime": 1790566829.0424895,
+    "seen": 1790566910.6636674,
+    "ast_hash": "06bd2d32a7c13184ac04d27e351423b3",
+    "semantic_hash": "06bd2d32a7c13184ac04d27e351423b3"
+  },
+  "scripts/provenance/validate_provenance.py": {
+    "mtime": 1790566829.0424895,
+    "seen": 1790566910.6636686,
+    "ast_hash": "b82caf4882cd1342c3e21b4fbc865d4c",
+    "semantic_hash": "b82caf4882cd1342c3e21b4fbc865d4c"
+  },
+  "tests/security/test_gitleaks_ignore_regression.sh": {
+    "mtime": 1790566829.0425236,
+    "seen": 1790566910.6636698,
+    "ast_hash": "1d763636333f4b2e538f6199178c8662",
+    "semantic_hash": "1d763636333f4b2e538f6199178c8662"
+  },
+  "tests/test_validate_okf_markdown.py": {
+    "mtime": 1790566829.0425236,
+    "seen": 1790566910.6636708,
+    "ast_hash": "a1d6bf457311fc50c57cef19ecc1a7f7",
+    "semantic_hash": "a1d6bf457311fc50c57cef19ecc1a7f7"
+  },
+  "tests/test_validate_provenance.py": {
+    "mtime": 1790566829.0425236,
+    "seen": 1790566910.663672,
+    "ast_hash": "368bcf909dd792379aa21d9972847124",
+    "semantic_hash": "368bcf909dd792379aa21d9972847124"
+  },
+  ".copilot/skills/graphify/SKILL.md": {
+    "mtime": 1790566829.0361304,
+    "seen": 1790566910.6636732,
+    "ast_hash": "1656a8a8e4a05bbe69f32cd15de81e87",
+    "semantic_hash": "1656a8a8e4a05bbe69f32cd15de81e87"
+  },
+  "README.md": {
+    "mtime": 1790566829.0377378,
+    "seen": 1790566910.663674,
+    "ast_hash": "c1a2e1430aabc2a1ca62df88d9f269f3",
+    "semantic_hash": "c1a2e1430aabc2a1ca62df88d9f269f3"
+  },
+  "SECURITY.md": {
+    "mtime": 1790566829.0377378,
+    "seen": 1790566910.6636755,
+    "ast_hash": "8b1c449c78995990b78cb80fb1ba52c6",
+    "semantic_hash": "8b1c449c78995990b78cb80fb1ba52c6"
+  },
+  "diagrams/README.md": {
+    "mtime": 1790566829.0377378,
+    "seen": 1790566910.6636772,
+    "ast_hash": "40f91c891ddf2d8ff14189dfdd0637a9",
+    "semantic_hash": "40f91c891ddf2d8ff14189dfdd0637a9"
+  },
+  "diagrams/stack.architecture.html": {
+    "mtime": 1790566829.0415237,
+    "seen": 1790566910.6636786,
+    "ast_hash": "ec2d15d2336e8edb6e3149e06d3695fe",
+    "semantic_hash": "ec2d15d2336e8edb6e3149e06d3695fe"
+  },
+  "index.md": {
+    "mtime": 1790566829.0415237,
+    "seen": 1790566910.6636798,
+    "ast_hash": "a9a15b05e8bbc903606439387acf2c06",
+    "semantic_hash": "a9a15b05e8bbc903606439387acf2c06"
+  },
+  "log.md": {
+    "mtime": 1790566829.0415237,
+    "seen": 1790566910.663681,
+    "ast_hash": "b87618d4f3d36559ea1c56801d084a88",
+    "semantic_hash": "b87618d4f3d36559ea1c56801d084a88"
+  },
+  "plans/repository-provenance.md": {
+    "mtime": 1790566829.0415237,
+    "seen": 1790566910.663682,
+    "ast_hash": "6d0c04f5a234ded86f6ec66c9a9286b0",
+    "semantic_hash": "6d0c04f5a234ded86f6ec66c9a9286b0"
+  },
+  "stack.md": {
+    "mtime": 1790566829.0424895,
+    "seen": 1790566910.6636834,
+    "ast_hash": "ce7e33c2a74d83eca2318c0ee627be5f",
+    "semantic_hash": "ce7e33c2a74d83eca2318c0ee627be5f"
+  }
+}
