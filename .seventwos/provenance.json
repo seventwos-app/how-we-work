@@ -189,6 +189,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request adding the advisory security canary"
       }
+    },
+    {
+      "id": "2026-10-08-repin-claude-sonnet-5-5",
+      "intent": "Repin agents still pinned to the superseded Claude Sonnet 5 to Claude Sonnet 5.5 after the available Copilot model roster changed.",
+      "human_direction": "A maintainer reported that the available models had been updated and asked for outdated agent model pins to be fixed across repositories.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "reviewed-before-merge",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request repinning Claude Sonnet 5 agents to Claude Sonnet 5.5"
+      }
     }
   ]
 }
