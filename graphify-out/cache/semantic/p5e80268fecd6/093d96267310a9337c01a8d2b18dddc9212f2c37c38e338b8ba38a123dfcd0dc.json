@@ -1,0 +1,1 @@
+{"nodes": [{"id": "diagrams_readme", "label": "Architecture Diagram Maintenance", "file_type": "document", "source_file": "diagrams/README.md"}], "edges": [{"source": "diagrams_readme", "target": "diagrams_stack_architecture_html", "relation": "references", "confidence": "EXTRACTED", "source_file": "diagrams/README.md"}], "hyperedges": []}
