@@ -1502,6 +1502,7 @@
     {
       "id": "diagrams_stack_architecture_runcopy",
       "label": "runCopy",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 12,
@@ -1516,6 +1517,7 @@
     {
       "id": "diagrams_stack_architecture_runcopysharecard",
       "label": "runCopyShareCard",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 12,
@@ -1530,6 +1532,7 @@
     {
       "id": "diagrams_stack_architecture_writepngtoclipboard",
       "label": "writePngToClipboard",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 12,
@@ -1544,6 +1547,7 @@
     {
       "id": "diagrams_stack_architecture_archify_intenttrace",
       "label": "Archify.intentTrace",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 15,
@@ -1558,6 +1562,7 @@
     {
       "id": "diagrams_stack_architecture_archify_presentation",
       "label": "Archify.presentation",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 16,
@@ -1572,6 +1577,7 @@
     {
       "id": "diagrams_stack_architecture_archify_readerlayout",
       "label": "Archify.readerLayout",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 17,
@@ -1586,6 +1592,7 @@
     {
       "id": "diagrams_stack_architecture_agent_gateway",
       "label": "Agent Gateway",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1600,6 +1607,7 @@
     {
       "id": "diagrams_stack_architecture_android",
       "label": "Android Client",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1614,6 +1622,7 @@
     {
       "id": "diagrams_stack_architecture_desktop",
       "label": "Desktop Client",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1628,6 +1637,7 @@
     {
       "id": "diagrams_stack_architecture_federation",
       "label": "Federated Homeservers",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1642,6 +1652,7 @@
     {
       "id": "diagrams_stack_architecture_homeserver",
       "label": "Matrix Homeserver",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1656,6 +1667,7 @@
     {
       "id": "diagrams_stack_architecture_ios",
       "label": "iOS Client",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1670,6 +1682,7 @@
     {
       "id": "diagrams_stack_architecture_local_extensions",
       "label": "Local Extensions",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1684,6 +1697,7 @@
     {
       "id": "diagrams_stack_architecture_models",
       "label": "Frontier Models",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1698,6 +1712,7 @@
     {
       "id": "diagrams_stack_architecture_push",
       "label": "Push Gateway",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -1712,6 +1727,7 @@
     {
       "id": "diagrams_stack_architecture_archify_finder",
       "label": "Archify.finder",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1726,6 +1742,7 @@
     {
       "id": "diagrams_stack_architecture_archify_focus",
       "label": "Archify.focus",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1740,6 +1757,7 @@
     {
       "id": "diagrams_stack_architecture_archify_guidedviews",
       "label": "Archify.guidedViews",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1754,6 +1772,7 @@
     {
       "id": "diagrams_stack_architecture_archify_motiongovernor",
       "label": "Archify.motionGovernor",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1768,6 +1787,7 @@
     {
       "id": "diagrams_stack_architecture_archify_radar",
       "label": "Archify.radar",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1782,6 +1802,7 @@
     {
       "id": "diagrams_stack_architecture_archify_routeprobe",
       "label": "Archify.routeProbe",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1796,6 +1817,7 @@
     {
       "id": "diagrams_stack_architecture_archify_sourceevidence",
       "label": "Archify.sourceEvidence",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1810,6 +1832,7 @@
     {
       "id": "diagrams_stack_architecture_archify_view",
       "label": "Archify.view",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1824,6 +1847,7 @@
     {
       "id": "diagrams_stack_architecture_archify_viewerchromelayout",
       "label": "Archify.viewerChromeLayout",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 8,
@@ -1833,6 +1857,190 @@
       "rationale": "Manages UI control placement to avoid overlapping with SVG content",
       "source_file": "diagrams/stack.architecture.html",
       "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "diagrams_stack_architecture_guide",
+      "label": "Diagram Guide Module",
+      "_origin": "semantic",
+      "community": 11,
+      "file_type": "code",
+      "norm_label": "diagram guide module",
+      "rationale": "Command deck that delegates actions to other modules like Finder, Route Probe, and Semantic Lens.",
+      "source_file": "diagrams/stack.architecture.html"
+    },
+    {
+      "id": "diagrams_stack_architecture_routeprobe",
+      "label": "Route Probe Module",
+      "_origin": "semantic",
+      "community": 11,
+      "file_type": "code",
+      "norm_label": "route probe module",
+      "rationale": "Handles pathfinding (shortestDirectedPath), journey playback, and visual overlays for node-to-node routes.",
+      "source_file": "diagrams/stack.architecture.html"
+    },
+    {
+      "id": "diagrams_stack_architecture_semanticlens",
+      "label": "Semantic Lens Module",
+      "_origin": "semantic",
+      "community": 11,
+      "file_type": "code",
+      "norm_label": "semantic lens module",
+      "rationale": "Provides kind-based filtering and comparison of nodes and relationships using data-node-kind attributes.",
+      "source_file": "diagrams/stack.architecture.html"
+    },
+    {
+      "id": "diagrams_stack_architecture_archify",
+      "label": "Archify Namespace",
+      "_origin": "semantic",
+      "community": 14,
+      "file_type": "code",
+      "norm_label": "archify namespace",
+      "rationale": "Global namespace for diagram interaction modules including routeProbe, semanticLens, and guide.",
+      "source_file": "diagrams/stack.architecture.html"
+    },
+    {
+      "id": "github_workflows_ci",
+      "label": "CI Workflow",
+      "_origin": "semantic",
+      "community": 18,
+      "file_type": "code",
+      "norm_label": "ci workflow",
+      "source_file": ".github/workflows/ci.yml"
+    },
+    {
+      "id": "github_workflows_graphify",
+      "label": "Graphify Workflow",
+      "_origin": "semantic",
+      "community": 19,
+      "file_type": "code",
+      "norm_label": "graphify workflow",
+      "source_file": ".github/workflows/graphify.yml"
+    },
+    {
+      "id": "log_updates",
+      "label": "Update Log",
+      "_origin": "semantic",
+      "community": 21,
+      "file_type": "document",
+      "norm_label": "update log",
+      "source_file": "log.md"
+    },
+    {
+      "id": "diagrams_stack_architecture_html",
+      "label": "Rendered Architecture Diagram",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "code",
+      "norm_label": "rendered architecture diagram",
+      "source_file": "diagrams/stack.architecture.html"
+    },
+    {
+      "id": "github_workflows_security_canary",
+      "label": "Security Canary Workflow",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "code",
+      "norm_label": "security canary workflow",
+      "source_file": ".github/workflows/security-canary.yml"
+    },
+    {
+      "id": "stack_specification",
+      "label": "Technology Stack for User Frontend",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "code",
+      "norm_label": "technology stack for user frontend",
+      "rationale": "Architectural specification for Desktop, Mobile, and Matrix fabric.",
+      "source_file": "stack.md"
+    },
+    {
+      "id": "agent_gateway",
+      "label": "Agent Gateway",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "concept",
+      "norm_label": "agent gateway",
+      "rationale": "VM-hosted service connecting Matrix to frontier models via Azure AI Foundry."
+    },
+    {
+      "id": "matrix_protocol",
+      "label": "Matrix Protocol",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "concept",
+      "norm_label": "matrix protocol",
+      "rationale": "Decentralized communications fabric used for human-agent coordination."
+    },
+    {
+      "id": "slsa_provenance",
+      "label": "SLSA Provenance Spec",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "concept",
+      "norm_label": "slsa provenance spec",
+      "rationale": "External specification defining provenance as verifiable information about artifact production.",
+      "source_url": "https://slsa.dev/spec/v1.2/provenance"
+    },
+    {
+      "id": "diagrams_readme",
+      "label": "Architecture Diagram Maintenance",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "document",
+      "norm_label": "architecture diagram maintenance",
+      "source_file": "diagrams/README.md"
+    },
+    {
+      "id": "index_bundle",
+      "label": "OKF Bundle Index",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "document",
+      "norm_label": "okf bundle index",
+      "source_file": "index.md"
+    },
+    {
+      "id": "plans_repository_provenance_plan",
+      "label": "Repository Provenance Plan",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "document",
+      "norm_label": "repository provenance plan",
+      "rationale": "Defines the MVP for recording intent, human direction, and agent involvement in repository changes.",
+      "source_file": "plans/repository-provenance.md"
+    },
+    {
+      "id": "readme_vision",
+      "label": "How We Work",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "document",
+      "norm_label": "how we work",
+      "rationale": "Vision statement defining the collaboration between humans (intent) and agents (implementation).",
+      "source_file": "README.md"
+    },
+    {
+      "id": "security_policy",
+      "label": "Security Reporting",
+      "_origin": "semantic",
+      "community": 4,
+      "file_type": "document",
+      "norm_label": "security reporting",
+      "rationale": "Policy for reporting vulnerabilities and description of the advisory security canary.",
+      "source_file": "SECURITY.md"
+    },
+    {
+      "id": "github_workflows_graphify_catchup_graphify_semantic_catch_up",
+      "label": "Graphify Semantic Catch-up workflow",
+      "author": null,
+      "captured_at": null,
+      "community": 20,
+      "contributor": null,
+      "file_type": "code",
+      "norm_label": "graphify semantic catch-up workflow",
+      "source_file": ".github/workflows/graphify-catchup.yml",
+      "source_location": "L1-L62",
       "source_url": null
     },
     {
@@ -1886,58 +2094,6 @@
       "type": "external"
     },
     {
-      "id": "diagrams_stack_architecture_guide",
-      "label": "Diagram Guide Module",
-      "community": 11,
-      "file_type": "code",
-      "norm_label": "diagram guide module",
-      "rationale": "Command deck that delegates actions to other modules like Finder, Route Probe, and Semantic Lens.",
-      "source_file": "diagrams/stack.architecture.html"
-    },
-    {
-      "id": "diagrams_stack_architecture_routeprobe",
-      "label": "Route Probe Module",
-      "community": 11,
-      "file_type": "code",
-      "norm_label": "route probe module",
-      "rationale": "Handles pathfinding (shortestDirectedPath), journey playback, and visual overlays for node-to-node routes.",
-      "source_file": "diagrams/stack.architecture.html"
-    },
-    {
-      "id": "diagrams_stack_architecture_semanticlens",
-      "label": "Semantic Lens Module",
-      "community": 11,
-      "file_type": "code",
-      "norm_label": "semantic lens module",
-      "rationale": "Provides kind-based filtering and comparison of nodes and relationships using data-node-kind attributes.",
-      "source_file": "diagrams/stack.architecture.html"
-    },
-    {
-      "id": "diagrams_stack_architecture_archify",
-      "label": "Archify Namespace",
-      "community": 14,
-      "file_type": "code",
-      "norm_label": "archify namespace",
-      "rationale": "Global namespace for diagram interaction modules including routeProbe, semanticLens, and guide.",
-      "source_file": "diagrams/stack.architecture.html"
-    },
-    {
-      "id": "github_workflows_ci",
-      "label": "CI Workflow",
-      "community": 18,
-      "file_type": "code",
-      "norm_label": "ci workflow",
-      "source_file": ".github/workflows/ci.yml"
-    },
-    {
-      "id": "github_workflows_graphify",
-      "label": "Graphify Workflow",
-      "community": 19,
-      "file_type": "code",
-      "norm_label": "graphify workflow",
-      "source_file": ".github/workflows/graphify.yml"
-    },
-    {
       "id": "argparse",
       "label": "argparse",
       "community": 2,
@@ -1976,107 +2132,6 @@
       "norm_label": "re",
       "source_file": "",
       "type": "external"
-    },
-    {
-      "id": "log_updates",
-      "label": "Update Log",
-      "community": 20,
-      "file_type": "document",
-      "norm_label": "update log",
-      "source_file": "log.md"
-    },
-    {
-      "id": "diagrams_stack_architecture_html",
-      "label": "Rendered Architecture Diagram",
-      "community": 4,
-      "file_type": "code",
-      "norm_label": "rendered architecture diagram",
-      "source_file": "diagrams/stack.architecture.html"
-    },
-    {
-      "id": "github_workflows_security_canary",
-      "label": "Security Canary Workflow",
-      "community": 4,
-      "file_type": "code",
-      "norm_label": "security canary workflow",
-      "source_file": ".github/workflows/security-canary.yml"
-    },
-    {
-      "id": "stack_specification",
-      "label": "Technology Stack for User Frontend",
-      "community": 4,
-      "file_type": "code",
-      "norm_label": "technology stack for user frontend",
-      "rationale": "Architectural specification for Desktop, Mobile, and Matrix fabric.",
-      "source_file": "stack.md"
-    },
-    {
-      "id": "agent_gateway",
-      "label": "Agent Gateway",
-      "community": 4,
-      "file_type": "concept",
-      "norm_label": "agent gateway",
-      "rationale": "VM-hosted service connecting Matrix to frontier models via Azure AI Foundry."
-    },
-    {
-      "id": "matrix_protocol",
-      "label": "Matrix Protocol",
-      "community": 4,
-      "file_type": "concept",
-      "norm_label": "matrix protocol",
-      "rationale": "Decentralized communications fabric used for human-agent coordination."
-    },
-    {
-      "id": "slsa_provenance",
-      "label": "SLSA Provenance Spec",
-      "community": 4,
-      "file_type": "concept",
-      "norm_label": "slsa provenance spec",
-      "rationale": "External specification defining provenance as verifiable information about artifact production.",
-      "source_url": "https://slsa.dev/spec/v1.2/provenance"
-    },
-    {
-      "id": "diagrams_readme",
-      "label": "Architecture Diagram Maintenance",
-      "community": 4,
-      "file_type": "document",
-      "norm_label": "architecture diagram maintenance",
-      "source_file": "diagrams/README.md"
-    },
-    {
-      "id": "index_bundle",
-      "label": "OKF Bundle Index",
-      "community": 4,
-      "file_type": "document",
-      "norm_label": "okf bundle index",
-      "source_file": "index.md"
-    },
-    {
-      "id": "plans_repository_provenance_plan",
-      "label": "Repository Provenance Plan",
-      "community": 4,
-      "file_type": "document",
-      "norm_label": "repository provenance plan",
-      "rationale": "Defines the MVP for recording intent, human direction, and agent involvement in repository changes.",
-      "source_file": "plans/repository-provenance.md"
-    },
-    {
-      "id": "readme_vision",
-      "label": "How We Work",
-      "community": 4,
-      "file_type": "document",
-      "norm_label": "how we work",
-      "rationale": "Vision statement defining the collaboration between humans (intent) and agents (implementation).",
-      "source_file": "README.md"
-    },
-    {
-      "id": "security_policy",
-      "label": "Security Reporting",
-      "community": 4,
-      "file_type": "document",
-      "norm_label": "security reporting",
-      "rationale": "Policy for reporting vulnerabilities and description of the advisory security canary.",
-      "source_file": "SECURITY.md"
     }
   ],
   "links": [
@@ -4726,6 +4781,7 @@
       "source": "diagrams_stack_architecture_routeprobe",
       "target": "diagrams_stack_architecture_semanticlens",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "rationale": "routeProbe.begin clears semanticLens state if active.",
@@ -4735,6 +4791,7 @@
       "source": "diagrams_stack_architecture_agent_gateway",
       "target": "diagrams_stack_architecture_homeserver",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4745,6 +4802,7 @@
       "source": "diagrams_stack_architecture_agent_gateway",
       "target": "diagrams_stack_architecture_models",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4755,6 +4813,7 @@
       "source": "diagrams_stack_architecture_android",
       "target": "diagrams_stack_architecture_homeserver",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4765,6 +4824,7 @@
       "source": "diagrams_stack_architecture_archify_finder",
       "target": "diagrams_stack_architecture_archify_focus",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4775,6 +4835,7 @@
       "source": "diagrams_stack_architecture_archify_finder",
       "target": "diagrams_stack_architecture_archify_view",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4785,6 +4846,7 @@
       "source": "diagrams_stack_architecture_archify_focus",
       "target": "diagrams_stack_architecture_archify_radar",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4795,6 +4857,7 @@
       "source": "diagrams_stack_architecture_archify_focus",
       "target": "diagrams_stack_architecture_archify_sourceevidence",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4805,6 +4868,7 @@
       "source": "diagrams_stack_architecture_archify_focus",
       "target": "diagrams_stack_architecture_archify_view",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4815,6 +4879,7 @@
       "source": "diagrams_stack_architecture_archify_guidedviews",
       "target": "diagrams_stack_architecture_archify_focus",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4825,6 +4890,7 @@
       "source": "diagrams_stack_architecture_archify_guidedviews",
       "target": "diagrams_stack_architecture_archify_view",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4835,6 +4901,7 @@
       "source": "diagrams_stack_architecture_archify_motiongovernor",
       "target": "diagrams_stack_architecture_archify_guidedviews",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4845,6 +4912,7 @@
       "source": "diagrams_stack_architecture_archify_motiongovernor",
       "target": "diagrams_stack_architecture_archify_routeprobe",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4855,6 +4923,7 @@
       "source": "diagrams_stack_architecture_archify_radar",
       "target": "diagrams_stack_architecture_archify_view",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4865,6 +4934,7 @@
       "source": "diagrams_stack_architecture_archify_view",
       "target": "diagrams_stack_architecture_archify_viewerchromelayout",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4875,6 +4945,7 @@
       "source": "diagrams_stack_architecture_desktop",
       "target": "diagrams_stack_architecture_homeserver",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4885,6 +4956,7 @@
       "source": "diagrams_stack_architecture_desktop",
       "target": "diagrams_stack_architecture_local_extensions",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4895,6 +4967,7 @@
       "source": "diagrams_stack_architecture_federation",
       "target": "diagrams_stack_architecture_homeserver",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4905,6 +4978,7 @@
       "source": "diagrams_stack_architecture_guide",
       "target": "diagrams_stack_architecture_routeprobe",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html"
@@ -4913,6 +4987,7 @@
       "source": "diagrams_stack_architecture_guide",
       "target": "diagrams_stack_architecture_semanticlens",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html"
@@ -4921,6 +4996,7 @@
       "source": "diagrams_stack_architecture_homeserver",
       "target": "diagrams_stack_architecture_ios",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4931,6 +5007,7 @@
       "source": "diagrams_stack_architecture_homeserver",
       "target": "diagrams_stack_architecture_push",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4941,6 +5018,7 @@
       "source": "diagrams_stack_architecture_push",
       "target": "diagrams_stack_architecture_android",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4951,6 +5029,7 @@
       "source": "diagrams_stack_architecture_push",
       "target": "diagrams_stack_architecture_ios",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4961,6 +5040,7 @@
       "source": "diagrams_stack_architecture_runcopy",
       "target": "diagrams_stack_architecture_writepngtoclipboard",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4971,6 +5051,7 @@
       "source": "diagrams_stack_architecture_runcopysharecard",
       "target": "diagrams_stack_architecture_writepngtoclipboard",
       "relation": "calls",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/stack.architecture.html",
@@ -4981,6 +5062,7 @@
       "source": "plans_repository_provenance_plan",
       "target": "slsa_provenance",
       "relation": "cites",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "plans/repository-provenance.md"
@@ -4989,6 +5071,7 @@
       "source": "diagrams_readme",
       "target": "diagrams_stack_architecture_html",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "diagrams/README.md"
@@ -4997,6 +5080,7 @@
       "source": "index_bundle",
       "target": "diagrams_readme",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "index.md"
@@ -5005,6 +5089,7 @@
       "source": "index_bundle",
       "target": "plans_repository_provenance_plan",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "index.md"
@@ -5013,6 +5098,7 @@
       "source": "index_bundle",
       "target": "readme_vision",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "index.md"
@@ -5021,6 +5107,7 @@
       "source": "index_bundle",
       "target": "security_policy",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "index.md"
@@ -5029,6 +5116,7 @@
       "source": "index_bundle",
       "target": "stack_specification",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "index.md"
@@ -5037,6 +5125,7 @@
       "source": "stack_specification",
       "target": "agent_gateway",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "stack.md"
@@ -5045,6 +5134,7 @@
       "source": "stack_specification",
       "target": "diagrams_readme",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "stack.md"
@@ -5053,6 +5143,7 @@
       "source": "stack_specification",
       "target": "matrix_protocol",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "stack.md"
@@ -5061,6 +5152,7 @@
       "source": "readme_vision",
       "target": "plans_repository_provenance_plan",
       "relation": "conceptually_related_to",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.55,
       "rationale": "Provenance records the human intent and agent implementation described in the Vision.",
@@ -5070,6 +5162,7 @@
       "source": "github_workflows_security_canary",
       "target": "security_policy",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.55,
       "rationale": "The workflow implements the canary policy described in SECURITY.md.",
@@ -5187,5 +5280,5 @@
       "source_file": "SECURITY.md"
     }
   ],
-  "built_at_commit": "3f4ad1e51830d74a4b8c0c2b18470b3753dd8ab1"
+  "built_at_commit": "6e8a73a9e7d3a55b94157c4064bb85962bea7218"
 }
