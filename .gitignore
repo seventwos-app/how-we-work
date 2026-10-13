@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .playwright-mcp/
 diagrams/*.visual-check.*
+# Graphify regenerates this machine-specific scan-root marker locally.
+/graphify-out/.graphify_root
