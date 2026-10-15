@@ -1,0 +1,116 @@
+{
+  ".seventwos/provenance.json": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.0531034,
+    "ast_hash": "7c2a801866b1f30fe51ccee8caff6bc5",
+    "semantic_hash": "7c2a801866b1f30fe51ccee8caff6bc5"
+  },
+  "diagrams/stack.architecture.json": {
+    "mtime": 1791739829.7115178,
+    "seen": 1791739878.0531082,
+    "ast_hash": "a1b245335b5f2521f6565564fd4042f4",
+    "semantic_hash": "a1b245335b5f2521f6565564fd4042f4"
+  },
+  "scripts/okf/validate_okf_markdown.py": {
+    "mtime": 1791739829.7122517,
+    "seen": 1791739878.0531104,
+    "ast_hash": "06bd2d32a7c13184ac04d27e351423b3",
+    "semantic_hash": "06bd2d32a7c13184ac04d27e351423b3"
+  },
+  "scripts/provenance/validate_provenance.py": {
+    "mtime": 1791739829.7122517,
+    "seen": 1791739878.0531116,
+    "ast_hash": "b82caf4882cd1342c3e21b4fbc865d4c",
+    "semantic_hash": "b82caf4882cd1342c3e21b4fbc865d4c"
+  },
+  "tests/security/test_gitleaks_ignore_regression.sh": {
+    "mtime": 1791739829.712653,
+    "seen": 1791739878.0531125,
+    "ast_hash": "1d763636333f4b2e538f6199178c8662",
+    "semantic_hash": "1d763636333f4b2e538f6199178c8662"
+  },
+  "tests/test_validate_okf_markdown.py": {
+    "mtime": 1791739829.712653,
+    "seen": 1791739878.0531137,
+    "ast_hash": "a1d6bf457311fc50c57cef19ecc1a7f7",
+    "semantic_hash": "a1d6bf457311fc50c57cef19ecc1a7f7"
+  },
+  "tests/test_validate_provenance.py": {
+    "mtime": 1791739829.712653,
+    "seen": 1791739878.0531147,
+    "ast_hash": "368bcf909dd792379aa21d9972847124",
+    "semantic_hash": "368bcf909dd792379aa21d9972847124"
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1791739829.7074902,
+    "seen": 1791739878.0531158,
+    "ast_hash": "be41e75159999756f217fdd7c943479f",
+    "semantic_hash": "be41e75159999756f217fdd7c943479f"
+  },
+  ".github/workflows/graphify.yml": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.053117,
+    "ast_hash": "d65cdaff9af60d9e19e081cd313fe9a6",
+    "semantic_hash": "d65cdaff9af60d9e19e081cd313fe9a6"
+  },
+  ".github/workflows/security-canary.yml": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.053118,
+    "ast_hash": "0d2facf5e0756c51f489c946f163b42b",
+    "semantic_hash": "0d2facf5e0756c51f489c946f163b42b"
+  },
+  "README.md": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.0531192,
+    "ast_hash": "c1a2e1430aabc2a1ca62df88d9f269f3",
+    "semantic_hash": "c1a2e1430aabc2a1ca62df88d9f269f3"
+  },
+  "SECURITY.md": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.0531206,
+    "ast_hash": "8b1c449c78995990b78cb80fb1ba52c6",
+    "semantic_hash": "8b1c449c78995990b78cb80fb1ba52c6"
+  },
+  "diagrams/README.md": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.0531213,
+    "ast_hash": "40f91c891ddf2d8ff14189dfdd0637a9",
+    "semantic_hash": "40f91c891ddf2d8ff14189dfdd0637a9"
+  },
+  "diagrams/stack.architecture.html": {
+    "mtime": 1791739829.710518,
+    "seen": 1791739878.0531223,
+    "ast_hash": "ec2d15d2336e8edb6e3149e06d3695fe",
+    "semantic_hash": "ec2d15d2336e8edb6e3149e06d3695fe"
+  },
+  "index.md": {
+    "mtime": 1791739829.7115178,
+    "seen": 1791739878.053123,
+    "ast_hash": "a9a15b05e8bbc903606439387acf2c06",
+    "semantic_hash": "a9a15b05e8bbc903606439387acf2c06"
+  },
+  "log.md": {
+    "mtime": 1791739829.7115178,
+    "seen": 1791739878.0531242,
+    "ast_hash": "b87618d4f3d36559ea1c56801d084a88",
+    "semantic_hash": "b87618d4f3d36559ea1c56801d084a88"
+  },
+  "plans/repository-provenance.md": {
+    "mtime": 1791739829.7115178,
+    "seen": 1791739878.0531251,
+    "ast_hash": "6d0c04f5a234ded86f6ec66c9a9286b0",
+    "semantic_hash": "6d0c04f5a234ded86f6ec66c9a9286b0"
+  },
+  "stack.md": {
+    "mtime": 1791739829.7122517,
+    "seen": 1791739878.053126,
+    "ast_hash": "ce7e33c2a74d83eca2318c0ee627be5f",
+    "semantic_hash": "ce7e33c2a74d83eca2318c0ee627be5f"
+  },
+  ".github/workflows/graphify-catchup.yml": {
+    "mtime": 1791741788.2379792,
+    "seen": 1791813979.132766,
+    "ast_hash": "d70a27337d8bb42f97e282ec3686529b",
+    "semantic_hash": "d70a27337d8bb42f97e282ec3686529b"
+  }
+}
