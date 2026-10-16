@@ -36,10 +36,6 @@
     ],
     "1": [
       "copy",
-      "pathlib",
-      "sys",
-      "tests_test_validate_okf_markdown",
-      "tests_test_validate_okf_markdown_rationale_2",
       "tests_test_validate_provenance",
       "tests_test_validate_provenance_duplicateidtests",
       "tests_test_validate_provenance_duplicateidtests_test_duplicate_entry_ids_fail",
@@ -103,6 +99,20 @@
       "tests_test_validate_okf_markdown_conceptfrontmattertests_write"
     ],
     "4": [
+      "pathlib",
+      "sys",
+      "tests_test_validate_okf_markdown",
+      "tests_test_validate_okf_markdown_rationale_2",
+      "tests_test_validate_okf_markdown_rationale_259",
+      "tests_test_validate_okf_markdown_repobundletests",
+      "tests_test_validate_okf_markdown_repobundletests_test_assistant_tooling_directories_are_excluded",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_rejects_stale_document_link",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_requires_each_concept_document",
+      "tests_test_validate_okf_markdown_repobundletests_test_parent_excluded_directory_name_does_not_hide_bundle",
+      "tests_test_validate_okf_markdown_repobundletests_test_whole_bundle_conforms",
+      "tests_test_validate_okf_markdown_write"
+    ],
+    "5": [
       "agent_gateway",
       "diagrams_readme",
       "diagrams_stack_architecture_html",
@@ -115,7 +125,7 @@
       "slsa_provenance",
       "stack_specification"
     ],
-    "5": [
+    "6": [
       "tests_test_validate_okf_markdown_reservedfiletests",
       "tests_test_validate_okf_markdown_reservedfiletests_setup",
       "tests_test_validate_okf_markdown_reservedfiletests_teardown",
@@ -128,7 +138,7 @@
       "tests_test_validate_okf_markdown_reservedfiletests_test_subdirectory_index_without_frontmatter_passes",
       "tests_test_validate_okf_markdown_reservedfiletests_write"
     ],
-    "6": [
+    "7": [
       "tests_test_validate_okf_markdown_sourcesandfootnotetests",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_setup",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_teardown",
@@ -140,7 +150,7 @@
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_with_resource_passes",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_write"
     ],
-    "7": [
+    "8": [
       "diagrams_stack_architecture_agent_gateway",
       "diagrams_stack_architecture_android",
       "diagrams_stack_architecture_desktop",
@@ -151,7 +161,7 @@
       "diagrams_stack_architecture_models",
       "diagrams_stack_architecture_push"
     ],
-    "8": [
+    "9": [
       "diagrams_stack_architecture_archify_finder",
       "diagrams_stack_architecture_archify_focus",
       "diagrams_stack_architecture_archify_guidedviews",
@@ -162,17 +172,16 @@
       "diagrams_stack_architecture_archify_view",
       "diagrams_stack_architecture_archify_viewerchromelayout"
     ],
-    "9": [
-      "tests_test_validate_okf_markdown_rationale_259",
-      "tests_test_validate_okf_markdown_repobundletests",
-      "tests_test_validate_okf_markdown_repobundletests_test_assistant_tooling_directories_are_excluded",
-      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_rejects_stale_document_link",
-      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_requires_each_concept_document",
-      "tests_test_validate_okf_markdown_repobundletests_test_parent_excluded_directory_name_does_not_hide_bundle",
-      "tests_test_validate_okf_markdown_repobundletests_test_whole_bundle_conforms",
-      "tests_test_validate_okf_markdown_write"
-    ],
     "10": [
+      "github_agents_change_reviewer_agent",
+      "github_agents_fact_checker_agent",
+      "github_agents_shared_safety_blocks",
+      "github_agents_technical_visualizer_agent",
+      "github_copilot_instructions",
+      "github_skills_mermaid_diagrams_skill",
+      "github_workflows_graphify_catchup"
+    ],
+    "11": [
       "scripts_okf_validate_okf_markdown_frontmatter",
       "scripts_okf_validate_okf_markdown_frontmatter_get",
       "scripts_okf_validate_okf_markdown_frontmatter_has_okf_version",
@@ -180,61 +189,64 @@
       "scripts_okf_validate_okf_markdown_frontmatter_init",
       "scripts_okf_validate_okf_markdown_frontmatter_keys"
     ],
-    "11": [
+    "12": [
       "diagrams_stack_architecture_guide",
       "diagrams_stack_architecture_routeprobe",
       "diagrams_stack_architecture_semanticlens"
     ],
-    "12": [
+    "13": [
       "diagrams_stack_architecture_runcopy",
       "diagrams_stack_architecture_runcopysharecard",
       "diagrams_stack_architecture_writepngtoclipboard"
     ],
-    "13": [
+    "14": [
       "tests_security_test_gitleaks_ignore_regression",
       "tests_security_test_gitleaks_ignore_regression_run_gitleaks",
       "tests_security_test_gitleaks_ignore_regression_sh__entry"
     ],
-    "14": [
+    "15": [
       "diagrams_stack_architecture_archify"
     ],
-    "15": [
+    "16": [
       "diagrams_stack_architecture_archify_intenttrace"
     ],
-    "16": [
+    "17": [
       "diagrams_stack_architecture_archify_presentation"
     ],
-    "17": [
+    "18": [
       "diagrams_stack_architecture_archify_readerlayout"
     ],
-    "18": [
-      "github_workflows_ci"
-    ],
     "19": [
-      "github_workflows_graphify"
+      "github_pull_request_template"
     ],
     "20": [
-      "github_workflows_graphify_catchup_graphify_semantic_catch_up"
+      "github_workflows_ci"
     ],
     "21": [
+      "github_workflows_graphify"
+    ],
+    "22": [
+      "github_workflows_graphify_catchup_graphify_semantic_catch_up"
+    ],
+    "23": [
       "log_updates"
     ]
   },
   "cohesion": {
     "0": 0.11491935483870967,
-    "1": 0.10591133004926108,
+    "1": 0.12333333333333334,
     "2": 0.23529411764705882,
     "3": 0.225,
-    "4": 0.21818181818181817,
-    "5": 0.3090909090909091,
-    "6": 0.3333333333333333,
-    "7": 0.2777777777777778,
-    "8": 0.3055555555555556,
-    "9": 0.32142857142857145,
-    "10": 0.3333333333333333,
-    "11": 1.0,
-    "12": 0.6666666666666666,
-    "13": 1.0,
+    "4": 0.21212121212121213,
+    "5": 0.21818181818181817,
+    "6": 0.3090909090909091,
+    "7": 0.3333333333333333,
+    "8": 0.2777777777777778,
+    "9": 0.3055555555555556,
+    "10": 0.42857142857142855,
+    "11": 0.3333333333333333,
+    "12": 1.0,
+    "13": 0.6666666666666666,
     "14": 1.0,
     "15": 1.0,
     "16": 1.0,
@@ -242,7 +254,9 @@
     "18": 1.0,
     "19": 1.0,
     "20": 1.0,
-    "21": 1.0
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0
   },
   "gods": [
     {
@@ -276,23 +290,23 @@
       "degree": 8
     },
     {
-      "id": "scripts_okf_validate_okf_markdown_parse_scalar_or_flow",
-      "label": "_parse_scalar_or_flow()",
-      "degree": 7
-    },
-    {
       "id": "scripts_okf_validate_okf_markdown_frontmatter",
       "label": "Frontmatter",
       "degree": 7
     },
     {
-      "id": "scripts_provenance_validate_provenance_validate",
-      "label": "validate()",
+      "id": "tests_test_validate_okf_markdown_repobundletests",
+      "label": "RepoBundleTests",
       "degree": 7
     },
     {
-      "id": "tests_test_validate_okf_markdown_write",
-      "label": "write()",
+      "id": "scripts_okf_validate_okf_markdown_parse_scalar_or_flow",
+      "label": "_parse_scalar_or_flow()",
+      "degree": 7
+    },
+    {
+      "id": "scripts_provenance_validate_provenance_validate",
+      "label": "validate()",
       "degree": 7
     }
   ],
@@ -354,7 +368,7 @@
     }
   ],
   "tokens": {
-    "input": 0,
-    "output": 0
+    "input": 11810,
+    "output": 1761
   }
 }
