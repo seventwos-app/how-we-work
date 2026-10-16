@@ -200,6 +200,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request repinning Claude Sonnet 5 agents to Claude Sonnet 5.5"
       }
+    },
+    {
+      "id": "2026-10-16-copilot-review-and-delegation-policy",
+      "intent": "Document Copilot-reviewed pull requests without mandatory cross-user approval, and clarify bounded delegation, targeted validation, and knowledge-graph freshness.",
+      "human_direction": "A maintainer requested durable repository guidance for independent maintainer merges and efficient, effective agent delegation.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "Copilot reviewed the instruction change and requested this provenance entry; follow-up review is required before merge.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "https://github.com/seventwos-app/how-we-work/pull/39"
+      }
     }
   ]
 }
