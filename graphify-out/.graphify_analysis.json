@@ -7,7 +7,13 @@
       "scripts_okf_validate_okf_markdown_check_file",
       "scripts_okf_validate_okf_markdown_check_optional_shape",
       "scripts_okf_validate_okf_markdown_check_sources_and_footnotes",
+      "scripts_okf_validate_okf_markdown_frontmatter",
       "scripts_okf_validate_okf_markdown_frontmatter_body",
+      "scripts_okf_validate_okf_markdown_frontmatter_get",
+      "scripts_okf_validate_okf_markdown_frontmatter_has_okf_version",
+      "scripts_okf_validate_okf_markdown_frontmatter_has_type",
+      "scripts_okf_validate_okf_markdown_frontmatter_init",
+      "scripts_okf_validate_okf_markdown_frontmatter_keys",
       "scripts_okf_validate_okf_markdown_indent_of",
       "scripts_okf_validate_okf_markdown_is_excluded",
       "scripts_okf_validate_okf_markdown_iter_markdown_files",
@@ -37,6 +43,9 @@
     "1": [
       "copy",
       "pathlib",
+      "sys",
+      "tests_test_validate_okf_markdown",
+      "tests_test_validate_okf_markdown_rationale_2",
       "tests_test_validate_provenance",
       "tests_test_validate_provenance_duplicateidtests",
       "tests_test_validate_provenance_duplicateidtests_test_duplicate_entry_ids_fail",
@@ -59,9 +68,30 @@
       "tests_test_validate_provenance_valid_document",
       "tests_test_validate_provenance_validrecordtests",
       "tests_test_validate_provenance_validrecordtests_test_actual_repo_record_is_valid",
-      "tests_test_validate_provenance_validrecordtests_test_valid_record_has_no_violations"
+      "tests_test_validate_provenance_validrecordtests_test_valid_record_has_no_violations",
+      "unittest"
     ],
     "2": [
+      "tests_test_validate_okf_markdown_rationale_259",
+      "tests_test_validate_okf_markdown_repobundletests",
+      "tests_test_validate_okf_markdown_repobundletests_test_assistant_tooling_directories_are_excluded",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_rejects_stale_document_link",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_requires_each_concept_document",
+      "tests_test_validate_okf_markdown_repobundletests_test_parent_excluded_directory_name_does_not_hide_bundle",
+      "tests_test_validate_okf_markdown_repobundletests_test_whole_bundle_conforms",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_setup",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_teardown",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_duplicate_source_ids_fail",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_matching_source_id_passes",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_not_matching_any_source_id_fails",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_without_sources_fails",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_missing_resource_fails",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_with_resource_passes",
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_write",
+      "tests_test_validate_okf_markdown_write"
+    ],
+    "3": [
       "argparse",
       "collections",
       "json",
@@ -80,7 +110,7 @@
       "scripts_provenance_validate_provenance_sorted",
       "scripts_provenance_validate_provenance_validate"
     ],
-    "3": [
+    "4": [
       "tests_test_validate_okf_markdown_conceptfrontmattertests",
       "tests_test_validate_okf_markdown_conceptfrontmattertests_setup",
       "tests_test_validate_okf_markdown_conceptfrontmattertests_teardown",
@@ -98,31 +128,17 @@
       "tests_test_validate_okf_markdown_conceptfrontmattertests_test_verified_list_entry_missing_by_fails",
       "tests_test_validate_okf_markdown_conceptfrontmattertests_write"
     ],
-    "4": [
-      "sys",
-      "tests_test_validate_okf_markdown",
-      "tests_test_validate_okf_markdown_rationale_2",
-      "tests_test_validate_okf_markdown_rationale_259",
-      "tests_test_validate_okf_markdown_repobundletests",
-      "tests_test_validate_okf_markdown_repobundletests_test_assistant_tooling_directories_are_excluded",
-      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_rejects_stale_document_link",
-      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_requires_each_concept_document",
-      "tests_test_validate_okf_markdown_repobundletests_test_parent_excluded_directory_name_does_not_hide_bundle",
-      "tests_test_validate_okf_markdown_repobundletests_test_whole_bundle_conforms",
-      "tests_test_validate_okf_markdown_write",
-      "unittest"
-    ],
     "5": [
       "agent_gateway",
       "diagrams_readme",
       "diagrams_stack_architecture_html",
-      "github_workflows_security_canary",
-      "index_bundle",
+      "graphify_out_graph_report",
+      "index",
       "matrix_protocol",
-      "plans_repository_provenance_plan",
-      "readme_vision",
-      "security_policy",
-      "slsa_provenance",
+      "plans_repository_provenance",
+      "readme",
+      "security",
+      "stack",
       "stack_specification"
     ],
     "6": [
@@ -139,18 +155,6 @@
       "tests_test_validate_okf_markdown_reservedfiletests_write"
     ],
     "7": [
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_setup",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_teardown",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_duplicate_source_ids_fail",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_matching_source_id_passes",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_not_matching_any_source_id_fails",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_without_sources_fails",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_missing_resource_fails",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_with_resource_passes",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_write"
-    ],
-    "8": [
       "diagrams_stack_architecture_agent_gateway",
       "diagrams_stack_architecture_android",
       "diagrams_stack_architecture_desktop",
@@ -161,7 +165,7 @@
       "diagrams_stack_architecture_models",
       "diagrams_stack_architecture_push"
     ],
-    "9": [
+    "8": [
       "diagrams_stack_architecture_archify_finder",
       "diagrams_stack_architecture_archify_focus",
       "diagrams_stack_architecture_archify_guidedviews",
@@ -172,7 +176,7 @@
       "diagrams_stack_architecture_archify_view",
       "diagrams_stack_architecture_archify_viewerchromelayout"
     ],
-    "10": [
+    "9": [
       "github_agents_change_reviewer",
       "github_agents_fact_checker",
       "github_agents_shared_safety_blocks",
@@ -182,23 +186,28 @@
       "github_skills_mermaid_diagrams_skill",
       "github_workflows_graphify_catchup"
     ],
-    "11": [
-      "scripts_okf_validate_okf_markdown_frontmatter",
-      "scripts_okf_validate_okf_markdown_frontmatter_get",
-      "scripts_okf_validate_okf_markdown_frontmatter_has_okf_version",
-      "scripts_okf_validate_okf_markdown_frontmatter_has_type",
-      "scripts_okf_validate_okf_markdown_frontmatter_init",
-      "scripts_okf_validate_okf_markdown_frontmatter_keys"
+    "10": [
+      "github_skills_artifact_integrity_third_party_notices",
+      "github_skills_decision_and_design_third_party_notices",
+      "github_skills_durable_agent_handoff_third_party_notices",
+      "github_skills_evidence_first_engineering_third_party_notices",
+      "paperthin",
+      "skills"
     ],
-    "12": [
+    "11": [
       "diagrams_stack_architecture_guide",
       "diagrams_stack_architecture_routeprobe",
       "diagrams_stack_architecture_semanticlens"
     ],
-    "13": [
+    "12": [
       "diagrams_stack_architecture_runcopy",
       "diagrams_stack_architecture_runcopysharecard",
       "diagrams_stack_architecture_writepngtoclipboard"
+    ],
+    "13": [
+      "plans_repository_provenance_plan",
+      "readme_vision",
+      "slsa_provenance"
     ],
     "14": [
       "tests_security_test_gitleaks_ignore_regression",
@@ -206,59 +215,63 @@
       "tests_security_test_gitleaks_ignore_regression_sh__entry"
     ],
     "15": [
-      "diagrams_stack_architecture_archify"
+      "github_workflows_security_canary",
+      "security_policy"
     ],
     "16": [
-      "diagrams_stack_architecture_archify_intenttrace"
+      "diagrams_stack_architecture_archify"
     ],
     "17": [
-      "diagrams_stack_architecture_archify_presentation"
+      "diagrams_stack_architecture_archify_intenttrace"
     ],
     "18": [
-      "diagrams_stack_architecture_archify_readerlayout"
+      "diagrams_stack_architecture_archify_presentation"
     ],
     "19": [
-      "github_pull_request_template"
+      "diagrams_stack_architecture_archify_readerlayout"
     ],
     "20": [
-      "github_skills_artifact_integrity"
+      "github_pull_request_template"
     ],
     "21": [
-      "github_skills_decision_and_design"
+      "github_skills_artifact_integrity"
     ],
     "22": [
-      "github_skills_durable_agent_handoff"
+      "github_skills_decision_and_design"
     ],
     "23": [
-      "github_skills_evidence_first_engineering"
+      "github_skills_durable_agent_handoff"
     ],
     "24": [
-      "github_workflows_ci"
+      "github_skills_evidence_first_engineering"
     ],
     "25": [
-      "github_workflows_graphify"
+      "github_workflows_ci"
     ],
     "26": [
-      "github_workflows_graphify_catchup_graphify_semantic_catch_up"
+      "github_workflows_graphify"
     ],
     "27": [
+      "github_workflows_graphify_catchup_graphify_semantic_catch_up"
+    ],
+    "28": [
       "log_updates"
     ]
   },
   "cohesion": {
-    "0": 0.11491935483870967,
-    "1": 0.12333333333333334,
-    "2": 0.23529411764705882,
-    "3": 0.225,
-    "4": 0.21212121212121213,
-    "5": 0.21818181818181817,
+    "0": 0.09103840682788052,
+    "1": 0.10591133004926108,
+    "2": 0.16339869281045752,
+    "3": 0.23529411764705882,
+    "4": 0.225,
+    "5": 0.18181818181818182,
     "6": 0.3090909090909091,
-    "7": 0.3333333333333333,
-    "8": 0.2777777777777778,
-    "9": 0.3055555555555556,
-    "10": 0.39285714285714285,
-    "11": 0.3333333333333333,
-    "12": 1.0,
+    "7": 0.2777777777777778,
+    "8": 0.3055555555555556,
+    "9": 0.39285714285714285,
+    "10": 0.5333333333333333,
+    "11": 1.0,
+    "12": 0.6666666666666666,
     "13": 0.6666666666666666,
     "14": 1.0,
     "15": 1.0,
@@ -273,7 +286,8 @@
     "24": 1.0,
     "25": 1.0,
     "26": 1.0,
-    "27": 1.0
+    "27": 1.0,
+    "28": 1.0
   },
   "gods": [
     {
@@ -373,7 +387,7 @@
       "why": "connects across different repos/directories"
     },
     {
-      "source": "OKF Bundle Index",
+      "source": "How We Work Index",
       "target": "Architecture Diagram Maintenance",
       "source_files": [
         "index.md",
@@ -384,40 +398,8 @@
       "why": "connects across different repos/directories"
     }
   ],
-  "questions": [
-    {
-      "type": "bridge_node",
-      "question": "Why does `ConceptFrontmatterTests` connect `ConceptFrontmatterTests` to `test_validate_okf_markdown.py`?",
-      "why": "High betweenness centrality (0.088) - this node is a cross-community bridge."
-    },
-    {
-      "type": "isolated_nodes",
-      "question": "What connects `Graphify Semantic Catch-up workflow`, `Mermaid Diagrams Skill`, `Graphify Catch-up Workflow` to the rest of the system?",
-      "why": "25 weakly-connected nodes found - possible documentation gaps or missing edges."
-    },
-    {
-      "type": "low_cohesion",
-      "question": "Should `validate_okf_markdown.py` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.11491935483870967 - nodes in this community are weakly interconnected."
-    },
-    {
-      "type": "bridge_node",
-      "question": "Why does `ReservedFileTests` connect `ReservedFileTests` to `test_validate_okf_markdown.py`?",
-      "why": "High betweenness centrality (0.059) - this node is a cross-community bridge."
-    },
-    {
-      "type": "low_cohesion",
-      "question": "Should `valid_document` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.12333333333333334 - nodes in this community are weakly interconnected."
-    },
-    {
-      "type": "bridge_node",
-      "question": "Why does `SourcesAndFootnoteTests` connect `SourcesAndFootnoteTests` to `test_validate_okf_markdown.py`?",
-      "why": "High betweenness centrality (0.053) - this node is a cross-community bridge."
-    }
-  ],
   "tokens": {
-    "input": 0,
-    "output": 0
+    "input": 3247,
+    "output": 3175
   }
 }
