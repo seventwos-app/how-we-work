@@ -1,6 +1,8 @@
 {
   "communities": {
     "0": [
+      "argparse",
+      "re",
       "scripts_okf_validate_okf_markdown",
       "scripts_okf_validate_okf_markdown_changed_markdown_files",
       "scripts_okf_validate_okf_markdown_check_bundle_index",
@@ -72,13 +74,6 @@
       "unittest"
     ],
     "2": [
-      "tests_test_validate_okf_markdown_rationale_259",
-      "tests_test_validate_okf_markdown_repobundletests",
-      "tests_test_validate_okf_markdown_repobundletests_test_assistant_tooling_directories_are_excluded",
-      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_rejects_stale_document_link",
-      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_requires_each_concept_document",
-      "tests_test_validate_okf_markdown_repobundletests_test_parent_excluded_directory_name_does_not_hide_bundle",
-      "tests_test_validate_okf_markdown_repobundletests_test_whole_bundle_conforms",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_setup",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_teardown",
@@ -88,14 +83,11 @@
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_footnote_without_sources_fails",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_missing_resource_fails",
       "tests_test_validate_okf_markdown_sourcesandfootnotetests_test_source_with_resource_passes",
-      "tests_test_validate_okf_markdown_sourcesandfootnotetests_write",
-      "tests_test_validate_okf_markdown_write"
+      "tests_test_validate_okf_markdown_sourcesandfootnotetests_write"
     ],
     "3": [
-      "argparse",
       "collections",
       "json",
-      "re",
       "scripts_provenance_validate_provenance",
       "scripts_provenance_validate_provenance_check_entry",
       "scripts_provenance_validate_provenance_check_non_empty_string",
@@ -132,16 +124,25 @@
       "agent_gateway",
       "diagrams_readme",
       "diagrams_stack_architecture_html",
+      "github_workflows_security_canary",
       "graphify_out_graph_report",
       "index",
       "matrix_protocol",
       "plans_repository_provenance",
-      "readme",
-      "security",
-      "stack",
+      "plans_repository_provenance_plan",
+      "readme_vision",
+      "security_policy",
+      "slsa_provenance",
       "stack_specification"
     ],
     "6": [
+      "tests_test_validate_okf_markdown_rationale_259",
+      "tests_test_validate_okf_markdown_repobundletests",
+      "tests_test_validate_okf_markdown_repobundletests_test_assistant_tooling_directories_are_excluded",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_rejects_stale_document_link",
+      "tests_test_validate_okf_markdown_repobundletests_test_bundle_index_requires_each_concept_document",
+      "tests_test_validate_okf_markdown_repobundletests_test_parent_excluded_directory_name_does_not_hide_bundle",
+      "tests_test_validate_okf_markdown_repobundletests_test_whole_bundle_conforms",
       "tests_test_validate_okf_markdown_reservedfiletests",
       "tests_test_validate_okf_markdown_reservedfiletests_setup",
       "tests_test_validate_okf_markdown_reservedfiletests_teardown",
@@ -152,7 +153,8 @@
       "tests_test_validate_okf_markdown_reservedfiletests_test_root_index_with_only_okf_version_passes",
       "tests_test_validate_okf_markdown_reservedfiletests_test_subdirectory_index_must_not_have_frontmatter",
       "tests_test_validate_okf_markdown_reservedfiletests_test_subdirectory_index_without_frontmatter_passes",
-      "tests_test_validate_okf_markdown_reservedfiletests_write"
+      "tests_test_validate_okf_markdown_reservedfiletests_write",
+      "tests_test_validate_okf_markdown_write"
     ],
     "7": [
       "diagrams_stack_architecture_agent_gateway",
@@ -204,19 +206,10 @@
       "diagrams_stack_architecture_runcopysharecard",
       "diagrams_stack_architecture_writepngtoclipboard"
     ],
-    "13": [
-      "plans_repository_provenance_plan",
-      "readme_vision",
-      "slsa_provenance"
-    ],
     "14": [
       "tests_security_test_gitleaks_ignore_regression",
       "tests_security_test_gitleaks_ignore_regression_run_gitleaks",
       "tests_security_test_gitleaks_ignore_regression_sh__entry"
-    ],
-    "15": [
-      "github_workflows_security_canary",
-      "security_policy"
     ],
     "16": [
       "diagrams_stack_architecture_archify"
@@ -259,22 +252,20 @@
     ]
   },
   "cohesion": {
-    "0": 0.09103840682788052,
+    "0": 0.0858974358974359,
     "1": 0.10591133004926108,
-    "2": 0.16339869281045752,
-    "3": 0.23529411764705882,
+    "2": 0.3333333333333333,
+    "3": 0.2761904761904762,
     "4": 0.225,
-    "5": 0.18181818181818182,
-    "6": 0.3090909090909091,
+    "5": 0.16666666666666666,
+    "6": 0.15789473684210525,
     "7": 0.2777777777777778,
     "8": 0.3055555555555556,
     "9": 0.39285714285714285,
     "10": 0.5333333333333333,
     "11": 1.0,
     "12": 0.6666666666666666,
-    "13": 0.6666666666666666,
     "14": 1.0,
-    "15": 1.0,
     "16": 1.0,
     "17": 1.0,
     "18": 1.0,
@@ -336,12 +327,23 @@
       "degree": 7
     },
     {
-      "id": "scripts_provenance_validate_provenance_validate",
-      "label": "validate()",
+      "id": "tests_test_validate_okf_markdown_write",
+      "label": "write()",
       "degree": 7
     }
   ],
   "surprises": [
+    {
+      "source": "How We Work",
+      "target": "Repository Provenance Plan",
+      "source_files": [
+        "README.md",
+        "plans/repository-provenance.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
     {
       "source": "Security Canary Workflow",
       "target": "Security Reporting",
@@ -354,15 +356,15 @@
       "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
     },
     {
-      "source": "How We Work",
-      "target": "Repository Provenance Plan",
+      "source": "How We Work Index",
+      "target": "Architecture Diagram Maintenance",
       "source_files": [
-        "README.md",
-        "plans/repository-provenance.md"
+        "index.md",
+        "diagrams/README.md"
       ],
-      "confidence": "INFERRED",
-      "relation": "conceptually_related_to",
-      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories"
     },
     {
       "source": "Graphify Catch-up Workflow",
@@ -385,21 +387,38 @@
       "confidence": "EXTRACTED",
       "relation": "references",
       "why": "connects across different repos/directories"
-    },
-    {
-      "source": "How We Work Index",
-      "target": "Architecture Diagram Maintenance",
-      "source_files": [
-        "index.md",
-        "diagrams/README.md"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "references",
-      "why": "connects across different repos/directories"
     }
   ],
-  "tokens": {
-    "input": 3247,
-    "output": 3175
-  }
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `ConceptFrontmatterTests` connect `Community 4` to `Community 1`?",
+      "why": "High betweenness centrality (0.081) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `Graphify Semantic Catch-up workflow`, `runCopy`, `runCopyShareCard` to the rest of the system?",
+      "why": "27 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.0858974358974359 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `ReservedFileTests` connect `Community 6` to `Community 1`?",
+      "why": "High betweenness centrality (0.054) - this node is a cross-community bridge."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 1` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.10591133004926108 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `SourcesAndFootnoteTests` connect `Community 2` to `Community 1`?",
+      "why": "High betweenness centrality (0.049) - this node is a cross-community bridge."
+    }
+  ]
 }
