@@ -211,6 +211,17 @@
         "origin": "pull_request",
         "reference": "https://github.com/seventwos-app/how-we-work/pull/39"
       }
+    },
+    {
+      "id": "2026-10-18-autonomous-review-separation-of-duties",
+      "intent": "Standardize an autonomous, separation-of-duties review process across organization repositories: purpose and outcome challenge, CI code and security evidence, and bounded Copilot adjudication without a routine human code-review approver.",
+      "human_direction": "A maintainer asked for one consistent agentic review workflow across all organization repositories that questions both the purpose and the completed work.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "A separate read-only code-review agent reviewed the rollout; Copilot reviewed this pull request and requested this provenance entry.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "https://github.com/seventwos-app/how-we-work/pull/41"
+      }
     }
   ]
 }
