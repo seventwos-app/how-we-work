@@ -233,6 +233,17 @@
         "origin": "pull_request",
         "reference": "https://github.com/seventwos-app/how-we-work/pull/41"
       }
+    },
+    {
+      "id": "2026-10-18-read-only-ocr-ci",
+      "intent": "Add an inactive, read-only, pinned OpenCodeReview CLI workflow with count-only reporting and explicit provider authorization.",
+      "human_direction": "A maintainer requested automated CI/CD integration across repositories without secret exposure or repeated custom proof approvals.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "Canonical purpose and outcome independently reviewed; repository CI and latest-head PR review remain required before merge.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request #45"
+      }
     }
   ]
 }
