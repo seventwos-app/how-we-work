@@ -213,6 +213,17 @@
       }
     },
     {
+      "id": "2026-10-18-engineering-discipline-skills",
+      "intent": "Add four pinned engineering discipline skills and phase-based routing to the repository's existing agent guidance while preserving permissions and specialist gates.",
+      "human_direction": "A maintainer requested comparison and synthesis of two upstream skill catalogs, then authorized rollout of the evaluated pack across relevant repository agents.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "Copilot reviewed the initial rollout and requested this provenance entry; follow-up review is required before merge. Mirror hashes, licenses, routing, and preserved agent contracts were checked.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "https://github.com/seventwos-app/how-we-work/pull/42"
+      }
+    },
+    {
       "id": "2026-10-18-autonomous-review-separation-of-duties",
       "intent": "Standardize an autonomous, separation-of-duties review process across organization repositories: purpose and outcome challenge, CI code and security evidence, and bounded Copilot adjudication without a routine human code-review approver.",
       "human_direction": "A maintainer asked for one consistent agentic review workflow across all organization repositories that questions both the purpose and the completed work.",
