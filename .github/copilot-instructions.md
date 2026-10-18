@@ -1,5 +1,9 @@
 # Copilot Instructions
 
+## Autonomous review policy
+
+Follow [Autonomous review and separation of duties](instructions/autonomous-review.instructions.md) for purpose/outcome challenge, CI evidence reuse, independent finding closure, and bounded Copilot adjudication. Use existing review agents; do not add a routine human approval gate or duplicate review rounds. Preserve mandatory specialist gates, required checks, and action authorization.
+
 ## Repo purpose
 A small OKF (Organizational Knowledge Framework, v0.2) documentation bundle expressing Seventwos' vision/heuristic for how humans and AI agents collaborate ("workspace captures intent, repository captures implementation"). It is not an application repository: it has no application runtime or package manifest, but it does retain lightweight pull-request CI for its in-repository validators.
 
