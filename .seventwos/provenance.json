@@ -244,6 +244,17 @@
         "origin": "pull_request",
         "reference": "seventwos-app/how-we-work pull request #45"
       }
+    },
+    {
+      "id": "2026-10-18-central-ocr-enrollment",
+      "intent": "Replace proposed local OCR execution with inert central enrollment and remove provider-bearing PR workflows.",
+      "human_direction": "The maintainer chose a trusted central GitHub Actions controller for OCR first, without a new hosted service.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "Central purpose and outcome independently reviewed as inactive preparation; repository CI and latest-head PR review remain required.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request #45"
+      }
     }
   ]
 }

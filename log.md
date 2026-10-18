@@ -2,6 +2,8 @@
 
 ## 2026-10-18
 
+* **Central OCR Enrollment**: Replace local OCR execution with inert configuration for a trusted central controller; remove provider-bearing PR workflows. Activation and provider authorization remain pending.
+
 * **Read-only OCR CI**: Add a pinned CLI integration with trusted-base execution and count-only reporting; activation remains disabled pending provider and recurring-usage authorization. Record provenance in PR #45.
 
 
