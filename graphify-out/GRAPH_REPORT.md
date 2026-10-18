@@ -60,19 +60,19 @@ generated:
 7. `Frontmatter` - 7 edges
 8. `RepoBundleTests` - 7 edges
 9. `_parse_scalar_or_flow()` - 7 edges
-10. `write()` - 7 edges
+10. `validate()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `How We Work` --conceptually_related_to--> `Repository Provenance Plan`  [INFERRED]
-  README.md → plans/repository-provenance.md
+- `How We Work Index` --references--> `Knowledge Graph Report`  [EXTRACTED]
+  index.md → graphify-out/GRAPH_REPORT.md
+- `How We Work Index` --references--> `Repository Provenance`  [EXTRACTED]
+  index.md → plans/repository-provenance.md
 - `Security Canary Workflow` --references--> `Security Reporting`  [INFERRED]
   .github/workflows/security-canary.yml → SECURITY.md
+- `How We Work` --conceptually_related_to--> `Repository Provenance Plan`  [INFERRED]
+  README.md → plans/repository-provenance.md
 - `How We Work Index` --references--> `Architecture Diagram Maintenance`  [EXTRACTED]
   index.md → diagrams/README.md
-- `Graphify Catch-up Workflow` --conceptually_related_to--> `Copilot Instructions`  [INFERRED]
-  .github/workflows/graphify-catchup.yml → .github/copilot-instructions.md
-- `Technology Stack for User Frontend` --references--> `Architecture Diagram Maintenance`  [EXTRACTED]
-  stack.md → diagrams/README.md
 
 ## Import Cycles
 - None detected.
