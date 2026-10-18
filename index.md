@@ -9,3 +9,4 @@ okf_version: "0.2"
 * [Technology Stack](stack.md) - Architectural specification spanning the Desktop client, Mobile clients, the Matrix communications fabric, and the licensing posture governing reuse.
 * [Architecture Diagram Maintenance](diagrams/README.md) - Reproducible Archify source and rendering instructions for the Technology Stack architecture diagram.
 * [Repository Provenance](plans/repository-provenance.md) - A minimal, dependency-free MVP for recording change intent, human direction, agent involvement, review, and source outcome.
+* [Knowledge Graph Report](graphify-out/GRAPH_REPORT.md) - Generated analysis of the assembled Graphify knowledge graph.
