@@ -233,6 +233,28 @@
         "origin": "pull_request",
         "reference": "https://github.com/seventwos-app/how-we-work/pull/41"
       }
+    },
+    {
+      "id": "2026-10-18-read-only-ocr-ci",
+      "intent": "Add an inactive, read-only, pinned OpenCodeReview CLI workflow with count-only reporting and explicit provider authorization.",
+      "human_direction": "A maintainer requested automated CI/CD integration across repositories without secret exposure or repeated custom proof approvals.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "Canonical purpose and outcome independently reviewed; repository CI and latest-head PR review remain required before merge.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request #45"
+      }
+    },
+    {
+      "id": "2026-10-18-central-ocr-enrollment",
+      "intent": "Replace proposed local OCR execution with inert central enrollment and remove provider-bearing PR workflows.",
+      "human_direction": "The maintainer chose a trusted central GitHub Actions controller for OCR first, without a new hosted service.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "Central purpose and outcome independently reviewed as inactive preparation; repository CI and latest-head PR review remain required.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "seventwos-app/how-we-work pull request #45"
+      }
     }
   ]
 }
