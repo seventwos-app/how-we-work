@@ -1,0 +1,1 @@
+{"nodes": [{"id": "github_skills_artifact_integrity", "label": "Artifact Integrity Skill", "file_type": "code", "source_file": ".github/skills/artifact-integrity/SKILL.md", "rationale": "Skill for maintaining claim accuracy and source traceability.", "_origin": "semantic"}], "edges": [], "hyperedges": []}

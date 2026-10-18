@@ -290,23 +290,23 @@
       "degree": 8
     },
     {
-      "id": "scripts_okf_validate_okf_markdown_frontmatter",
-      "label": "Frontmatter",
-      "degree": 7
-    },
-    {
-      "id": "tests_test_validate_okf_markdown_repobundletests",
-      "label": "RepoBundleTests",
-      "degree": 7
-    },
-    {
       "id": "scripts_okf_validate_okf_markdown_parse_scalar_or_flow",
       "label": "_parse_scalar_or_flow()",
       "degree": 7
     },
     {
+      "id": "scripts_okf_validate_okf_markdown_frontmatter",
+      "label": "Frontmatter",
+      "degree": 7
+    },
+    {
       "id": "scripts_provenance_validate_provenance_validate",
       "label": "validate()",
+      "degree": 7
+    },
+    {
+      "id": "tests_test_validate_okf_markdown_write",
+      "label": "write()",
       "degree": 7
     }
   ],
@@ -368,7 +368,7 @@
     }
   ],
   "tokens": {
-    "input": 11810,
-    "output": 1761
+    "input": 0,
+    "output": 0
   }
 }

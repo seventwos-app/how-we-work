@@ -1,43 +1,43 @@
 {
   ".seventwos/provenance.json": {
-    "mtime": 1792150568.28217,
-    "seen": 1792150592.1347558,
-    "ast_hash": "a21c945e08fcfcaf1a36d89d54a55a81",
-    "semantic_hash": "a21c945e08fcfcaf1a36d89d54a55a81"
+    "mtime": 1792311965.5189192,
+    "seen": 1792311995.3239117,
+    "ast_hash": "b89861d82b18bdc37cc189212705b340",
+    "semantic_hash": "b89861d82b18bdc37cc189212705b340"
   },
   "diagrams/stack.architecture.json": {
-    "mtime": 1792150568.2848651,
-    "seen": 1792150592.1347613,
+    "mtime": 1792311965.5225387,
+    "seen": 1792311995.3239138,
     "ast_hash": "a1b245335b5f2521f6565564fd4042f4",
     "semantic_hash": "a1b245335b5f2521f6565564fd4042f4"
   },
   "scripts/okf/validate_okf_markdown.py": {
-    "mtime": 1792150568.2883615,
-    "seen": 1792150592.1347635,
+    "mtime": 1792311965.5265386,
+    "seen": 1792311995.3239155,
     "ast_hash": "06bd2d32a7c13184ac04d27e351423b3",
     "semantic_hash": "06bd2d32a7c13184ac04d27e351423b3"
   },
   "scripts/provenance/validate_provenance.py": {
-    "mtime": 1792150568.2883615,
-    "seen": 1792150592.1347651,
+    "mtime": 1792311965.5265386,
+    "seen": 1792311995.323917,
     "ast_hash": "b82caf4882cd1342c3e21b4fbc865d4c",
     "semantic_hash": "b82caf4882cd1342c3e21b4fbc865d4c"
   },
   "tests/security/test_gitleaks_ignore_regression.sh": {
-    "mtime": 1792150568.2886882,
-    "seen": 1792150592.134766,
+    "mtime": 1792311965.5268815,
+    "seen": 1792311995.323918,
     "ast_hash": "1d763636333f4b2e538f6199178c8662",
     "semantic_hash": "1d763636333f4b2e538f6199178c8662"
   },
   "tests/test_validate_okf_markdown.py": {
-    "mtime": 1792150568.2886882,
-    "seen": 1792150592.134767,
+    "mtime": 1792311965.5268815,
+    "seen": 1792311995.3239193,
     "ast_hash": "a1d6bf457311fc50c57cef19ecc1a7f7",
     "semantic_hash": "a1d6bf457311fc50c57cef19ecc1a7f7"
   },
   "tests/test_validate_provenance.py": {
-    "mtime": 1792150568.2886882,
-    "seen": 1792150592.1347678,
+    "mtime": 1792311965.5268815,
+    "seen": 1792311995.3239207,
     "ast_hash": "368bcf909dd792379aa21d9972847124",
     "semantic_hash": "368bcf909dd792379aa21d9972847124"
   },
@@ -154,5 +154,17 @@
     "seen": 1792150592.1347775,
     "ast_hash": "2e7a9e26b826a258ce8d5de57fd6e643",
     "semantic_hash": "2e7a9e26b826a258ce8d5de57fd6e643"
+  },
+  ".github/skills/engineering-pack.lock.json": {
+    "mtime": 1792311965.5186665,
+    "seen": 1792311995.3239036,
+    "ast_hash": "e8f81276b3aff5d99c59a84192facdcc",
+    "semantic_hash": "e8f81276b3aff5d99c59a84192facdcc"
+  },
+  ".github/skills/engineering-scenarios.json": {
+    "mtime": 1792311965.5186665,
+    "seen": 1792311995.3239086,
+    "ast_hash": "08b1775e9067c38aafcbdf5d534691e0",
+    "semantic_hash": "08b1775e9067c38aafcbdf5d534691e0"
   }
 }

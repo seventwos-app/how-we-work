@@ -1,0 +1,158 @@
+{
+  ".seventwos/provenance.json": {
+    "mtime": 1792150568.28217,
+    "seen": 1792150592.1347558,
+    "ast_hash": "a21c945e08fcfcaf1a36d89d54a55a81",
+    "semantic_hash": "a21c945e08fcfcaf1a36d89d54a55a81"
+  },
+  "diagrams/stack.architecture.json": {
+    "mtime": 1792150568.2848651,
+    "seen": 1792150592.1347613,
+    "ast_hash": "a1b245335b5f2521f6565564fd4042f4",
+    "semantic_hash": "a1b245335b5f2521f6565564fd4042f4"
+  },
+  "scripts/okf/validate_okf_markdown.py": {
+    "mtime": 1792150568.2883615,
+    "seen": 1792150592.1347635,
+    "ast_hash": "06bd2d32a7c13184ac04d27e351423b3",
+    "semantic_hash": "06bd2d32a7c13184ac04d27e351423b3"
+  },
+  "scripts/provenance/validate_provenance.py": {
+    "mtime": 1792150568.2883615,
+    "seen": 1792150592.1347651,
+    "ast_hash": "b82caf4882cd1342c3e21b4fbc865d4c",
+    "semantic_hash": "b82caf4882cd1342c3e21b4fbc865d4c"
+  },
+  "tests/security/test_gitleaks_ignore_regression.sh": {
+    "mtime": 1792150568.2886882,
+    "seen": 1792150592.134766,
+    "ast_hash": "1d763636333f4b2e538f6199178c8662",
+    "semantic_hash": "1d763636333f4b2e538f6199178c8662"
+  },
+  "tests/test_validate_okf_markdown.py": {
+    "mtime": 1792150568.2886882,
+    "seen": 1792150592.134767,
+    "ast_hash": "a1d6bf457311fc50c57cef19ecc1a7f7",
+    "semantic_hash": "a1d6bf457311fc50c57cef19ecc1a7f7"
+  },
+  "tests/test_validate_provenance.py": {
+    "mtime": 1792150568.2886882,
+    "seen": 1792150592.1347678,
+    "ast_hash": "368bcf909dd792379aa21d9972847124",
+    "semantic_hash": "368bcf909dd792379aa21d9972847124"
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1791739829.7074902,
+    "seen": 1791739878.0531158,
+    "ast_hash": "be41e75159999756f217fdd7c943479f",
+    "semantic_hash": "be41e75159999756f217fdd7c943479f"
+  },
+  ".github/workflows/graphify.yml": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.053117,
+    "ast_hash": "d65cdaff9af60d9e19e081cd313fe9a6",
+    "semantic_hash": "d65cdaff9af60d9e19e081cd313fe9a6"
+  },
+  ".github/workflows/security-canary.yml": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.053118,
+    "ast_hash": "0d2facf5e0756c51f489c946f163b42b",
+    "semantic_hash": "0d2facf5e0756c51f489c946f163b42b"
+  },
+  "README.md": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.0531192,
+    "ast_hash": "c1a2e1430aabc2a1ca62df88d9f269f3",
+    "semantic_hash": "c1a2e1430aabc2a1ca62df88d9f269f3"
+  },
+  "SECURITY.md": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.0531206,
+    "ast_hash": "8b1c449c78995990b78cb80fb1ba52c6",
+    "semantic_hash": "8b1c449c78995990b78cb80fb1ba52c6"
+  },
+  "diagrams/README.md": {
+    "mtime": 1791739829.7075834,
+    "seen": 1791739878.0531213,
+    "ast_hash": "40f91c891ddf2d8ff14189dfdd0637a9",
+    "semantic_hash": "40f91c891ddf2d8ff14189dfdd0637a9"
+  },
+  "diagrams/stack.architecture.html": {
+    "mtime": 1791739829.710518,
+    "seen": 1791739878.0531223,
+    "ast_hash": "ec2d15d2336e8edb6e3149e06d3695fe",
+    "semantic_hash": "ec2d15d2336e8edb6e3149e06d3695fe"
+  },
+  "index.md": {
+    "mtime": 1791739829.7115178,
+    "seen": 1791739878.053123,
+    "ast_hash": "a9a15b05e8bbc903606439387acf2c06",
+    "semantic_hash": "a9a15b05e8bbc903606439387acf2c06"
+  },
+  "log.md": {
+    "mtime": 1791739829.7115178,
+    "seen": 1791739878.0531242,
+    "ast_hash": "b87618d4f3d36559ea1c56801d084a88",
+    "semantic_hash": "b87618d4f3d36559ea1c56801d084a88"
+  },
+  "plans/repository-provenance.md": {
+    "mtime": 1791739829.7115178,
+    "seen": 1791739878.0531251,
+    "ast_hash": "6d0c04f5a234ded86f6ec66c9a9286b0",
+    "semantic_hash": "6d0c04f5a234ded86f6ec66c9a9286b0"
+  },
+  "stack.md": {
+    "mtime": 1791739829.7122517,
+    "seen": 1791739878.053126,
+    "ast_hash": "ce7e33c2a74d83eca2318c0ee627be5f",
+    "semantic_hash": "ce7e33c2a74d83eca2318c0ee627be5f"
+  },
+  ".github/workflows/graphify-catchup.yml": {
+    "mtime": 1792150568.28217,
+    "seen": 1792150592.134779,
+    "ast_hash": "05ff83a082c3c99b3c023364bc442e28",
+    "semantic_hash": "05ff83a082c3c99b3c023364bc442e28"
+  },
+  ".github/agents/_shared_safety_blocks.md": {
+    "mtime": 1792150568.2816913,
+    "seen": 1792150592.1347697,
+    "ast_hash": "92a2915a497678a3afa7fda2229acf3a",
+    "semantic_hash": "92a2915a497678a3afa7fda2229acf3a"
+  },
+  ".github/agents/change-reviewer.agent.md": {
+    "mtime": 1792150568.2817373,
+    "seen": 1792150592.134771,
+    "ast_hash": "22083639346a421fc0c2e5200efa490e",
+    "semantic_hash": "22083639346a421fc0c2e5200efa490e"
+  },
+  ".github/agents/fact-checker.agent.md": {
+    "mtime": 1792150568.2817373,
+    "seen": 1792150592.1347725,
+    "ast_hash": "9b7c5ccd8e08d5aeb2a48096afe4aa5d",
+    "semantic_hash": "9b7c5ccd8e08d5aeb2a48096afe4aa5d"
+  },
+  ".github/agents/technical-visualizer.agent.md": {
+    "mtime": 1792150568.2818651,
+    "seen": 1792150592.1347742,
+    "ast_hash": "dd678befe1960241c02f1782cfd3eb48",
+    "semantic_hash": "dd678befe1960241c02f1782cfd3eb48"
+  },
+  ".github/copilot-instructions.md": {
+    "mtime": 1792150568.2818651,
+    "seen": 1792150592.1347756,
+    "ast_hash": "d3204bc7b29697724b44c6c67ace21ec",
+    "semantic_hash": "d3204bc7b29697724b44c6c67ace21ec"
+  },
+  ".github/pull_request_template.md": {
+    "mtime": 1792150568.2818651,
+    "seen": 1792150592.1347766,
+    "ast_hash": "b90343574bc765ad1edf5c05c297b90d",
+    "semantic_hash": "b90343574bc765ad1edf5c05c297b90d"
+  },
+  ".github/skills/mermaid-diagrams/SKILL.md": {
+    "mtime": 1792150568.2820573,
+    "seen": 1792150592.1347775,
+    "ast_hash": "2e7a9e26b826a258ce8d5de57fd6e643",
+    "semantic_hash": "2e7a9e26b826a258ce8d5de57fd6e643"
+  }
+}

@@ -1,0 +1,1 @@
+{"nodes": [{"id": "github_instructions_autonomous_review", "label": "Autonomous Review Policy", "file_type": "document", "source_file": ".github/instructions/autonomous-review.instructions.md", "rationale": "Organization-wide policy for agent-driven reviews and separation of duties.", "_origin": "semantic"}], "edges": [], "hyperedges": []}
