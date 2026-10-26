@@ -4,6 +4,17 @@
   "disclosure_class": "public",
   "entries": [
     {
+      "id": "2026-10-27-bounded-execution-policy",
+      "intent": "Reduce unnecessary implementation handoffs and repeated validation while preserving independent review, required checks, operation ownership, and cumulative review limits.",
+      "human_direction": "A maintainer requested independent stress-testing of a task-efficiency plan and a safe rollout of the resulting execution guidance.",
+      "agent_involvement": "generated-and-reviewed",
+      "review": "Independent plan and outcome review, with latest-head automated review and required CI before merge.",
+      "outcome": {
+        "origin": "pull_request",
+        "reference": "https://github.com/seventwos-app/how-we-work/pull/47"
+      }
+    },
+    {
       "id": "2026-09-14-provenance-mvp",
       "intent": "Introduce a practical, dependency-free provenance record and validator for this repository, replacing the earlier heavier repository-provenance plan draft with a minimal MVP.",
       "human_direction": "A maintainer requested scoping repository provenance down to a minimal, public-safe MVP: a small JSON record, disclosure classes, a validator, and matching PR template fields.",
