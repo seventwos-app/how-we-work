@@ -123,7 +123,7 @@ unbounded push/review/fix loops.
 - **Control context size.** Read narrowly (view_range on large files, LIMIT/specific columns on queries, grep/head on shell output). Avoid re-reading data already established in context. Summarize large tool output instead of carrying raw dumps forward turn after turn.
 - **Session hygiene.** Prefer a focused session per distinct task/topic over one ever-growing thread.
 - **Tool-call efficiency.** Prefer built-in grep/glob/view over shell equivalents (rg/find/cat). Chain related bash commands with `&&`. Suppress verbose/pager output.
-- **Right-size delegation.** Delegate only when a sub-task needs substantial separate context; do not delegate anything doable in ≤5 direct calls. Give delegated agents bounded, concrete objectives.
+- **Right-size delegation.** Use the execution policy below to separate implementation ownership from required independent review. Delegate substantial independent work or required specialist judgment, not merely a small edit; give delegates bounded objectives.
 - **Model routing.** Let Auto mode pick per task complexity; do not force larger/slower models for simple mechanical steps. Reasoning effort is a separate, deliberate choice — never reduced silently in the name of speed.
 
 ## Pull requests and merge authority
@@ -138,10 +138,13 @@ unbounded push/review/fix loops.
 ## Efficient execution and delegation
 
 - Start with the repo's existing instructions, agent catalog, and relevant skill. Inspect the actual diff and reuse existing implementations before adding machinery. Load only context needed for the current phase.
-- Handle small, tightly coupled tasks directly. Delegate when a bounded subtask needs substantial separate context or independent specialist judgment, or when an existing mandatory specialist gate applies. Use available repository specialists before generic agents; do not invent unavailable agents or silently weaken review/security gates.
+- For a known-owner, bounded, low-risk task with focused proof, the current owner may implement directly without an implementation handoff. Required independent purpose/outcome reviews, customization audits, pre-push review, and risk-triggered specialist gates still apply; direct implementation is not self-approval. Unknown ownership or risk follows existing specialist routing. Delegate substantial independent work, not a continuous investigation already owned by another agent.
 - Give each delegate a concrete objective, relevant context, allowed paths, ownership, acceptance checks, and a stop condition. Use the configured model/risk policy rather than overriding pins for speed.
 - Parallelize only independent work with non-overlapping write ownership. Keep a continuous investigation with one owner; do not duplicate a delegate's search or implementation. Use background agents only while doing independent work, and collect their result without polling.
 - Batch related edits and review feedback. Run the smallest relevant validation; expand only when risk or failures justify it. Do not add a second review tool merely because it is available, retry CI blindly, or treat an installed skill/agent as proof that it runs in CI.
+- Reuse validation only for the revision or exact diff, inputs, environment, and coverage it actually proves. Count a hook-run canonical gate as that cycle's run; do not repeat it manually. Preserve deliberately independent security checks and stricter latest-head requirements.
+- Give long operations a justified runtime deadline and progress signal. A progress checkpoint or tool initial wait is not a cancellation deadline: do not kill a healthy build just because a checkpoint expires. If an operation-specific deadline expires, cancel only its task-owned process tree, verify termination, and report the failure.
+- Preserve the existing review-loop ceiling across resumes: record its wall-clock start, completed cycles, reviewed SHA, pending operations, and any authorized continuation in the existing task/PR record. At the ceiling stop further autonomous corrections and pushes, report the blocker, and keep healthy pending builds separate from the review clock; restarting a session does not reset the budget.
 - The coordinating agent owns integration, verifies acceptance evidence, and reports what changed, what remains blocked, and whether the result is merged. Instruction files guide compatible agents; they do not guarantee every tool loads them.
 
 ## Engineering discipline routing
